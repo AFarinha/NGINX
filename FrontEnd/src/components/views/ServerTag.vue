@@ -1,47 +1,69 @@
 <template>
 <section class="content">
-  {{server}}
-  <div class="row center-block">
-    <div :class="{ 'has-error': errors.has('host') }">
-      <label v-show="errors.has('host')" class="control-label" ><i :class="{'fa fa-fw fa-times-circle-o': errors.has('host')  }"></i>  {{errors.has('host') ? 'Input with error' : '' }}</label>
-      <input name="host" v-model="server.host" v-validate="'required'" class="form-control" type="text" placeholder="Host">
-      <span v-show="errors.has('host')" class="help-block">{{ errors.first('host') }}</span>
+  <div class="row ">
+
+    <div class="form-group col-md-4">
+      <h5><b> Host </b></h5>
+      <div :class="{ 'has-error': errors.has('host') }" >
+        <input name="host" v-model="server.host" v-validate="'required'" class="form-control" type="text" placeholder="Host">
+        <span v-show="errors.has('host')" class="help-block">{{ errors.first('host') }}</span>
+      </div>
     </div>
-    <div class="form-group">
-      <h4>Port</h4>
+    <div class="form-group col-md-4">
+      <h5><b>Port </b></h5>
       <div :class="{ 'has-error': errors.has('port') }">
-        <label v-show="errors.has('port')" class="control-label" ><i :class="{'fa fa-fw fa-times-circle-o': errors.has('port')  }"></i>  {{errors.has('port') ? 'Input with error' : '' }}</label>
-        <input name="port" v-model="server.port" v-validate="'required'" class="form-control" type="text" placeholder="port">
+        <input name="port" v-model="server.port" v-validate="'required|numeric'" class="form-control" type="text" placeholder="port">
         <span v-show="errors.has('port')" class="help-block">{{ errors.first('port') }}</span>
       </div>
     </div>
-    <div class="form-group">
-      <h4>Destination</h4>
+    <div  class="form-group col-md-4">
+      <h5><b>Destination</b></h5>
       <div :class="{ 'has-error': errors.has('destination') }">
-        <label v-show="errors.has('destination')" class="control-label" ><i :class="{'fa fa-fw fa-times-circle-o': errors.has('destination')  }"></i>  {{errors.has('destination') ? 'Input with error' : '' }}</label>
         <input name="destination" v-model="server.destination" v-validate="'required'" class="form-control" type="text" placeholder="Destination">
         <span v-show="errors.has('destination')" class="help-block">{{ errors.first('destination') }}</span>
       </div>
     </div>
-
-    <GenericItem v-for="(generic, index) in this.server.arrayGenericServer"
-      :generic="generic"
-      :key= "generic"
-      v-on:removeGeneric="removeGeneric(index)" >
-    </GenericItem>
-
-        <button @click="addGeneric">Add generic item</button>
-
-      <LocationTag v-for="(location, index) in this.server.arrayLocations"
-        :location="location"
-        :key= "location"
-        v-on:removeLocation="removeLocation(index)"
-         >
-      </LocationTag>
-      <button @click="addLocation">AddLocation</button>
-      <button @click="onValidate">teste</button>
   </div>
+  <div class="row center-block">
 
+    <div class="box box-solid box-success">
+      <div class="box-header">
+          <h3 class="box-title">Server - Generic Items</h3>
+          <div class="box-tools pull-right">
+              <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
+          </div>
+      </div>
+      <div class="box-body">
+          <GenericItem v-for="(generic, index) in this.server.arrayGenericServer"
+            :generic="generic"
+            :key= "generic"
+            v-on:removeGeneric="removeGeneric(index)" >
+          </GenericItem>
+          <button @click="addGeneric">Add generic item</button>
+      </div>
+    </div>
+    <!-- Locations -->
+
+    <div class="box box-solid box-success">
+      <div class="box-header">
+          <h3 class="box-title">Locations</h3>
+          <div class="box-tools pull-right">
+              <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
+          </div>
+      </div>
+      <div class="box-body">
+        <LocationTag v-for="(location, index) in this.server.arrayLocations"
+          :location="location"
+          :key= "location"
+          v-on:removeLocation="removeLocation(index)">
+        </LocationTag>
+        <button @click="addLocation">AddLocation</button>
+      </div>
+    </div>
+
+  </div>
 </section>
 </template>
 

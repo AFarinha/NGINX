@@ -29,8 +29,8 @@ const routes = [
       }, {
         path: 'createVHost',
         component: CreateVHostView,
-        name: 'CreateVHost',
-        meta: {description: 'CreateVHost'}
+        name: 'Create VHost',
+        meta: {description: 'Here is possible to create a Virtual Host'}
       }, {
         path: 'vhosts',
         component: VhostsView,

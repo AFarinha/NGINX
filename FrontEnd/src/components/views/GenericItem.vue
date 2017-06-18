@@ -1,9 +1,12 @@
 <template>
-    <div class="form-group">
+    <div class="form-inline">
+        <label for="nameProp"> Name Propertie </label>
         <input name="nameProp" v-model="generic.nameProp" v-validate="'required'"  class="form-control" type="text">
+        <label for="nameProp"> Value Propertie </label>
         <input name="valueProp" v-model="generic.valueProp" v-validate="'required'" class="form-control" type="text">
 
-        <button @click="remove">Remove generic item</button>
+        <button @click="remove" type="button" class="btn btn-danger fa fa-times" ></button>
+
     </div>
 </template>
 

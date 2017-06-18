@@ -1,15 +1,17 @@
 <template>
 <section class="content">
-
-
+    {{server}}
+  <div class="box box-primary">
+      <div class="box-header">
+          <h3 class="box-title">Server</h3>
+      </div>
     <ServerTag v-bind:server="server" ></ServerTag>
 
     <button v-on:click="validateBeforeSubmit" id="createHost" type="button" class="btn btn-info">Create Host</button>
-    <button v-on:click="validateBeforeSubmit1" id="createHost" type="button" class="btn btn-info">Create Host1</button>
     <button @:click="postTestNginx" id="testNginx" type="button" class="btn btn-info">Test NginX</button>
     <button @:click="postReloadNginx" id="reloadNginx" type="button" class="btn btn-info">Reload NginX</button>
-
-  </section>
+  </div>
+</section>
 </template>
 
 <script>
@@ -57,33 +59,25 @@ export default {
   },
   methods: {
     validateBeforeSubmit: function () {
-      var self = this
-      self.$validator.validateAll().then(() => {
-        console.log('submit')
-      }).catch(() => {
-        console.log('errorSubmit')
-        EventBus.$emit('errors-changed', self.errors.errors)
-      })
-    },
-    validateBeforeSubmit1: function () {
       EventBus.$emit('validate')
       setTimeout(() => {
         if (!this.errors.any()) {
           this.postCreateHost()
-          console.log('ola111')
+          console.log('Post To Server')
         }
       }, 200)
     },
     postCreateHost: function () {
       var app = this
-
-      axios.post('/api/host', {
-        'host': app.host,
-        'port': app.port,
-        'destination': app.destination,
-        'cache': app.cache,
-        'extensions': app.extensions
-      })
+      app.server
+      axios.post('/api/host', app.server)
+    /*  axios.post('/api/host', {
+        'host': '',
+        'port': '',
+        'destination': '',
+        'cache': '',
+        'extensions': ''
+      }) */
         .then(function (response) {
           console.log('response')
           console.log(response)
