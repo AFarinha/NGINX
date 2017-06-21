@@ -2,25 +2,18 @@
 <section class="content">
   <div class="row ">
 
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-6">
       <h5><b> Host </b></h5>
       <div :class="{ 'has-error': errors.has('host') }" >
         <input name="host" v-model="server.host" v-validate="'required'" class="form-control" type="text" placeholder="Host">
         <span v-show="errors.has('host')" class="help-block">{{ errors.first('host') }}</span>
       </div>
     </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-6">
       <h5><b>Port </b></h5>
       <div :class="{ 'has-error': errors.has('port') }">
         <input name="port" v-model="server.port" v-validate="'required|numeric'" class="form-control" type="text" placeholder="port">
         <span v-show="errors.has('port')" class="help-block">{{ errors.first('port') }}</span>
-      </div>
-    </div>
-    <div  class="form-group col-md-4">
-      <h5><b>Destination</b></h5>
-      <div :class="{ 'has-error': errors.has('destination') }">
-        <input name="destination" v-model="server.destination" v-validate="'required'" class="form-control" type="text" placeholder="Destination">
-        <span v-show="errors.has('destination')" class="help-block">{{ errors.first('destination') }}</span>
       </div>
     </div>
   </div>
@@ -115,7 +108,7 @@ export default {
       this.server.arrayGenericServer.splice(index, 1)
     },
     addLocation: function () {
-      this.server.arrayLocations.push({ path: '', arrayUpstreams: [], arrayGeneric: [] })
+      this.server.arrayLocations.push({ path: '/', arrayUpstreams: [], arrayGeneric: [] })
     },
     removeLocation (index) {
       this.server.arrayLocations.splice(index, 1)

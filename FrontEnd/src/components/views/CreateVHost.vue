@@ -31,7 +31,6 @@ export default {
       server: {
         host: '',
         port: '',
-        destination: '',
         arrayGenericServer: [],
         arrayLocations: []
       }
@@ -71,13 +70,31 @@ export default {
       var app = this
       app.server
       axios.post('/api/host', app.server)
-    /*  axios.post('/api/host', {
+      axios.post('/api/host', {
         'host': '',
         'port': '',
         'destination': '',
         'cache': '',
         'extensions': ''
-      }) */
+      })
+        .then(function (response) {
+          console.log('response')
+          console.log(response)
+        })
+        .catch(error => {
+          console.log('error')
+          console.log(error.response.data)
+        })
+    },
+    Save: function () {
+      var app = this
+      axios.post('/api/host', app.server)
+      axios.post('/api/host', {
+        'instance': '1',
+        'name': app.server.host,
+        'port': app.server.port,
+        'config': app.server,
+      })
         .then(function (response) {
           console.log('response')
           console.log(response)

@@ -1,11 +1,14 @@
 <template>
 
-    <div class="form-group">
+    <div class="form-inline">
+        <label for="nameProp"> Host </label>
         <input v-model="upstream.name"  class="form-control" type="text">
-        <input v-model="upstream.ip" class="form-control" type="text">
-        <input v-model="upstream.weight" class="form-control" type="text">removeUpstream
+        <label for="nameProp"> Port </label>
+        <input v-model="upstream.port" class="form-control" type="text">
+        <label for="nameProp"> Weight </label>
+        <input v-model="upstream.weight" class="form-control" type="text">
 
-        <button @click="remove">Remove Upstream item</button>
+        <button @click="remove" type="button" class="btn btn-danger fa fa-times"></button>
     </div>
 </template>
 
