@@ -87,9 +87,9 @@ app.post('/insertVHost', function(req, res) {
 
 
 //a corrigir
-app.get('/getVHost:id', function(req, res) {
+app.get('/getVHost/:id', function(req, res) {
   console.log(req.params.id);
-  db.selectVHost(id,function(err){
+  db.selectVHost(req.params.id,function(err){
     if(err){
       return res.status(500).send({
         'status': 'failed',
