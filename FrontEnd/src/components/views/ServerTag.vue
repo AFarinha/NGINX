@@ -26,11 +26,11 @@
   </div>
   <div class="row center-block">
 
-    <div class="box box-solid box-success">
-      <div class="box-header">
-          <h3 class="box-title">Server - Generic Items</h3>
-          <div class="box-tools pull-right">
-              <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+	<div class="box box-solid box-info">
+            <div class="box-header bg-purple">
+              <h3 class="box-title">Server - Generic Items</h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-success btn-sm bg-yellow" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
           </div>
       </div>
@@ -40,16 +40,16 @@
             :key= "generic"
             v-on:removeGeneric="removeGeneric(index)" >
           </GenericItem>
-          <button @click="addGeneric">Add generic item</button>
+          <button @click="addGeneric" class="btn btn-primary">Add generic item</button>
       </div>
     </div>
     <!-- Locations -->
 
-    <div class="box box-solid box-success">
-      <div class="box-header">
-          <h3 class="box-title">Locations</h3>
-          <div class="box-tools pull-right">
-              <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+	<div class="box box-solid box-info">
+            <div class="box-header bg-purple">
+              <h3 class="box-title">Locations</h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-success btn-sm bg-yellow" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
           </div>
       </div>
@@ -59,7 +59,7 @@
           :key= "location"
           v-on:removeLocation="removeLocation(index)">
         </LocationTag>
-        <button @click="addLocation">AddLocation</button>
+        <button @click="addLocation" class="btn btn-primary">AddLocation</button>
       </div>
     </div>
 

@@ -4,12 +4,12 @@
 
 
 
-  <div class="box box-solid box-success">
-    <div class="box-header">
+  <div class="box box-solid box-box-info">
+    <div class="box-header bg-purple">
       <h3 class="box-title">Location </h3>
       <div class="box-tools pull-right">
-        <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-        <button class="btn btn-success btn-sm" data-widget="remove" @click="removeLocation" ><i class="fa fa-times"></i></button>
+        <button class="btn btn-success btn-sm bg-yellow" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        <button class="btn btn-danger btn-sm" data-widget="remove" @click="removeLocation" ><i class="fa fa-trash-o"></i></button>
       </div>
     </div>
     <div class="box-body">
@@ -32,28 +32,28 @@
         </div>
         <div class="row">
           <!-- Begin Upstreams -->
-          <div class="box box-solid box-success">
-            <div class="box-header">
+          <div class="box box-solid box-info">
+            <div class="box-header bg-purple">
               <h3 class="box-title">Location - Upstream</h3>
               <div class="box-tools pull-right">
-                <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-success btn-sm bg-yellow" data-widget="collapse"><i class="fa fa-minus"></i></button>
                 <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
               </div>
             </div>
             <div class="box-body">
               <UpstreamItem v-for="(upstream, index) in this.location.arrayUpstreams" :upstream="upstream" :key="upstream" v-on:removeUpstream="removeUpstream(index)">
               </UpstreamItem>
-              <button @click="addUpstream">Add Upstream item</button>
+              <button @click="addUpstream" class="btn btn-primary">Add Upstream item</button>
             </div>
           </div>
           <!-- End Upstreams -->
 
           <!-- Begin Cache -->
-          <div class="box box-solid box-success">
-            <div class="box-header">
+          <div class="box box-solid box-info">
+            <div class="box-header bg-purple">
               <h3 class="box-title">Location - Cache</h3>
               <div class="box-tools pull-right">
-                <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-success btn-sm bg-yellow" data-widget="collapse"><i class="fa fa-minus"></i></button>
                 <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
               </div>
             </div>
@@ -71,20 +71,21 @@
             <!-- End Cache -->
 
           <!-- Begin LocationsGeneric -->
-          <div class="box box-solid box-success">
-            <div class="box-header">
+          <div class="box box-solid box-info">
+            <div class="box-header bg-purple">
               <h3 class="box-title">Location - Generic Items</h3>
               <div class="box-tools pull-right">
-                <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-success btn-sm bg-yellow" data-widget="collapse"><i class="fa fa-minus"></i></button>
                 <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
               </div>
             </div>
             <div class="box-body">
               <GenericItem v-for="(generic, index) in this.location.arrayGeneric" :generic="generic" :key="generic" v-on:removeGeneric="removeGeneric(index)">
               </GenericItem>
-              <button @click="addGeneric">Add generic item</button>
+              <button @click="addGeneric" class="btn btn-primary">Add generic item</button>
             </div>
           </div>
+			
             <!-- End LocationsGeneric -->
         </div>
       </div>

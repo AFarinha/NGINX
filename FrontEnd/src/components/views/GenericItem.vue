@@ -1,11 +1,11 @@
 <template>
     <div class="form-inline">
-        <label for="nameProp"> Name Propertie </label>
+        <label for="nameProp"> Name Property: </label>
         <input name="nameProp" v-model="generic.nameProp" v-validate="'required'"  class="form-control" type="text">
-        <label for="nameProp"> Value Propertie </label>
+        <label for="nameProp"> Value Property: </label>
         <input name="valueProp" v-model="generic.valueProp" v-validate="'required'" class="form-control" type="text">
 
-        <button @click="remove" type="button" class="btn btn-danger fa fa-times" ></button>
+        <button @click="remove" type="button" class="btn btn-danger fa fa-trash-o" ></button>
 
     </div>
 </template>

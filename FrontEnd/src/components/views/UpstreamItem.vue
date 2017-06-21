@@ -5,7 +5,7 @@
         <input v-model="upstream.ip" class="form-control" type="text">
         <input v-model="upstream.weight" class="form-control" type="text">removeUpstream
 
-        <button @click="remove">Remove Upstream item</button>
+        <button @click="remove" class="btn btn-primary">Remove Upstream item</button>
     </div>
 </template>
 

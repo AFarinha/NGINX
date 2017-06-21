@@ -1,15 +1,20 @@
 <template>
 <section class="content">
     {{server}}
-  <div class="box box-primary">
-      <div class="box-header">
+	<div class="box box-solid box-info">
+      <div class="box-header box bg-purple" >
           <h3 class="box-title">Server</h3>
       </div>
     <ServerTag v-bind:server="server" ></ServerTag>
 
-    <button v-on:click="validateBeforeSubmit" id="createHost" type="button" class="btn btn-info">Create Host</button>
-    <button @:click="postTestNginx" id="testNginx" type="button" class="btn btn-info">Test NginX</button>
-    <button @:click="postReloadNginx" id="reloadNginx" type="button" class="btn btn-info">Reload NginX</button>
+			<table style="width:20%">
+			  <tr>
+				<th><button v-on:click="validateBeforeSubmit" id="createHost" type="button" class="btn btn-primary">Create Host</button></th>
+				<th><button @:click="postTestNginx" id="testNginx" type="button" class="btn btn-primary">Test NginX</button></th>
+				<th><button @:click="postReloadNginx" id="reloadNginx" type="button" class="btn btn-primary">Reload NginX</button></th>
+			  </tr>
+			</table>
+
   </div>
 </section>
 </template>
