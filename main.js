@@ -2,10 +2,12 @@ var express = require('express'),
   fs = require('fs'),
   utils = require('./utils'),
   cp = require('child_process'),
-  bodyParser = require('body-parser');
-
+  bodyParser = require('body-parser'),
+  sqlite3 = require('sqlite3').verbose(),
+  db = require('./examples/SiteNGINX/database.js');
 
 var app = express();
+var databaseName = "nginx";
 
 app.use(express.static('./public'));
 app.use(bodyParser.json());
@@ -60,8 +62,50 @@ app.post('/host', function(req, res) {
   });
 });
 
+
+app.post('/insertVHost', function(req, res) {
+
+  var vhost = {'instance':req.body.instance
+              ,'name'    :req.body.name
+              ,'port'    :req.body.port
+              ,'config'  :req.body.config
+            };
+
+  db.insertVHost(vhost,function(err){
+    if(err){
+      return res.status(500).send({
+        'status': 'failed',
+        'message': err
+      });
+    }
+
+    res.send({
+      'status': 'ok'
+    });
+  });
+});
+
+
+//a corrigir
+app.get('/getVHost:id', function(req, res) {
+  console.log(req.params.id);
+  db.selectVHost(id,function(err){
+    if(err){
+      return res.status(500).send({
+        'status': 'failed',
+        'message': err
+      });
+    }
+
+    res.send({
+      'status': 'ok'
+    });
+  });
+});
+
 var port = process.env.PORT || 3000;
 
 app.listen(port, function() {
+  db.initBD(databaseName);
   console.log('Dashboard listening on port ' + port);
 });

@@ -1,31 +1,42 @@
 var https = require("https"),
 	cheerio = require('cheerio'),
-	request = require('request');
+	request = require('request'),
+	sqlite3 = require('sqlite3').verbose(),
+	db = require('./database.js');
+
+var dbName = 'nginx';
+
+var db;
 
 var options = {
     host: 'nginx.org',
 	path: '/en/docs/'
 };
 
+var originalPath = options.path;
 var listModules = [];
 var listDirectives = [];
 
+
 https.get(options, function (http_res) {
-    // initialize the container for our data
+	db.initBD(dbName);
+
+	var vhost = {'instance':'teste'
+				, 'name':'teste'
+				, 'port':'1234'
+				, 'config' : 'teste'};
+
+	db.insertVHost(vhost);
+
     var data = "";
 
-    // this event fires many times, each time collecting another piece of the response
     http_res.on("data", function (chunk) {
-        // append this chunk to our growing `data` var
         data += chunk;
     });
 
-    // this event fires *one* time, after all the `data` events/chunks have been gathered
     http_res.on("end", function () {
-        // you can use res.send instead of console.log to output via express
 		parseModules(data);
-		parseDirectives2(0);
-		//parseDirectives();
+		parseDirectives(0);
 		
 		//console.log(listModules);
 		//console.log(listDirectives);
@@ -58,94 +69,59 @@ var parseModules = function(response) {
 	
 }
 
-
-var parseDirectives = function() {
-	//console.log(list);
-	var backupPath = options.path;
+var parseDirectives = function(nrModule) {
 	var start = 1;
-	var auxLink="";
 	var idDirectives=1;
-	
-	//ciclo for
-	
-	for(var nrModule=0;i<listModules.length;nrModule++){
-		options.path = backupPath;
-		options.path = options.path + listModules[nrModule].linka;
-		console.log("PATH",options.path);
-		
-		https.get(options, function (http_res) {
-			// initialize the container for our data
-			var data = "";
-
-			// this event fires many times, each time collecting another piece of the response
-			http_res.on("data", function (chunk) {
-				// append this chunk to our growing `data` var
-				data += chunk;
-			});
-
-			// this event fires *one* time, after all the `data` events/chunks have been gathered
-			http_res.on("end", function () {
-				
-				var $ = cheerio.load(data);
-				$('#content table tbody tr td a').each(function(i, element){
-					var a = $(this);
-					
-					if(start=1){
-						auxLink = options.host+options.path.trim()+a.attr('href').toString().trim();
-						listDirectives.push({"id": idDirectives,"idModule":listModules[nrModule].id ,"nome": a.text().trim(),"link":auxLink});
-						console.log("id:", idDirectives,"idModule:",listModules[nrModule].id ,"nome:", a.text().trim(),"link:",auxLink);
-					}
-					//esta depois para ainda copiar o proprio
-					if(a.text().trim() == "Embedded Variables"){
-						start=0;
-					}
-					
-					idDirectives++;
-				});
-			});	
-		});
-		idDirectives = 1;
-	}//fim ciclo for
-}
-
-
-var backupPath = options.path;
-
-var parseDirectives2 = function(nrModule) {
-	var start = 1;
 	var auxLink="";
-	var idDirectives=1;
 	
-	options.path = backupPath;
+	options.path = originalPath;
 	options.path = options.path + listModules[nrModule].linka;
-	console.log("PATH",options.path,"\n");
+	
+	//console.log("PATH",options.path,"\n");
 	
 	https.get(options, function (http_res) {
 		// initialize the container for our data
 		var data = "";
 
-		// this event fires many times, each time collecting another piece of the response
+		// evento onde se vai recebendo a resposta
 		http_res.on("data", function (chunk) {
-			// append this chunk to our growing `data` var
 			data += chunk;
 		});
 
-		// this event fires *one* time, after all the `data` events/chunks have been gathered
+		//Ao ter a resposta toda
 		http_res.on("end", function () {
 			var $ = cheerio.load(data);
 			$('#content table tbody tr td a').each(function(i, element){
 				var a = $(this);
 				auxLink = options.host+options.path.trim()+a.attr('href').toString().trim();
 				listDirectives.push({"id": idDirectives,"idModule":listModules[nrModule].id ,"nome": a.text().trim(),"link":auxLink});
-				console.log	("id:", idDirectives,"idModule:",listModules[nrModule].id ,"nome:", a.text().trim(),"link:",auxLink,"\n");
+				//console.log	("id:", idDirectives,"idModule:",listModules[nrModule].id ,"nome:", a.text().trim(),"link:",auxLink,"\n");
 				idDirectives++;
 			});
 			nrModule++;
 			
+			//Se houver mais modules, passa ao proximo
 			if(nrModule<listModules.length){
-				parseDirectives2(nrModule);
+				parseDirectives(nrModule);
 			}
 		});	
 	});
+
+}
+
+var createBD = function(nome) {
+	db = new sqlite3.Database('./'+nome+'.db');
+	console.log('Criada a BD:',nome);
+
+	db.serialize(function() {  
+		db.run("CREATE TABLE IF NOT EXISTS modules (id INT, name TEXT, link TEXT)");
+		console.log("Criada tabela modules");
+		db.run("CREATE TABLE IF NOT EXISTS directives (id INT, idModule INT, name TEXT, link TEXT)");  
+		console.log("Criada tabela directives");
+		db.run("CREATE TABLE IF NOT EXISTS vhost (instancia TEXT,name TEXT, port INT, config TEXT)");  
+		console.log("Criada tabela vhost");
+	});  
+	console.log("CLOSE BD");
+	db.close(); 
 
 }
