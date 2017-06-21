@@ -93,7 +93,7 @@ export default {
         'instance': '1',
         'name': app.server.host,
         'port': app.server.port,
-        'config': app.server,
+        'config': app.server
       })
         .then(function (response) {
           console.log('response')
