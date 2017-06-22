@@ -10,39 +10,105 @@ module.exports = {
         db.serialize(function() {  
             db.run("CREATE TABLE IF NOT EXISTS modules (id INT, name TEXT, link TEXT,PRIMARY KEY (id))");
             db.run("CREATE TABLE IF NOT EXISTS directives (id INT, idModule INT, name TEXT, link TEXT,PRIMARY KEY (id),FOREIGN KEY(idModule) REFERENCES modules(id))");  
-            db.run("CREATE TABLE IF NOT EXISTS vhosts (id INTEGER PRIMARY KEY AUTOINCREMENT, instance TEXT,name TEXT, port INT, config TEXT)");  
+            db.run("CREATE TABLE IF NOT EXISTS vhosts (id INTEGER PRIMARY KEY AUTOINCREMENT, instance TEXT,name TEXT, port INT , config TEXT, UNIQUE(instance,name,port))");  
         });  
         
         closeBD();
     },
-    insertVHost: function(vhost, callback) {
+    insertVHost: function(vhost, response) {
         openBD();
 
+        //db.run("INSERT INTO vhosts (instance, name, port,config) VALUES (?,?,?,?)"
         db.run("INSERT INTO vhosts (instance, name, port,config) VALUES (?,?,?,?)"
             , vhost.instance
             , vhost.name
             , vhost.port
             , vhost.config
             , function(err) {
-                if(callback) { 
-                    callback(err); 
+                if(err) { 
+                    //SE ERRO, JÁ EXISTE
+                     db.run("UPDATE vhosts set config = ? where instance = ? and name = ? and port = ?"
+                                , vhost.config
+                                , vhost.instance
+                                , vhost.name
+                                , vhost.port
+                                , function(err) {
+                                    if(err) { 
+                                        console.log({'STATUS':'FAILED','MESSAGE':err});
+                                        return response({'STATUS':'FAILED','MESSAGE':err});  
+                                    }else{
+                                        db.all("SELECT id FROM vhosts where instance = ? and name = ? and port = ?"
+                                        , vhost.instance
+                                        , vhost.name
+                                        , vhost.port
+                                        , function(err, rows) {
+                                            if(err) { 
+                                                console.log({'STATUS':'FAILED','MESSAGE':err,'JSON':{}});
+                                                return response({'STATUS':'FAILED','MESSAGE':err,'JSON':{}});  
+                                            }
+                                            if (rows == 0) {
+                                                console.log({'STATUS':'OK','MESSAGE':'SUCCESS - NO ROWS','JSON':{}});
+                                                response({'STATUS':'OK','MESSAGE':'SUCCESS - NO ROWS','JSON':{}});
+                                            }else{
+                                                rows.forEach(function (row) {  
+                                                    console.log({'STATUS':'OK','MESSAGE':'UPDATED ID: '+ row.id,'JSON': {'id': row.id }});  
+                                                    response({'STATUS':'OK','MESSAGE':'UPDATED ID: '+ row.id,'JSON': {'id': row.id }});
+                                                });  
+                                                
+                                            }
+                                        });
+                                    }
+                                });
+
+
+                }else{
+                    console.log({'STATUS':'OK','MESSAGE':'INSERTED ID: '+this.lastID,'JSON': {'id':this.lastID}});
+                    return response({'STATUS':'OK','MESSAGE':'INSERTED ID: '+this.lastID,'JSON': {'id':this.lastID}});
                 }
             });
  
         closeBD();
     },
-    selectVHost: function(id, callback) {
-   
+    selectVHost: function(id, response) {
+    
         openBD();
-
-        db.all("SELECT instance, name, port,config FROM vhosts where id = ?"
+        var result;
+        db.all("SELECT id,instance, name, port,config FROM vhosts where id = ?"
         , id
         , function(err, rows) {
-          console.log(JSON.stringify(rows));
+            if(err) { 
+                return response({'STATUS':'FAILED','MESSAGE':err,'JSON':{}});  
+            }
+            if (rows == 0) {
+                    response({'STATUS':'OK','MESSAGE':'SUCCESS','JSON':{}});
+            }else{
+                response({'STATUS':'OK','MESSAGE':'SUCCESS','JSON':JSON.parse(JSON.stringify(rows))[0]});
+            }
+        });
+ 
+        closeBD();
+    },
+    selectAllVHosts: function(id, response) {
+    
+        openBD();
+        var result;
+        db.all("SELECT id,instance, name, port,config FROM vhosts"
+        , function(err, rows) {
+            if(err) { 
+                return response({'STATUS':'FAILED','MESSAGE':err,'JSON':{}});  
+            }
+            if (rows == 0) {
+                    response({'STATUS':'OK','MESSAGE':'SUCCESS','JSON':{}});
+            }else{
+                response({'STATUS':'OK','MESSAGE':'SUCCESS','JSON':JSON.parse(JSON.stringify(rows))});
+            }
         });
  
         closeBD();
     }
+
+
+
 }
 
 var openBD = function() {

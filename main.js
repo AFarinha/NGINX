@@ -18,7 +18,7 @@ app.post('/nginx/reload', function(req, res) {
   });
 
   res.send({
-    'status': 'ok',
+    'STATUS': 'OK',
     'stdout': output.stdout.toString(),
     'stderr': output.stderr.toString(),
   });
@@ -30,7 +30,7 @@ app.post('/nginx/test', function(req, res) {
   });
 
   res.send({
-    'status': 'ok',
+    'STATUS': 'OK',
     'stdout': output.stdout.toString(),
     'stderr': output.stderr.toString(),
   });
@@ -50,14 +50,14 @@ app.post('/host', function(req, res) {
 
   fs.writeFile('/etc/nginx/conf.d/' + req.body.host + '.conf', confcontent, function(err) {
     if (err) {
-      return res.status(500).send({
-        'status': 'failed',
-        'message': err
+      return res.STATUS(500).send({
+        'STATUS': 'FAILED',
+        'MESSAGE': err
       });
     }
 
     res.send({
-      'status': 'created'
+      'STATUS': 'created'
     });
   });
 });
@@ -70,36 +70,24 @@ app.post('/insertVHost', function(req, res) {
               ,'port'    :req.body.port
               ,'config'  :req.body.config
             };
+  
+  db.insertVHost(vhost,function(message){
+    res.send(message);
+  });
 
-  db.insertVHost(vhost,function(err){
-    if(err){
-      return res.status(500).send({
-        'status': 'failed',
-        'message': err
-      });
-    }
+});
 
-    res.send({
-      'status': 'ok'
-    });
+app.get('/getVHost/:id', function(req, res) {
+
+  db.selectVHost(req.params.id,function(message){
+    res.send(message);
   });
 });
 
+app.get('/getAllVHosts', function(req, res) {
 
-//a corrigir
-app.get('/getVHost/:id', function(req, res) {
-  console.log(req.params.id);
-  db.selectVHost(req.params.id,function(err){
-    if(err){
-      return res.status(500).send({
-        'status': 'failed',
-        'message': err
-      });
-    }
-
-    res.send({
-      'status': 'ok'
-    });
+  db.selectAllVHosts(req.params.id,function(message){
+    res.send(message);
   });
 });
 
