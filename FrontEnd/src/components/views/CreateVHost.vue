@@ -1,16 +1,21 @@
 <template>
 <section class="content">
     {{server}}
-  <div class="box box-primary">
-      <div class="box-header">
-          <h3 class="box-title">Server</h3>
-      </div>
-    <ServerTag v-bind:server="server" ></ServerTag>
 
-    <button v-on:click="validateBeforeSubmit" id="createHost" type="button" class="btn btn-info">Create Host</button>
-    <button @:click="postTestNginx" id="testNginx" type="button" class="btn btn-info">Test NginX</button>
-    <button @:click="postReloadNginx" id="reloadNginx" type="button" class="btn btn-info">Reload NginX</button>
-  </div>
+    <div class="box box-solid box-danger">
+      <div class="box-header box-solid box-danger">
+        <h3 class="box-title">Server</h3>
+      </div>
+    </div>
+      <!--   <div class="box-body"> -->
+        <ServerTag v-bind:server="server" ></ServerTag>
+
+        <button v-on:click="validateBeforeSubmit" id="createHost" type="button" class="btn btn-info">Create Host</button>
+        <button @:click="postTestNginx" id="testNginx" type="button" class="btn btn-info">Test NginX</button>
+        <button @:click="postReloadNginx" id="reloadNginx" type="button" class="btn btn-info">Reload NginX</button>
+      </div>
+  <!--   -->
+
 </section>
 </template>
 
