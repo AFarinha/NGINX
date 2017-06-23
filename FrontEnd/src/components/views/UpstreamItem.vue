@@ -3,8 +3,6 @@
     <div class="form-inline">
         <label for="nameProp"> Host </label>
         <input v-model="upstream.name"  class="form-control" type="text">
-        <label for="nameProp"> Port </label>
-        <input v-model="upstream.port" class="form-control" type="text">
         <label for="nameProp"> Weight </label>
         <input v-model="upstream.weight" class="form-control" type="text">
 

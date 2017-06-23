@@ -5,7 +5,7 @@
       <div class="box-header">
           <h3 class="box-title"><b> General Configuraion </b></h3>
           <div class="box-tools pull-right">
-              <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
           </div>
       </div>
@@ -20,7 +20,7 @@
         <div class="form-group col-md-6">
           <h5><b>Port </b></h5>
           <div :class="{ 'has-error': errors.has('port') }">
-            <input name="port" v-model="server.port" v-validate="'required|numeric'" class="form-control" type="text" placeholder="port">
+            <input name="port" v-model="server.port" v-validate="'required|numeric'" class="form-control" type="text" placeholder="Port">
             <span v-show="errors.has('port')" class="help-block">{{ errors.first('port') }}</span>
           </div>
         </div>
@@ -33,7 +33,7 @@
       <div class="box-header">
           <h3 class="box-title"><b> Server - Generic Items </b></h3>
           <div class="box-tools pull-right">
-              <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
           </div>
       </div>

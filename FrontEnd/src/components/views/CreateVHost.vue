@@ -2,11 +2,7 @@
 <section class="content">
     {{server}}
 
-    <div class="box box-solid box-danger">
-      <div class="box-header box-solid box-danger">
-        <h3 class="box-title">Server</h3>
-      </div>
-    </div>
+
       <!--   <div class="box-body"> -->
         <ServerTag v-bind:server="server" ></ServerTag>
 

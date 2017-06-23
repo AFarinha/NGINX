@@ -1,34 +1,41 @@
 <template>
 <section class="">
-  <div class="box box-solid box-warning " style="background:transparent !important">
+  <div class="box box-solid box-primary " style="background:transparent !important">
     <div class="box-header">
       <h3 class="box-title"><b> Location </b></h3>
       <div class="box-tools pull-right">
-        <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-        <button class="btn btn-success btn-sm" data-widget="remove" @click="removeLocation" ><i class="fa fa-times"></i></button>
+        <button class="btn btn-danger btn-sm" data-widget="remove" @click="removeLocation" ><i class="fa fa-times"></i></button>
+		<button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
       </div>
     </div>
     <div class="box-body">
       <div class="content">
         <div class="row">
           <div class="col-md-6">
-            <div class="box box-solid box-success">
+            <div class="box box-solid box-default">
               <div class="box-header">
                 <h3 class="box-title">Location - Path</h3>
                 <div class="box-tools pull-right">
-                  <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                  <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
                   <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
                 </div>
               </div>
             <div class="box-body">
-              <div class="form-group col-md-2">
-                <input type="radio" id="one" value="1" name="loc" v-model="selected">
-                <label for="one">Generic</label>
-                <br>
-                <input type="radio" id="two" value="2" name="loc" v-model="selected">
-                <label for="two">File Types</label>
-                <br>
-              </div>
+				<div class="row">
+				  <div class="form-group col-md-6">
+					<input type="radio" id="one" value="1" name="loc" v-model="selected">
+					<label for="one">Generic</label>
+					<br>
+				  </div>
+					
+					<div class="form-group col-md-6">
+					<input type="radio" id="two" value="2" name="loc" v-model="selected">
+					<label for="two">File Types</label>
+
+					<br>
+					</div>
+				  </div>
+			  <div class="row">
               <!-- INICIO LOCATION PATH -->
               <div class="form-group col-md-10" v-if="selected == '1' " >
                 <div :class="{ 'has-error': errors.has('path') }">
@@ -62,24 +69,23 @@
               <!-- FIM LOCATION PATH -->
             </div>
             </div>
-          </div>
+           </div>
+		  </div>
           <div class="col-md-6">
-            <div class="box box-solid box-success">
+            <div class="box box-solid box-default">
               <div class="box-header">
                 <h3 class="box-title">Location - Proxy Pass</h3>
                 <div class="box-tools pull-right">
-                  <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                  <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
                   <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
                 </div>
               </div>
               <div class="box-body">
-                <div class="form-group col-md-4">
                   <h5><b> Proxy Pass </b></h5>
                   <div :class="{ 'has-error': errors.has('proxyPass') }">
                     <input name="proxyPass" v-model="location.proxyPass" v-validate="'required'" class="form-control" type="text" placeholder="Proxy Pass">
                     <span v-show="errors.has('proxyPass')" class="help-block">{{ errors.first('proxyPass') }}</span>
                   </div>
-                </div>
               </div>
             </div>
           </div>
@@ -87,11 +93,11 @@
         <div class="row">
           <!-- Begin Upstreams -->
           <div class="col-md-6">
-            <div class="box box-solid box-success">
+            <div class="box box-solid box-default">
               <div class="box-header">
                 <h3 class="box-title">Location - Upstream</h3>
                 <div class="box-tools pull-right">
-                  <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                  <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
                   <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
                 </div>
               </div>
@@ -106,11 +112,11 @@
 
           <!-- Begin Cache -->
           <div class="col-md-6">
-            <div class="box box-solid box-success">
+            <div class="box box-solid box-default">
               <div class="box-header">
                 <h3 class="box-title">Location - Cache</h3>
                 <div class="box-tools pull-right">
-                  <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                  <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
                   <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
                 </div>
               </div>
@@ -139,20 +145,22 @@
         </div>
         <div class="row">
           <!-- Begin LocationsGeneric -->
-          <div class="box box-solid box-success">
-            <div class="box-header">
-              <h3 class="box-title">Location - Generic Items</h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
-              </div>
-            </div>
-            <div class="box-body">
-              <GenericItem v-for="(generic, index) in this.location.arrayGeneric" :generic="generic" :key="generic" v-on:removeGeneric="removeGeneric(index)">
-              </GenericItem>
-              <button @click="addGeneric">Add generic item</button>
-            </div>
-          </div>
+		  <div class="col-md-12">
+			  <div class="box box-solid box-default">
+				<div class="box-header">
+				  <h3 class="box-title">Location - Generic Items</h3>
+				  <div class="box-tools pull-right">
+					<button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+					<!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
+				  </div>
+				</div>
+				<div class="box-body">
+				  <GenericItem v-for="(generic, index) in this.location.arrayGeneric" :generic="generic" :key="generic" v-on:removeGeneric="removeGeneric(index)">
+				  </GenericItem>
+				  <button @click="addGeneric">Add generic item</button>
+				</div>
+			  </div>
+		  </div>
           <!-- End LocationsGeneric -->
         </div>
       </div>
@@ -174,7 +182,7 @@ export default {
   },
   data () {
     return {
-      selected: ''
+      selected: '1'
     }
   },
   watch: {
