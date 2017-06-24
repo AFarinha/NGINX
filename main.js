@@ -42,6 +42,8 @@ app.post('/host', function(req, res) {
   var confcontent = generateFiles.createServerConf(req.body, {
 
   });
+  /******* ORIGINAL INI *******/
+  
   fs.writeFile('/etc/nginx/conf.d/' + req.body.host + '.conf', confcontent, function(err) {
     if (err) {
       return res.status(500).send({
@@ -65,13 +67,31 @@ app.post('/host', function(req, res) {
         );
       });
     }
-/*
+
     res.send({
       'STATUS': 'created'
     });
-  */
+  
   });
   
+  /******* ORIGINAL FIM *******/
+
+  /******* TESTES - INI *******//*
+  var vhost = {
+               'id'      :req.body.id
+              ,'instance':req.body.instance || ''
+              ,'name'    :req.body.host
+              ,'port'    :req.body.port
+              ,'config'  :req.body
+            };
+  
+      db.insertVHostV2(vhost,function(message){
+        console.log(message);
+        return res.status(200).send(
+          message
+        );
+      }); 
+  /******* TESTES - FIM ********/
 
 });
 

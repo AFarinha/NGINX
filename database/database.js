@@ -89,14 +89,14 @@ module.exports = {
                 }
             });
         }else{
-            console.log("vhost.config",vhost.config,"vhost.instance", vhost.instance,"vhost.name", vhost.name,"vhost.port", vhost.port,"vhost.id", vhost.id);
+            console.log("UPDATE vhosts set config = ",vhost.config," where instance = ", vhost.instance," and name = " , vhost.name," and port = ", vhost.port," and id = ", vhost.id);
 
             db.run("UPDATE vhosts set config = ? where instance = ? and name = ? and port = ? and id = ?"
-                , vhost.config
+                , JSON.stringify(vhost.config)
                 , vhost.instance
                 , vhost.name
                 , vhost.port
-                , parseInt(vhost.id)
+                , vhost.id
                 , function(err) {
                     if(err) { 
                         console.log({'status':'failed update','message':err});
