@@ -162,15 +162,12 @@ module.exports = {
  
         closeBD();
     },
-    deleteVHost: function(vhost, response) {
+    deleteVHost: function(id, response) {
     
         openBD();
         
-        db.all("DELETE FROM vhosts where instance = ? and name = ? and port = ? and id = ?"
-            , vhost.instance
-            , vhost.name
-            , vhost.port
-            , vhost.id
+        db.all("DELETE FROM vhosts where id = ?"
+            , id
             , function(err, rows) {
                 if(err) { 
                     return response({'STATUS':'FAILED','MESSAGE':err});  

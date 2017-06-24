@@ -107,17 +107,9 @@ app.get('/getAllVHosts', function(req, res) {
   });
 });
 
-app.delete('/deleteVHost', function(req, res) {
-
-  var vhost = {
-               'id'      :req.body.id
-              ,'instance':req.body.instance
-              ,'name'    :req.body.name
-              ,'port'    :req.body.port
-              ,'config'  :req.body.config
-            };
+app.delete('/deleteVHost/:id', function(req, res) {
   
-  db.deleteVHost(vhost,function(message){
+  db.deleteVHost(req.params.id,function(message){
     res.send(message);
   });
 
