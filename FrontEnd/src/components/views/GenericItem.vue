@@ -1,13 +1,30 @@
 <template>
-    <div class="form-inline">
-        <label for="nameProp"> Name Propertie </label>
-        <input name="nameProp" v-model="generic.nameProp" v-validate="'required'"  class="form-control" type="text">
-        <label for="nameProp"> Value Propertie </label>
-        <input name="valueProp" v-model="generic.valueProp" v-validate="'required'" class="form-control" type="text">
-
-        <button @click="remove" type="button" class="btn btn-danger fa fa-times" ></button>
+  <div class="row">
+    <div class="col-md-6">
 
     </div>
+    <div class="col-md-6">
+
+      <div class="row" style="margin-top: 0.5em">
+          <div class="col-xs-5">
+            <div :class="{ 'has-error': errors.has('nameProp') }">
+              <input name="nameProp" v-model="generic.nameProp" v-validate="'required'" placeholder="Name Propertie"  class="form-control" type="text">
+              <span v-show="errors.has('nameProp')" class="help-block">{{ errors.first('nameProp') }}</span>
+            </div>
+          </div>
+          <div class="col-xs-5">
+            <div :class="{ 'has-error': errors.has('valueProp') }">
+              <input name="valueProp" v-model="generic.valueProp" v-validate="'required'" placeholder="Value Propertie"  class="form-control" type="text">
+              <span v-show="errors.has('valueProp')" class="help-block">{{ errors.first('valueProp') }}</span>
+            </div>
+          </div>
+          <div class="col-xs-2">
+              <button @click="remove" type="button" class="btn btn-danger fa fa-times" ></button>
+          </div>
+      </div>
+
+    </div>
+  </div>
 </template>
 
 <script>

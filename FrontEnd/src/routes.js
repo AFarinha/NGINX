@@ -9,7 +9,6 @@ import SettingView from './components/views/Setting.vue'
 import ReposView from './components/views/Repos.vue'
 import VhostsView from './components/views/Vhosts.vue'
 import CreateVHostView from './components/views/CreateVHost.vue'
-import ParaEstragarView from './components/views/ParaEstragar.vue'
 
 // Routes
 const routes = [
@@ -52,11 +51,6 @@ const routes = [
         component: ReposView,
         name: 'Repository',
         meta: {description: 'List of popular javascript repos'}
-      }, {
-        path: 'paraEstragar',
-        component: ParaEstragarView,
-        name: 'paraEstragar',
-        meta: {description: 'Para Estragar isto tudo'}
       }
     ]
   }, {

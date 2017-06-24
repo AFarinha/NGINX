@@ -1,13 +1,23 @@
 <template>
 
-    <div class="form-inline">
-        <label for="nameProp"> Host </label>
-        <input v-model="upstream.name"  class="form-control" type="text">
-        <label for="nameProp"> Weight </label>
-        <input v-model="upstream.weight" class="form-control" type="text">
+  <div class="row center-block" style="margin-top: 0.5em">
+      <div class="col-xs-6">
+        <div :class="{ 'has-error': errors.has('name') }">
+          <input name="name" v-model="upstream.name" v-validate="'required'" placeholder="Host"  class="form-control" type="text">
+          <span v-show="errors.has('name')" class="help-block">{{ errors.first('name') }}</span>
+        </div>
+      </div>
+      <div class="col-xs-4">
+        <div :class="{ 'has-error': errors.has('weight') }">
+          <input name="weight" v-model="upstream.weight" v-validate="'required|numeric'" placeholder="Weight"  class="form-control" type="text">
+          <span v-show="errors.has('weight')" class="help-block">{{ errors.first('weight') }}</span>
+        </div>
+      </div>
+      <div class="col-xs-2">
+          <button @click="remove" type="button" class="btn btn-danger fa fa-times"></button>
+      </div>
+  </div>
 
-        <button @click="remove" type="button" class="btn btn-danger fa fa-times"></button>
-    </div>
 </template>
 
 <script>

@@ -43,7 +43,7 @@
             :key= "generic"
             v-on:removeGeneric="removeGeneric(index)" >
           </GenericItem>
-          <button @click="addGeneric">Add generic item</button>
+          <button @click="addGeneric" type="button" class="btn btn-success">Add Generic Item</button>
       </div>
     </div>
     <!-- Locations
@@ -59,7 +59,7 @@
           :key= "location"
           v-on:removeLocation="removeLocation(index)">
         </LocationTag>
-        <button @click="addLocation">AddLocation</button>
+        <button @click="addLocation" type="button" class="btn btn-success">AddLocation</button>
 
 
   </div>
@@ -115,7 +115,18 @@ export default {
       this.server.arrayGenericServer.splice(index, 1)
     },
     addLocation: function () {
-      this.server.arrayLocations.push({ path: '/', arrayUpstreams: [], arrayGeneric: [] })
+      this.server.arrayLocations.push({
+        pathGeneric: true,
+        path: '/',
+        pathFileType: [],
+        cacheServer: false,
+        cacheClient: false,
+        cacheClientTimeNumber: '',
+        cacheClientTimeUnit: { code: 'm', description: 'minutes' },
+        IsProxyPass: true,
+        proxyPass: '',
+        arrayUpstreams: [],
+        arrayGeneric: [] })
     },
     removeLocation (index) {
       this.server.arrayLocations.splice(index, 1)
