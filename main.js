@@ -4,7 +4,7 @@ var express = require('express'),
   cp = require('child_process'),
   bodyParser = require('body-parser'),
   sqlite3 = require('sqlite3').verbose(),
-  db = require('./examples/SiteNGINX/database.js');
+  db = require('./database/database.js');
 
 var app = express();
 var databaseName = "nginx";
@@ -77,6 +77,22 @@ app.post('/insertVHost', function(req, res) {
 
 });
 
+app.post('/insertVHostV2', function(req, res) {
+
+  var vhost = {
+               'id'      :req.body.id
+              ,'instance':req.body.instance
+              ,'name'    :req.body.name
+              ,'port'    :req.body.port
+              ,'config'  :req.body.config
+            };
+  
+  db.insertVHostV2(vhost,function(message){
+    res.send(message);
+  });
+
+});
+
 app.get('/getVHost/:id', function(req, res) {
 
   db.selectVHost(req.params.id,function(message){
@@ -86,9 +102,17 @@ app.get('/getVHost/:id', function(req, res) {
 
 app.get('/getAllVHosts', function(req, res) {
 
-  db.selectAllVHosts(req.params.id,function(message){
+  db.selectAllVHosts(function(message){
     res.send(message);
   });
+});
+
+app.delete('/deleteVHost/:id', function(req, res) {
+  
+  db.deleteVHost(req.params.id,function(message){
+    res.send(message);
+  });
+
 });
 
 var port = process.env.PORT || 3000;
