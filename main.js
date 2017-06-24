@@ -39,9 +39,44 @@ app.post('/nginx/test', function(req, res) {
 
 app.post('/host', function(req, res) {
   //console.log(req.body);
-  var confcontent = generateFiles.createServerConf(req.body, {
+  var confcontent = generateFiles.createServerConf(req.body);
 
-  });
+  var confUpdtreamContent = generateFiles.createUpstreamConf(req.body.arrayLocations);
+
+
+  try{
+
+    utils.writeFileSync(req.body.host,confcontent)
+
+    confUpdtreamContent.forEach(function (item) {
+      utils.writeFileSync(item.name,item.conf)
+    });
+
+    //chamar insertVHostV2
+    var vhost = {
+             'id'      :req.body.id
+            ,'instance':req.body.instance || ''
+            ,'name'    :req.body.host
+            ,'port'    :req.body.port
+            ,'config'  :req.body
+          };
+
+    db.insertVHostV2(vhost,function(message){
+      console.log(message);
+      return res.status(200).send(
+        message
+      );
+    });
+
+
+  }catch(err){
+    res.status(500).send({
+      'STATUS': 'FAILED',
+      'MESSAGE': err
+    });
+  }
+
+/*
   fs.writeFile('/etc/nginx/conf.d/' + req.body.host + '.conf', confcontent, function(err) {
     if (err) {
       return res.status(500).send({
@@ -49,29 +84,32 @@ app.post('/host', function(req, res) {
         'MESSAGE': err
       });
     }else{
-      //chamar insertVHostV2
-      var vhost = {
-               'id'      :req.body.id
-              ,'instance':req.body.instance || ''
-              ,'name'    :req.body.host
-              ,'port'    :req.body.port
-              ,'config'  :req.body
-            };
-  
-      db.insertVHostV2(vhost,function(message){
-        console.log(message);
-        return res.status(200).send(
-          message
-        );
-      });
-    }
-/*
-    res.send({
-      'STATUS': 'created'
+      fs.writeFile('/etc/nginx/conf.d/' + req.body.host + '.conf', confcontent, function(err) {
+        if (err) {
+          return res.status(500).send({
+            'STATUS': 'FAILED',
+            'MESSAGE': err
+          });
+        }else{
+          //chamar insertVHostV2
+          var vhost = {
+                   'id'      :req.body.id
+                  ,'instance':req.body.instance || ''
+                  ,'name'    :req.body.host
+                  ,'port'    :req.body.port
+                  ,'config'  :req.body
+                };
+
+          db.insertVHostV2(vhost,function(message){
+            console.log(message);
+            return res.status(200).send(
+              message
+            );
+          });
+        }
     });
+  }
   */
-  });
-  
 
 });
 

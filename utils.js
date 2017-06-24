@@ -11,5 +11,17 @@ module.exports = {
     }
 
     return content;
+  },
+  writeFile: function (fileName, confcontent, response ) {
+    fs.writeFile('/etc/nginx/conf.d/' + fileName + '.conf', confcontent, function(err) {
+      if (err) {
+        response({'status':'failed','message':err});
+      }
+    });
+  },
+  writeFileSync: function (fileName, confcontent, response ) {
+      response = fs.writeFileSync('/etc/nginx/conf.d/' + fileName + '.conf', confcontent);
   }
+
+
 };

@@ -3,7 +3,6 @@ var utils = require('./utils')
 module.exports = {
 
   createServerConf: function(body){
-      console.log('cenas');
       console.log(body);
 
       var serverItems = '';
@@ -29,7 +28,7 @@ module.exports = {
 
         loc += utils.prepareConf('location', {
           'PATH': item.pathGeneric ? item.path : '~* ^.+\.('+ item.pathFileType.join('|') + ')$',
-          'PROXYPASS': (item.IsProxyPass || arrayUpstreams.length != 0) ? 'proxy_pass ' + item.proxyPass + ';' : '',
+          'PROXYPASS': (item.IsProxyPass || item.arrayUpstreams.length != 0) ? 'proxy_pass ' + item.proxyPass + ';' : '',
           'CACHESERVER': item.cacheServer ? 'include /etc/nginx/dashboard/cache.conf;' : '',
           'CACHECLIENT': item.cacheClient ? 'expires ' + item.cacheClientTimeNumber + ''+item.cacheClientTimeUnit.code + ';' : '' ,
           'GNERICITEMSLOCATION' : locationItems
@@ -44,6 +43,32 @@ module.exports = {
       });
       console.log(confcontent);
       return confcontent;
+    },
+    createUpstreamConf: function(locations){
+      console.log(locations);
+      var arrConfsUpstreams = [];
+      var upstream = '';
+      var upstreamItems = '';
+
+      locations.forEach(function (item) {
+        upstreamItems = '';
+
+        item.arrayUpstreams.forEach(function (item1) {
+         upstreamItems += utils.prepareConf('upstreamsItems', {
+            'HOST': item1.name,
+            'WEIGHT': item1.weight
+          });
+        });
+        upstream = utils.prepareConf('upstreams', {
+           'PROXYPASS': item.proxyPass,
+           'UPSTREAMITEMS': upstreamItems
+         });
+        console.log(upstream);
+        arrConfsUpstreams.push({'name': item.proxyPass , 'conf': upstream});
+      });
+
+      console.log(arrConfsUpstreams.length);
+      return arrConfsUpstreams;
     }
 
 };

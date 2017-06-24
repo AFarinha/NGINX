@@ -256,7 +256,6 @@ export default {
     addUpstream: function () {
       this.location.arrayUpstreams.push({
         name: '',
-        ip: '',
         weight: ''
       })
     },
