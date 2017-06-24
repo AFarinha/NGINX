@@ -77,6 +77,22 @@ app.post('/insertVHost', function(req, res) {
 
 });
 
+app.post('/insertVHostV2', function(req, res) {
+  
+  var vhost = {
+               'id'      :req.body.id
+              ,'instance':req.body.instance
+              ,'name'    :req.body.name
+              ,'port'    :req.body.port
+              ,'config'  :req.body.config
+            };
+  
+  db.insertVHostV2(vhost,function(message){
+    res.send(message);
+  });
+
+});
+
 app.get('/getVHost/:id', function(req, res) {
 
   db.selectVHost(req.params.id,function(message){

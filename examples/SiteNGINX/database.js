@@ -69,6 +69,62 @@ module.exports = {
  
         closeBD();
     },
+    insertVHostV2: function(vhost, response) {
+        openBD();
+        //não tem ID, faz insert
+        if(vhost.id==undefined || vhost.id==null || isNaN(vhost.id)){
+            db.run("INSERT INTO vhosts (instance, name, port,config) VALUES (?,?,?,?)"
+            , vhost.instance
+            , vhost.name
+            , vhost.port
+            , vhost.config
+            , function(err) {
+                if(err) { 
+                    console.log({'STATUS':'FAILED','MESSAGE':err});
+                    response({'STATUS':'FAILED','MESSAGE':err});  
+                }else{
+                    console.log('\nInsert com id '+this.lastID);
+                    response({'STATUS':'OK','MESSAGE': {'id':this.lastID}});
+                }
+            });
+        }else{
+            db.run("UPDATE vhosts set config = ? where instance = ? and name = ? and port = ? and id = ?"
+                , vhost.config
+                , vhost.instance
+                , vhost.name
+                , vhost.port
+                , vhost.id
+                , function(err) {
+                    if(err) { 
+                        console.log({'STATUS':'FAILED','MESSAGE':err});
+                        return response({'STATUS':'FAILED','MESSAGE':err});  
+                    }else{
+                        db.all("SELECT id FROM vhosts where instance = ? and name = ? and port = ? and id = ?"
+                        , vhost.instance
+                        , vhost.name
+                        , vhost.port
+                        , vhost.id
+                        , function(err, rows) {
+                            if(err) { 
+                                console.log('MESSAGE: ',err);
+                                return response({'STATUS':'FAILED','MESSAGE':err});  
+                            }
+                            if (rows == 0) {
+                                console.log('Sem linhas');
+                                response({'STATUS':'OK','MESSAGE': 'Registo não existe'});
+                            }else{
+                                rows.forEach(function (row) {  
+                                    console.log('\nUpdate ao ID ',row.id);  
+                                    response({'STATUS':'OK','MESSAGE': {'id': row.id }});
+                                });  
+                                
+                            }
+                        });
+                    }
+                });
+        }
+        closeBD();
+    },
     selectVHost: function(id, response) {
     
         openBD();
