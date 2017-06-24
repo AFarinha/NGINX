@@ -48,12 +48,31 @@ app.post('/host', function(req, res) {
         'STATUS': 'FAILED',
         'MESSAGE': err
       });
+    }else{
+      //chamar insertVHostV2
+      var vhost = {
+               'id'      :req.body.id
+              ,'instance':req.body.instance || ''
+              ,'name'    :req.body.host
+              ,'port'    :req.body.port
+              ,'config'  :req.body
+            };
+  
+      db.insertVHostV2(vhost,function(message){
+        console.log(message);
+        return res.status(200).send(
+          message
+        );
+      });
     }
-
+/*
     res.send({
       'STATUS': 'created'
     });
+  */
   });
+  
+
 });
 
 
@@ -75,7 +94,7 @@ app.post('/insertVHostV2', function(req, res) {
 
   var vhost = {
                'id'      :req.body.id
-              ,'instance':req.body.instance
+              ,'instance':req.body.instance == undefined ? '' : req.body.instance
               ,'name'    :req.body.name
               ,'port'    :req.body.port
               ,'config'  :req.body.config
