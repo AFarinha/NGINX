@@ -4,7 +4,7 @@ var express = require('express'),
   cp = require('child_process'),
   bodyParser = require('body-parser'),
   sqlite3 = require('sqlite3').verbose(),
-  db = require('./examples/SiteNGINX/database.js');
+  db = require('./database/database.js');
 
 var app = express();
 var databaseName = "nginx";
