@@ -18,7 +18,6 @@
       </div>
     </div>
 
-
     <div v-if="responseError" class="alert alert-danger alert-dismissable">
        <i class="fa fa-ban"></i>
        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -94,40 +93,15 @@ export default {
       var app = this
       app.server
       axios.post('/api/host', app.server)
-      axios.post('/api/host', {
-        'host': '',
-        'port': '',
-        'destination': '',
-        'cache': '',
-        'extensions': ''
-      })
         .then(function (response) {
           console.log('response')
-          console.log(response)
-          this.responseSuccess = response
+          console.log(response.data.message.id)
+          app.server.id = response.data.message.id.toString()
+          app.responseSuccess = response
         })
         .catch(error => {
           console.log('error')
-          console.log(error.response.data)
           this.responseError = error.response
-        })
-    },
-    Save: function () {
-      var app = this
-      axios.post('/api/host', app.server)
-      axios.post('/api/host', {
-        'instance': '1',
-        'name': app.server.host,
-        'port': app.server.port,
-        'config': app.server
-      })
-        .then(function (response) {
-          console.log('response')
-          console.log(response)
-        })
-        .catch(error => {
-          console.log('error')
-          console.log(error.response.data)
         })
     },
     postTestNginx: function () {

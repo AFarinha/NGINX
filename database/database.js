@@ -70,13 +70,15 @@ module.exports = {
     },
     insertVHostV2: function(vhost, response) {
         openBD();
+
+        console.log('\nVHOST',vhost,'\n');
         //não tem ID, faz insert
-        if(vhost.id==undefined || vhost.id==null || isNaN(vhost.id)){
+        if(vhost.id==undefined || vhost.id==null || vhost.id=='' || isNaN(vhost.id)){
             db.run("INSERT INTO vhosts (instance, name, port,config) VALUES (?,?,?,?)"
             , vhost.instance
             , vhost.name
             , vhost.port
-            , vhost.config
+            , JSON.stringify(vhost.config)
             , function(err) {
                 if(err) { 
                     console.log({'status':'failed','message':err});
@@ -87,15 +89,17 @@ module.exports = {
                 }
             });
         }else{
+            console.log("vhost.config",vhost.config,"vhost.instance", vhost.instance,"vhost.name", vhost.name,"vhost.port", vhost.port,"vhost.id", vhost.id);
+
             db.run("UPDATE vhosts set config = ? where instance = ? and name = ? and port = ? and id = ?"
                 , vhost.config
                 , vhost.instance
                 , vhost.name
                 , vhost.port
-                , vhost.id
+                , parseInt(vhost.id)
                 , function(err) {
                     if(err) { 
-                        console.log({'status':'failed','message':err});
+                        console.log({'status':'failed update','message':err});
                         return response({'status':'failed','message':err});  
                     }else{
                         db.all("SELECT id FROM vhosts where instance = ? and name = ? and port = ? and id = ?"
@@ -106,7 +110,7 @@ module.exports = {
                         , function(err, rows) {
                             if(err) { 
                                 console.log('message: ',err);
-                                return response({'status':'failed','message':err});  
+                                return response({'status':'failed select do update','message':err});  
                             }
                             if (rows == 0) {
                                 console.log('Sem linhas');
