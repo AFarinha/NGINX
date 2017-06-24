@@ -50,6 +50,7 @@ export default {
       //  'host': 'fgd', 'port': 'fg', 'destination': 'fgh', 'arrayGenericServer': [ { 'nameProp': 'dfghdfghdfgh', 'valueProp': 'dfghdfghdfgh' } ], 'arrayLocations': []
       // }
       server: {
+        id: '',
         host: '',
         port: '',
         arrayGenericServer: [],
