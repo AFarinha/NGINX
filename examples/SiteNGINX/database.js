@@ -128,36 +128,55 @@ module.exports = {
     selectVHost: function(id, response) {
     
         openBD();
-        var result;
+        
         db.all("SELECT id,instance, name, port,config FROM vhosts where id = ?"
         , id
         , function(err, rows) {
             if(err) { 
-                return response({'STATUS':'FAILED','MESSAGE':err,'JSON':{}});  
+                return response({'STATUS':'FAILED','MESSAGE':{}});  
             }
             if (rows == 0) {
-                    response({'STATUS':'OK','MESSAGE':'SUCCESS','JSON':{}});
+                    response({'STATUS':'OK','MESSAGE':{}});
             }else{
-                response({'STATUS':'OK','MESSAGE':'SUCCESS','JSON':JSON.parse(JSON.stringify(rows))[0]});
+                response({'STATUS':'OK','MESSAGE':JSON.parse(JSON.stringify(rows))[0]});
             }
         });
  
         closeBD();
     },
-    selectAllVHosts: function(id, response) {
+    selectAllVHosts: function(response) {
     
         openBD();
-        var result;
+        
         db.all("SELECT id,instance, name, port,config FROM vhosts"
         , function(err, rows) {
             if(err) { 
-                return response({'STATUS':'FAILED','MESSAGE':err,'JSON':{}});  
+                return response({'STATUS':'FAILED','MESSAGE':err});  
             }
             if (rows == 0) {
-                    response({'STATUS':'OK','MESSAGE':'SUCCESS','JSON':{}});
+                    response({'STATUS':'OK','MESSAGE':{}});
             }else{
-                response({'STATUS':'OK','MESSAGE':'SUCCESS','JSON':JSON.parse(JSON.stringify(rows))});
+                response({'STATUS':'OK','MESSAGE':JSON.parse(JSON.stringify(rows))});
             }
+        });
+ 
+        closeBD();
+    },
+    deleteVHost: function(vhost, response) {
+    
+        openBD();
+        
+        db.all("DELETE FROM vhosts where instance = ? and name = ? and port = ? and id = ?"
+            , vhost.instance
+            , vhost.name
+            , vhost.port
+            , vhost.id
+            , function(err, rows) {
+                if(err) { 
+                    return response({'STATUS':'FAILED','MESSAGE':err});  
+                }else{
+                    response({'STATUS':'OK','MESSAGE':'SUCCESS'});
+                }
         });
  
         closeBD();
