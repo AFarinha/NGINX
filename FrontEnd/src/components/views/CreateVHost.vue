@@ -93,13 +93,6 @@ export default {
       var app = this
       app.server
       axios.post('/api/host', app.server)
-      axios.post('/api/host', {
-        'host': '',
-        'port': '',
-        'destination': '',
-        'cache': '',
-        'extensions': ''
-      })
         .then(function (response) {
           console.log('response')
           console.log(response)

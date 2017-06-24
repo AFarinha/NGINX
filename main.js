@@ -1,6 +1,7 @@
 var express = require('express'),
   fs = require('fs'),
   utils = require('./utils'),
+  generateFiles = require('./GenerateFiles'),
   cp = require('child_process'),
   bodyParser = require('body-parser'),
   sqlite3 = require('sqlite3').verbose(),
@@ -37,20 +38,13 @@ app.post('/nginx/test', function(req, res) {
 });
 
 app.post('/host', function(req, res) {
-  console.log(req.body);
+  //console.log(req.body);
+  var confcontent = generateFiles.createServerConf(req.body, {
 
-  var confcontent = utils.prepareConf('simpleproxy', {
-    'SERVERNAME': req.body.host,
-    'PORT': req.body.port,
-    'PROXY': req.body.destination,
-    'CACHE': req.body.cache === true ? 'include /etc/nginx/dashboard/cache.conf;' : '',
-    'EXTENSIONS' : req.body.extensions,
-    'CACHEBROWSER' : req.body.cacheBrowser,
   });
-
   fs.writeFile('/etc/nginx/conf.d/' + req.body.host + '.conf', confcontent, function(err) {
     if (err) {
-      return res.STATUS(500).send({
+      return res.status(500).send({
         'STATUS': 'FAILED',
         'MESSAGE': err
       });
@@ -70,7 +64,7 @@ app.post('/insertVHost', function(req, res) {
               ,'port'    :req.body.port
               ,'config'  :req.body.config
             };
-  
+
   db.insertVHost(vhost,function(message){
     res.send(message);
   });
@@ -86,7 +80,7 @@ app.post('/insertVHostV2', function(req, res) {
               ,'port'    :req.body.port
               ,'config'  :req.body.config
             };
-  
+
   db.insertVHostV2(vhost,function(message){
     res.send(message);
   });
@@ -108,7 +102,7 @@ app.get('/getAllVHosts', function(req, res) {
 });
 
 app.delete('/deleteVHost/:id', function(req, res) {
-  
+
   db.deleteVHost(req.params.id,function(message){
     res.send(message);
   });
