@@ -97,6 +97,8 @@ export default {
           console.log('response')
           console.log(response.data.message.id)
           app.server.id = response.data.message.id.toString()
+          console.log('teste')
+          console.log('teste2')
           app.responseSuccess = response
         })
         .catch(error => {

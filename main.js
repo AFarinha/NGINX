@@ -41,6 +41,7 @@ app.post('/host', function(req, res) {
   //console.log(req.body);
   var confcontent = generateFiles.createServerConf(req.body);
 
+
   var confUpdtreamContent = generateFiles.createUpstreamConf(req.body.arrayLocations);
 
 
@@ -61,15 +62,19 @@ app.post('/host', function(req, res) {
             ,'config'  :req.body
           };
 
-    db.insertVHostV2(vhost,function(message){
-      console.log(message);
-      return res.status(200).send(
-        message
-      );
-    });
+      db.insertVHostV2(vhost,function(message){
+        console.log(message);
+        return res.status(200).send(
+          message
+        );
+        res.send({
+          'STATUS': 'created'
+        });
+      });
 
 
   }catch(err){
+    console.log('apanhou');
     res.status(500).send({
       'STATUS': 'FAILED',
       'MESSAGE': err
@@ -77,6 +82,7 @@ app.post('/host', function(req, res) {
   }
 
 /*
+
   fs.writeFile('/etc/nginx/conf.d/' + req.body.host + '.conf', confcontent, function(err) {
     if (err) {
       return res.status(500).send({
@@ -110,6 +116,48 @@ app.post('/host', function(req, res) {
     });
   }
   */
+/*
+      //chamar insertVHostV2
+      var vhost = {
+               'id'      :req.body.id
+              ,'instance':req.body.instance || ''
+              ,'name'    :req.body.host
+              ,'port'    :req.body.port
+              ,'config'  :req.body
+            };
+
+      db.insertVHostV2(vhost,function(message){
+        console.log(message);
+        return res.status(200).send(
+          message
+        );
+      });
+    }
+
+    res.send({
+      'STATUS': 'created'
+    });
+
+  });*/
+
+  /******* ORIGINAL FIM *******/
+
+  /******* TESTES - INI *******//*
+  var vhost = {
+               'id'      :req.body.id
+              ,'instance':req.body.instance || ''
+              ,'name'    :req.body.host
+              ,'port'    :req.body.port
+              ,'config'  :req.body
+            };
+
+      db.insertVHostV2(vhost,function(message){
+        console.log(message);
+        return res.status(200).send(
+          message
+        );
+      });
+  /******* TESTES - FIM ********/
 
 });
 
