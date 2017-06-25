@@ -133,9 +133,9 @@ export default {
   created: function () {
     var app = this
     if (app.$route.params.id !== undefined) {
-      axios.get('/api/getVHost/' + 32)
+      axios.get('/api/getVHost/' + app.$route.params.id)
         .then(function (response) {
-          console.log(response.data.message.config)
+          console.log(response.data)
           app.server = JSON.parse(response.data.message.config)
           console.log(response)
         })

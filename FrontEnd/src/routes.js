@@ -28,12 +28,12 @@ const routes = [
       }, {
         path: 'VHost',
         component: VHostView,
-        name: 'Create VHost',
+        name: 'VHost',
         meta: {description: 'Here is possible to manage a Virtual Host'}
       }, {
         path: 'VHost/:id',
         component: VHostView,
-        name: 'Create VHost by id',
+        name: 'VHost ',
         meta: {description: 'Here is possible to manage a Virtual Host'}
       }, {
         path: 'tables',
