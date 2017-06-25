@@ -1,7 +1,7 @@
 var express = require('express'),
   fs = require('fs'),
-  utils = require('./utils'),
-  generateFiles = require('./GenerateFiles'),
+  utils = require('./lib/utils'),
+  generateFiles = require('./lib/GenerateFiles'),
   cp = require('child_process'),
   bodyParser = require('body-parser'),
   sqlite3 = require('sqlite3').verbose(),
@@ -216,3 +216,9 @@ app.listen(port, function() {
   db.initBD(databaseName);
   console.log('Dashboard listening on port ' + port);
 });
+
+
+//function startCollector(serverHostname) {
+//  var collector = new Collector(serverHostname);
+//  collector.init();
+//}

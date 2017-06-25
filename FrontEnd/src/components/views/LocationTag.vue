@@ -37,18 +37,18 @@
 	             <div class="row">
               <!-- INICIO LOCATION PATH -->
               <div class="form-group col-md-10" v-if="selected == '1' " >
-                <div :class="{ 'has-error': errors.has('path') }">
+                <div :class="{ 'has-error': vErrors.has('path') }">
                   <div class="input-group">
                     <div class="input-group-addon">
                       Path Generic
                     </div>
                     <input name="path" v-model="location.path" v-validate="'required'" class="form-control input-sm" type="text" placeholder="Path">
                   </div>
-                  <span v-show="errors.has('path')" class="help-block">{{ errors.first('path') }}</span>
+                  <span v-show="vErrors.has('path')" class="help-block">{{ vErrors.first('path') }}</span>
                 </div>
               </div>
               <div class="form-group col-md-10" v-if="selected == '2' " >
-                <div :class="{ 'has-error': errors.has('path') }">
+                <div :class="{ 'has-error': vErrors.has('path') }">
                   <multiselect
                     v-model="location.pathFileType"
                     :options="options"
@@ -58,7 +58,7 @@
                     tag-placeholder="Add this as new tag"
                     >
                   </multiselect>
-                  <span v-show="errors.has('path')" class="help-block">{{ errors.first('path') }}</span>
+                  <span v-show="vErrors.has('path')" class="help-block">{{ vErrors.first('path') }}</span>
                 </div>
               </div>
               <!-- FIM LOCATION PATH -->
@@ -79,9 +79,9 @@
               <div class="box-body">
                   <input type="checkbox" v-model="location.IsProxyPass"> <b> Proxy Pass </b>
                   <br />
-                  <div :class="{ 'has-error': errors.has('proxyPass') }">
+                  <div :class="{ 'has-error': vErrors.has('proxyPass') }">
                     <input name="proxyPass" v-model="location.proxyPass" v-validate="`${(location.IsProxyPass || location.arrayUpstreams.length != 0) ? 'required' : ''}`" class="form-control" type="text" placeholder="Proxy Pass">
-                    <span v-show="errors.has('proxyPass')" class="help-block">{{ errors.first('proxyPass') }}</span>
+                    <span v-show="vErrors.has('proxyPass')" class="help-block">{{ vErrors.first('proxyPass') }}</span>
                   </div>
               </div>
             </div>
@@ -130,9 +130,9 @@
               <div class="row center-block" style="margin-top: 0.5em" v-show="this.location.cacheClient" >
                 <h5>Time Client Cache</h5>
                   <div class="col-xs-6">
-                    <div :class="{ 'has-error': errors.has('ClientCache') }" >
+                    <div :class="{ 'has-error': vErrors.has('ClientCache') }" >
                       <input name="ClientCache" v-model="location.cacheClientTimeNumber" v-validate="`${location.cacheClient  ? 'required|numeric' : ''}`" class="form-control" type="text" placeholder="Time to Cache">
-                      <span v-show="errors.has('ClientCache')" class="help-block">{{ errors.first('ClientCache') }}</span>
+                      <span v-show="vErrors.has('ClientCache')" class="help-block">{{ vErrors.first('ClientCache') }}</span>
                     </div>
                   </div>
                   <div class="col-xs-6">
@@ -205,7 +205,7 @@ export default {
     // Listen on the bus for the parent component running validation
     EventBus.$on('validate', this.onValidate)
     // Watch for the changes to the childs error bag and pass back to the parent
-    this.$watch(() => this.errors.errors, (newValue, oldValue) => {
+    this.$watch(() => this.vErrors.errors, (newValue, oldValue) => {
       const newErrors = newValue.filter(error =>
         find(propEq('field', error.field))(oldValue) === undefined
       )
@@ -227,7 +227,7 @@ export default {
         console.log('Location Validated')
       }).catch(() => {
         console.log('error Location')
-        EventBus.$emit('errors-changed', this.errors.errors)
+        EventBus.$emit('errors-changed', this.vErrors.errors)
       })
     },
     addTag (newTag) {

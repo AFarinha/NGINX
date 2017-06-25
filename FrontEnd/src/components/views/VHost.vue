@@ -42,7 +42,9 @@ import ServerTag from './ServerTag'
 import Vue from 'vue'
 import VeeValidate from 'vee-validate'
 
-Vue.use(VeeValidate)
+Vue.use(VeeValidate, {
+  errorBagName: 'vErrors'
+})
 
 export default {
 
@@ -69,13 +71,13 @@ export default {
     // Listen on the bus for changers to the child components error bag and merge in/remove errors
     EventBus.$on('errors-changed', (newErrors, oldErrors) => {
       newErrors.forEach(error => {
-        if (!this.errors.has(error.field)) {
-          self.errors.add(error.field, error.msg)
+        if (!this.vErrors.has(error.field)) {
+          self.vErrors.add(error.field, error.msg)
         }
       })
       if (oldErrors) {
         oldErrors.forEach(error => {
-          self.errors.remove(error.field)
+          self.vErrors.remove(error.field)
         })
       }
     })
@@ -84,7 +86,7 @@ export default {
     validateBeforeSubmit: function () {
       EventBus.$emit('validate')
       setTimeout(() => {
-        if (!this.errors.any()) {
+        if (!this.vErrors.any()) {
           this.postCreateHost()
           console.log('Post To Server')
         }
@@ -120,9 +122,11 @@ export default {
       var app = this
       axios.post('/api/nginx/reload', app.server)
         .then(function (response) {
-          app.responseSuccess = response.data.stderr
+          console.log(response)
+          app.responseSuccess = response.data.status + ' : ' + response.data.stderr
         })
         .catch(error => {
+          console.log(error)
           app.responseError = error.response.statusText + ' : ' + error.response.data
         })
     }
