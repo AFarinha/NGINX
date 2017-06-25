@@ -7,8 +7,7 @@ import DashboardView from './components/views/Dashboard.vue'
 import TablesView from './components/views/Tables.vue'
 import SettingView from './components/views/Setting.vue'
 import ReposView from './components/views/Repos.vue'
-import VhostsView from './components/views/Vhosts.vue'
-import CreateVHostView from './components/views/CreateVHost.vue'
+import VHostView from './components/views/VHost.vue'
 
 // Routes
 const routes = [
@@ -27,15 +26,15 @@ const routes = [
         name: 'Dashboard',
         meta: {description: 'Overview of environment'}
       }, {
-        path: 'createVHost',
-        component: CreateVHostView,
+        path: 'VHost',
+        component: VHostView,
         name: 'Create VHost',
-        meta: {description: 'Here is possible to create a Virtual Host'}
+        meta: {description: 'Here is possible to manage a Virtual Host'}
       }, {
-        path: 'vhosts',
-        component: VhostsView,
-        name: 'Vhosts',
-        meta: {description: 'Vhosts'}
+        path: 'VHost/:id',
+        component: VHostView,
+        name: 'Create VHost by id',
+        meta: {description: 'Here is possible to manage a Virtual Host'}
       }, {
         path: 'tables',
         component: TablesView,

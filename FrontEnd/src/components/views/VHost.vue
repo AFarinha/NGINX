@@ -12,8 +12,8 @@
         <h3 class="box-title">Submition</h3>
         <div class="box-tools pull-right">
           <button v-on:click="validateBeforeSubmit" id="createHost" type="button" class="btn btn-info">Create Host</button>
-          <button @:click="postTestNginx" id="testNginx" type="button" class="btn btn-info">Test NginX</button>
-          <button @:click="postReloadNginx" id="reloadNginx" type="button" class="btn btn-info">Reload NginX</button>
+          <button v-on:click="postTestNginx" id="testNginx" type="button" class="btn btn-info">Test NginX</button>
+          <button v-on:click="postReloadNginx" id="reloadNginx" type="button" class="btn btn-info">Reload NginX</button>
         </div>
       </div>
     </div>
@@ -21,13 +21,13 @@
     <div v-if="responseError" class="alert alert-danger alert-dismissable">
        <i class="fa fa-ban"></i>
        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-       <b>Alert! </b>{{this.responseError.data}}
+       <b>Alert! </b>{{this.responseError}}
     </div>
 
     <div v-if="responseSuccess" class="alert alert-success alert-dismissable">
       <i class="fa fa-check"></i>
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <b>Alert! </b> {{this.responseSuccess.data}}
+      <b>Alert! </b> {{this.responseSuccess}}
     </div>
 
   <!--   -->
@@ -39,15 +39,16 @@
 import axios from 'axios'
 import { EventBus } from '../../main.js'
 import ServerTag from './ServerTag'
+import Vue from 'vue'
+import VeeValidate from 'vee-validate'
+
+Vue.use(VeeValidate)
 
 export default {
 
   name: 'Vhost',
   data () {
     return {
-      // server: {
-      //  'host': 'fgd', 'port': 'fg', 'destination': 'fgh', 'arrayGenericServer': [ { 'nameProp': 'dfghdfghdfgh', 'valueProp': 'dfghdfghdfgh' } ], 'arrayLocations': []
-      // }
       server: {
         id: '',
         host: '',
@@ -91,7 +92,6 @@ export default {
     },
     postCreateHost: function () {
       var app = this
-      app.server
       axios.post('/api/host', app.server)
         .then(function (response) {
           console.log('response')
@@ -107,15 +107,44 @@ export default {
         })
     },
     postTestNginx: function () {
-
+      var app = this
+      axios.post('/api/nginx/test', app.server)
+        .then(function (response) {
+          app.responseSuccess = response.data.stderr
+        })
+        .catch(error => {
+          app.responseError = error.response.statusText + ' : ' + error.response.data
+        })
     },
     postReloadNginx: function () {
-
+      var app = this
+      axios.post('/api/nginx/reload', app.server)
+        .then(function (response) {
+          app.responseSuccess = response.data.stderr
+        })
+        .catch(error => {
+          app.responseError = error.response.statusText + ' : ' + error.response.data
+        })
     }
   },
   components: {
     ServerTag: ServerTag
+  },
+  created: function () {
+    var app = this
+    if (app.$route.params.id !== undefined) {
+      axios.get('/api/getVHost/' + 32)
+        .then(function (response) {
+          console.log(response.data.message.config)
+          app.server = JSON.parse(response.data.message.config)
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    }
   }
+
 }
 </script>
 

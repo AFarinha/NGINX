@@ -19,7 +19,7 @@ app.post('/nginx/reload', function(req, res) {
   });
 
   res.send({
-    'STATUS': 'OK',
+    'status': 'ok',
     'stdout': output.stdout.toString(),
     'stderr': output.stderr.toString(),
   });
@@ -31,7 +31,7 @@ app.post('/nginx/test', function(req, res) {
   });
 
   res.send({
-    'STATUS': 'OK',
+    'status': 'ok',
     'stdout': output.stdout.toString(),
     'stderr': output.stderr.toString(),
   });
@@ -46,7 +46,6 @@ app.post('/host', function(req, res) {
 
 
   try{
-
     utils.writeFileSync(req.body.host,confcontent)
 
     confUpdtreamContent.forEach(function (item) {
@@ -54,6 +53,7 @@ app.post('/host', function(req, res) {
     });
 
     //chamar insertVHostV2
+
     var vhost = {
              'id'      :req.body.id
             ,'instance':req.body.instance || ''
@@ -63,15 +63,10 @@ app.post('/host', function(req, res) {
           };
 
       db.insertVHostV2(vhost,function(message){
-        console.log(message);
         return res.status(200).send(
           message
         );
-        res.send({
-          'STATUS': 'created'
-        });
       });
-
 
   }catch(err){
     console.log('apanhou');
@@ -195,6 +190,7 @@ app.post('/insertVHostV2', function(req, res) {
 app.get('/getVHost/:id', function(req, res) {
 
   db.selectVHost(req.params.id,function(message){
+    console.log(message);
     res.send(message);
   });
 });

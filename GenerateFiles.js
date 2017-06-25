@@ -3,7 +3,7 @@ var utils = require('./utils')
 module.exports = {
 
   createServerConf: function(body){
-      console.log(body);
+      //console.log(body);
 
       var serverItems = '';
       var loc = '';
@@ -41,11 +41,11 @@ module.exports = {
         'GNERICITEMSSERVER' : serverItems,
         'LOCATION' : loc
       });
-      console.log(confcontent);
+      //console.log(confcontent);
       return confcontent;
     },
     createUpstreamConf: function(locations){
-      console.log(locations);
+      //console.log(locations);
       var arrConfsUpstreams = [];
       var upstream = '';
       var upstreamItems = '';
@@ -67,7 +67,7 @@ module.exports = {
         arrConfsUpstreams.push({'name': item.proxyPass , 'conf': upstream});
       });
 
-      console.log(arrConfsUpstreams.length);
+      //console.log(arrConfsUpstreams.length);
       return arrConfsUpstreams;
     }
 
