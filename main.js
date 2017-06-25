@@ -7,8 +7,13 @@ var express = require('express'),
   sqlite3 = require('sqlite3').verbose(),
   db = require('./database/database.js');
 
+var Collector = require('./lib/collector');
+
 var app = express();
 var databaseName = "nginx";
+//para Dashboard
+var collectorProcess = new Collector();
+collectorProcess.init();
 
 app.use(express.static('./public'));
 app.use(bodyParser.json());
@@ -41,10 +46,7 @@ app.post('/host', function(req, res) {
   //console.log(req.body);
   var confcontent = generateFiles.createServerConf(req.body);
 
-
   var confUpdtreamContent = generateFiles.createUpstreamConf(req.body.arrayLocations);
-
-
   try{
     utils.writeFileSync(req.body.host,confcontent)
 
@@ -216,9 +218,3 @@ app.listen(port, function() {
   db.initBD(databaseName);
   console.log('Dashboard listening on port ' + port);
 });
-
-
-//function startCollector(serverHostname) {
-//  var collector = new Collector(serverHostname);
-//  collector.init();
-//}
