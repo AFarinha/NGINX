@@ -8,6 +8,7 @@ import TablesView from './components/views/Tables.vue'
 import SettingView from './components/views/Setting.vue'
 import ReposView from './components/views/Repos.vue'
 import VHostView from './components/views/VHost.vue'
+import ListVHostView from './components/views/VHostsList.vue'
 
 // Routes
 const routes = [
@@ -35,6 +36,11 @@ const routes = [
         component: VHostView,
         name: 'VHost ',
         meta: {description: 'Here is possible to manage a Virtual Host'}
+      }, {
+        path: 'listVHosts',
+        component: ListVHostView,
+        name: 'List VHost',
+        meta: {description: 'Here is possible to list all Virtual Hosts'}
       }, {
         path: 'tables',
         component: TablesView,
