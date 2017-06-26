@@ -1,5 +1,19 @@
 <template>
   <section class="content">
+
+
+    <data-tables
+      :data='this.server'
+      :has-action-col='false'
+      @row-click='rowClick'>
+      <el-table-column prop='id' label="id" sortable="custom"></el-table-column>
+      <el-table-column prop='status' label="Status" sortable="custom"></el-table-column>
+      <el-table-column prop='name' label="Host Name"  sortable="custom"></el-table-column>
+      <el-table-column prop='port' label="Port" sortable="custom"></el-table-column>
+      <el-table-column prop='instance' label="Instance" sortable="custom"></el-table-column>
+    </data-tables>
+
+<!--
     <div class="row center-block">
       <div class="form-group col-md-4" v-for="(item, index) in this.server">
         <router-link :to="`/VHost/${item.id}`" >
@@ -26,21 +40,46 @@
         </div>
 
     </div>
+-->
+    <div v-if="responseError" class="alert alert-danger alert-dismissable">
+       <i class="fa fa-ban"></i>
+       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+       <b>Alert! </b>{{this.responseError}}
+    </div>
+
   </section>
 </template>
 
 <script>
 import axios from 'axios'
 
+import Vue from 'vue'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-default/index.css'
+import DataTables from 'vue-data-tables'
+
+import lang from 'element-ui/lib/locale/lang/en'
+import locale from 'element-ui/lib/locale'
+locale.use(lang)
+
+Vue.use(ElementUI)
+Vue.use(DataTables)
+
 export default {
   data () {
     return {
-      server: {
-      }
+      server: [],
+      responseError: false
     }
   },
   methods: {
-
+    rowClick (row) {
+      this.$router.push(
+        {
+          path: 'VHost/' + row.id
+        }
+      )
+    }
   },
   created: function () {
     var app = this
@@ -52,6 +91,7 @@ export default {
       })
       .catch(error => {
         console.log(error)
+        app.responseError = error.response.statusText + ' : ' + error.response.data
       })
   }
 }
