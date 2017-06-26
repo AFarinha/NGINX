@@ -1,14 +1,19 @@
 var express = require('express'),
   fs = require('fs'),
-  utils = require('./utils'),
-  generateFiles = require('./GenerateFiles'),
+  utils = require('./lib/utils'),
+  generateFiles = require('./lib/GenerateFiles'),
   cp = require('child_process'),
   bodyParser = require('body-parser'),
   sqlite3 = require('sqlite3').verbose(),
   db = require('./database/database.js');
 
+var Collector = require('./lib/collector');
+
 var app = express();
 var databaseName = "nginx";
+//para Dashboard
+var collectorProcess = new Collector();
+collectorProcess.init();
 
 app.use(express.static('./public'));
 app.use(bodyParser.json());
@@ -19,7 +24,7 @@ app.post('/nginx/reload', function(req, res) {
   });
 
   res.send({
-    'STATUS': 'OK',
+    'status': 'ok',
     'stdout': output.stdout.toString(),
     'stderr': output.stderr.toString(),
   });
@@ -31,7 +36,7 @@ app.post('/nginx/test', function(req, res) {
   });
 
   res.send({
-    'STATUS': 'OK',
+    'status': 'ok',
     'stdout': output.stdout.toString(),
     'stderr': output.stderr.toString(),
   });
@@ -39,11 +44,42 @@ app.post('/nginx/test', function(req, res) {
 
 app.post('/host', function(req, res) {
   //console.log(req.body);
-  var confcontent = generateFiles.createServerConf(req.body, {
+  var confcontent = generateFiles.createServerConf(req.body);
 
-  });
-  /******* ORIGINAL INI *******/
-  
+  var confUpdtreamContent = generateFiles.createUpstreamConf(req.body.arrayLocations);
+  try{
+    utils.writeFileSync(req.body.host,confcontent)
+
+    confUpdtreamContent.forEach(function (item) {
+      utils.writeFileSync(item.name,item.conf)
+    });
+
+    //chamar insertVHostV2
+
+    var vhost = {
+             'id'      :req.body.id
+            ,'instance':req.body.instance || ''
+            ,'name'    :req.body.host
+            ,'port'    :req.body.port
+            ,'config'  :req.body
+          };
+
+      db.insertVHostV2(vhost,function(message){
+        return res.status(200).send(
+          message
+        );
+      });
+
+  }catch(err){
+    console.log('apanhou');
+    res.status(500).send({
+      'STATUS': 'FAILED',
+      'MESSAGE': err
+    });
+  }
+
+/*
+
   fs.writeFile('/etc/nginx/conf.d/' + req.body.host + '.conf', confcontent, function(err) {
     if (err) {
       return res.status(500).send({
@@ -51,6 +87,33 @@ app.post('/host', function(req, res) {
         'MESSAGE': err
       });
     }else{
+      fs.writeFile('/etc/nginx/conf.d/' + req.body.host + '.conf', confcontent, function(err) {
+        if (err) {
+          return res.status(500).send({
+            'STATUS': 'FAILED',
+            'MESSAGE': err
+          });
+        }else{
+          //chamar insertVHostV2
+          var vhost = {
+                   'id'      :req.body.id
+                  ,'instance':req.body.instance || ''
+                  ,'name'    :req.body.host
+                  ,'port'    :req.body.port
+                  ,'config'  :req.body
+                };
+
+          db.insertVHostV2(vhost,function(message){
+            console.log(message);
+            return res.status(200).send(
+              message
+            );
+          });
+        }
+    });
+  }
+  */
+/*
       //chamar insertVHostV2
       var vhost = {
                'id'      :req.body.id
@@ -59,7 +122,7 @@ app.post('/host', function(req, res) {
               ,'port'    :req.body.port
               ,'config'  :req.body
             };
-  
+
       db.insertVHostV2(vhost,function(message){
         console.log(message);
         return res.status(200).send(
@@ -71,9 +134,9 @@ app.post('/host', function(req, res) {
     res.send({
       'STATUS': 'created'
     });
-  
-  });
-  
+
+  });*/
+
   /******* ORIGINAL FIM *******/
 
   /******* TESTES - INI *******//*
@@ -84,13 +147,13 @@ app.post('/host', function(req, res) {
               ,'port'    :req.body.port
               ,'config'  :req.body
             };
-  
+
       db.insertVHostV2(vhost,function(message){
         console.log(message);
         return res.status(200).send(
           message
         );
-      }); 
+      });
   /******* TESTES - FIM ********/
 
 });
@@ -129,6 +192,7 @@ app.post('/insertVHostV2', function(req, res) {
 app.get('/getVHost/:id', function(req, res) {
 
   db.selectVHost(req.params.id,function(message){
+    console.log(message);
     res.send(message);
   });
 });

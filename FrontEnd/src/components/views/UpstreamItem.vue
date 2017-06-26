@@ -2,15 +2,15 @@
 
   <div class="row center-block" style="margin-top: 0.5em">
       <div class="col-xs-6">
-        <div :class="{ 'has-error': errors.has('name') }">
+        <div :class="{ 'has-error': vErrors.has('name') }">
           <input name="name" v-model="upstream.name" v-validate="'required'" placeholder="Host"  class="form-control" type="text">
-          <span v-show="errors.has('name')" class="help-block">{{ errors.first('name') }}</span>
+          <span v-show="vErrors.has('name')" class="help-block">{{ vErrors.first('name') }}</span>
         </div>
       </div>
       <div class="col-xs-4">
-        <div :class="{ 'has-error': errors.has('weight') }">
+        <div :class="{ 'has-error': vErrors.has('weight') }">
           <input name="weight" v-model="upstream.weight" v-validate="'required|numeric'" placeholder="Weight"  class="form-control" type="text">
-          <span v-show="errors.has('weight')" class="help-block">{{ errors.first('weight') }}</span>
+          <span v-show="vErrors.has('weight')" class="help-block">{{ vErrors.first('weight') }}</span>
         </div>
       </div>
       <div class="col-xs-2">
@@ -40,7 +40,7 @@ export default {
     // Listen on the bus for the parent component running validation
     EventBus.$on('validate', this.onValidate)
     // Watch for the changes to the childs error bag and pass back to the parent
-    this.$watch(() => this.errors.errors, (newValue, oldValue) => {
+    this.$watch(() => this.vErrors.errors, (newValue, oldValue) => {
       const newErrors = newValue.filter(error =>
         find(propEq('field', error.field))(oldValue) === undefined
       )
@@ -56,7 +56,7 @@ export default {
         console.log('Upstream Validated')
       }).catch(() => {
         console.log('error Upstream')
-        EventBus.$emit('errors-changed', this.errors.errors)
+        EventBus.$emit('errors-changed', this.vErrors.errors)
       })
     },
     remove: function () {

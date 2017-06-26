@@ -7,15 +7,15 @@
 
       <div class="row" style="margin-top: 0.5em">
           <div class="col-xs-5">
-            <div :class="{ 'has-error': errors.has('nameProp') }">
+            <div :class="{ 'has-error': vErrors.has('nameProp') }">
               <input name="nameProp" v-model="generic.nameProp" v-validate="'required'" placeholder="Name Propertie"  class="form-control" type="text">
-              <span v-show="errors.has('nameProp')" class="help-block">{{ errors.first('nameProp') }}</span>
+              <span v-show="vErrors.has('nameProp')" class="help-block">{{ vErrors.first('nameProp') }}</span>
             </div>
           </div>
           <div class="col-xs-5">
-            <div :class="{ 'has-error': errors.has('valueProp') }">
+            <div :class="{ 'has-error': vErrors.has('valueProp') }">
               <input name="valueProp" v-model="generic.valueProp" v-validate="'required'" placeholder="Value Propertie"  class="form-control" type="text">
-              <span v-show="errors.has('valueProp')" class="help-block">{{ errors.first('valueProp') }}</span>
+              <span v-show="vErrors.has('valueProp')" class="help-block">{{ vErrors.first('valueProp') }}</span>
             </div>
           </div>
           <div class="col-xs-2">
@@ -47,7 +47,7 @@ export default {
     // Listen on the bus for the parent component running validation
     EventBus.$on('validate', this.onValidate)
     // Watch for the changes to the childs error bag and pass back to the parent
-    this.$watch(() => this.errors.errors, (newValue, oldValue) => {
+    this.$watch(() => this.vErrors.errors, (newValue, oldValue) => {
       const newErrors = newValue.filter(error =>
         find(propEq('field', error.field))(oldValue) === undefined
       )
@@ -63,7 +63,7 @@ export default {
         console.log('GenericItem Validated')
       }).catch(() => {
         console.log('error GenericItem')
-        EventBus.$emit('errors-changed', this.errors.errors)
+        EventBus.$emit('errors-changed', this.vErrors.errors)
       })
     },
     remove: function () {

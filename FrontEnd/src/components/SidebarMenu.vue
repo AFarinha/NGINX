@@ -7,18 +7,13 @@
       </router-link>
     </li>
     <li class="pageLink" v-on:click="toggleMenu">
-      <router-link to="/tables"><i class="fa fa-table"></i>
-        <span class="page">Instances</span>
+      <router-link to="/listVHosts"><i class="fa fa-table"></i>
+        <span class="page">List VHost</span>
       </router-link>
     </li>
     <li class="pageLink" v-on:click="toggleMenu">
-      <router-link to="/createVHost"><i class="fa fa-table"></i>
-        <span class="page">Create VHost</span>
-      </router-link>
-    </li>
-    <li class="pageLink" v-on:click="toggleMenu">
-      <router-link to="/vhosts"><i class="fa fa-table"></i>
-        <span class="page">Vhosts</span>
+      <router-link to="/VHost"><i class="fa fa-table"></i>
+        <span class="page">VHost</span>
       </router-link>
     </li>
   </ul>

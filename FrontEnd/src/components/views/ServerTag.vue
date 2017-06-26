@@ -12,16 +12,16 @@
       <div class="box-body">
         <div class="form-group col-md-6">
           <h5><b> Host </b></h5>
-          <div :class="{ 'has-error': errors.has('host') }" >
+          <div :class="{ 'has-error': vErrors.has('host') }" >
             <input name="host" v-model="server.host" v-validate="'required'" class="form-control" type="text" placeholder="Host">
-            <span v-show="errors.has('host')" class="help-block">{{ errors.first('host') }}</span>
+            <span v-show="vErrors.has('host')" class="help-block">{{ vErrors.first('host') }}</span>
           </div>
         </div>
         <div class="form-group col-md-6">
           <h5><b>Port </b></h5>
-          <div :class="{ 'has-error': errors.has('port') }">
+          <div :class="{ 'has-error': vErrors.has('port') }">
             <input name="port" v-model="server.port" v-validate="'required|numeric'" class="form-control" type="text" placeholder="Port">
-            <span v-show="errors.has('port')" class="help-block">{{ errors.first('port') }}</span>
+            <span v-show="vErrors.has('port')" class="help-block">{{ vErrors.first('port') }}</span>
           </div>
         </div>
       </div>
@@ -89,7 +89,7 @@ export default {
     // Listen on the bus for the parent component running validation
     EventBus.$on('validate', this.onValidate)
     // Watch for the changes to the childs error bag and pass back to the parent
-    this.$watch(() => this.errors.errors, (newValue, oldValue) => {
+    this.$watch(() => this.vErrors.errors, (newValue, oldValue) => {
       const newErrors = newValue.filter(error =>
         find(propEq('field', error.field))(oldValue) === undefined
       )
@@ -105,7 +105,7 @@ export default {
         console.log('ServerTag Validated')
       }).catch(() => {
         console.log('error ServerTag')
-        EventBus.$emit('errors-changed', this.errors.errors)
+        EventBus.$emit('errors-changed', this.vErrors.errors)
       })
     },
     addGeneric: function () {

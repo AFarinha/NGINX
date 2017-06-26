@@ -13,3 +13,22 @@ sudo apt-get -y install curl git																										//instalar o git e o c
 sudo curl --silent -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -															//adicionar o repo nodejs
 sudo apt-get -y install nodejs																											//instalar o nodejs
 sudo npm install -g express
+
+-----------------------cent-os
+
+
+#sudo dhclient -v																														//ter net na VM, dispensavél à partida...
+#sudo apt -y install net-tools																											//por causa de ser VM, mas pode dar jeito...
+
+sudo yum update																														//indispensavel
+sudo yum upgrade																													//indispensavel
+sudo yum dist-upgrade																												//dependenciaas, indispensavel
+
+sudo yum -y install nginx 																											//instalar o nginx, indispensavel
+sudo service nginx restart																												//reiniciar o servico apos instalacao
+sudo yum -y install rpm																												//instalar o rpm
+
+sudo yum -y install curl git																										//instalar o git e o curl
+sudo curl --silent -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -															//adicionar o repo nodejs
+sudo yum -y install nodejs																											//instalar o nodejs
+sudo npm install -g express
