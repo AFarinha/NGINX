@@ -3,6 +3,11 @@
   <section class="content">
     <!-- Info boxes -->
     <div class="row">
+      <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h4><i class="icon fa fa-check"></i> CoPilot is open source!</h4>
+        Click on icon to check it out on github. <a href="https://github.com/misterGF/CoPilot" target="_blank"><i class="fa fa-github fa-2x"></i></a>
+      </div>
       <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
           <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
@@ -163,28 +168,16 @@
       </div>
     </div>
     <!-- /.row -->
-
-    <div>
-      <p v-if="isConnected">We're connected to the server!</p>
-      <p>Message from server: "{{socketMessage}}"</p>
-      <button @click="pingServer()">Ping Server</button>
-    </div>
   </section>
   <!-- /.content -->
 </template>
 
 <script>
 import Chart from 'chart.js'
-import Vue from 'vue'
-import VueSocketIO from 'vue-socket.io'
-
-Vue.use(VueSocketIO, 'http://socketserver.com:1923')
 
 export default {
   data () {
     return {
-      isConnected: false,
-      socketMessage: '',
       generateRandomNumbers (numbers, max, min) {
         var a = []
         for (var i = 0; i < numbers; i++) {
@@ -192,25 +185,6 @@ export default {
         }
         return a
       }
-    }
-  },
-  socket: {
-    connect () {
-      // Fired when the socket connects.
-      this.isConnected = true
-    },
-    disconnect () {
-      this.isConnected = false
-    },
-    // Fired when the server sends something on the "messageChannel" channel.
-    messageChannel (data) {
-      this.socketMessage = data
-    }
-  },
-  methods: {
-    pingServer () {
-      // Send the "pingServer" event to the server.
-      this.$socket.emit('pingServer', 'PING!')
     }
   },
   computed: {
