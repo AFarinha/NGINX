@@ -33,8 +33,10 @@ if ! package_exists npm ; then
 fi
 
 if ! package_exists nodejs ; then
-  echo 'Installing nodejs...'
-  apt-get install nodejs
+  echo 'Installing nodejs...'  
+  #apt-get install nodejs
+  sudo curl --silent -sL https://deb.nodesource.com/setup_8.x | sudo -E bash 
+  sudo apt-get -y install nodejs  
 fi
 
 if ! package_exists nginx ; then
