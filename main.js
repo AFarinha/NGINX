@@ -5,7 +5,7 @@ var express = require('express'),
   cp = require('child_process'),
   bodyParser = require('body-parser'),
   sqlite3 = require('sqlite3').verbose(),
-  db = require('./database/database.js');
+  db = require('./lib/database.js');
 
 var Collector = require('./lib/collector');
 
