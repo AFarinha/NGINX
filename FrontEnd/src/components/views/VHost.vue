@@ -96,16 +96,20 @@ export default {
       var app = this
       axios.post('/api/host', app.server)
         .then(function (response) {
-          console.log('response')
-          console.log(response.data.message.id)
-          app.server.id = response.data.message.id.toString()
-          console.log('teste')
-          console.log('teste2')
-          app.responseSuccess = response
+          if (response.data.status === 'failed') {
+            console.log(response.data)
+            app.responseError = response.data
+            app.responseSuccess = false
+          } else {
+            app.server.id = response.data.message.id.toString()
+            app.responseSuccess = response.data
+            app.responseError = false
+          }
         })
         .catch(error => {
           console.log('error')
-          this.responseError = error.response
+          app.responseSuccess = false
+          app.responseError = error.response
         })
     },
     postTestNginx: function () {
