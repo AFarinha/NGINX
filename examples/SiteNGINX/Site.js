@@ -2,10 +2,11 @@ var https = require("https"),
 	cheerio = require('cheerio'),
 	request = require('request'),
 	sqlite3 = require('sqlite3').verbose(),
-	db = require('./database.js');
+	db = require('/vagrant/lib/database.js'),
+	fs = require('fs');
 
 var dbName = 'nginx';
-
+var scriptName = 'script.txt';
 var db;
 
 var options = {
@@ -18,15 +19,18 @@ var listModules = [];
 var listDirectives = [];
 
 
+fs.exists(scriptName, function(exists) {
+  if(exists) {
+    fs.unlink(scriptName);
+  } 
+});
+
+db.initBDSite(dbName);
+
+
 https.get(options, function (http_res) {
-	db.initBD(dbName);
+	
 
-	var vhost = {'instance':'teste'
-				, 'name':'teste'
-				, 'port':'1234'
-				, 'config' : 'teste'};
-
-	db.insertVHost(vhost);
 
     var data = "";
 
@@ -51,11 +55,18 @@ var parseModules = function(response) {
 	var idModules = 1;
     //READ HTML
     var $ = cheerio.load(response);
-
+    
 	$('#content ul.compact li').each(function(i, element){
+		
 			var a = $(this);
 			if(start==1){
 				listModules.push({"id":idModules,"nome": a.text().trim(),"linka":a.children().attr('href').toString().trim()});	
+				//console.log("id:",idModules,"nome: ", a.text().trim(),"linka: ",a.children().attr('href').toString().trim());
+				var insert = "INSERT INTO modules (id, name, link) VALUES ("+idModules+",'"+ a.text().trim()+"','"+a.children().attr('href').toString().trim()+"');\r\n";
+				fs.appendFile(scriptName, insert, function (err) {
+				  if (err) throw err;
+				});
+				
 				idModules++;				
 			}
 			
@@ -64,8 +75,6 @@ var parseModules = function(response) {
 			}
 			
 	});
-	
-	//console.log(list);
 	
 }
 
@@ -96,6 +105,13 @@ var parseDirectives = function(nrModule) {
 				auxLink = options.host+options.path.trim()+a.attr('href').toString().trim();
 				listDirectives.push({"id": idDirectives,"idModule":listModules[nrModule].id ,"nome": a.text().trim(),"link":auxLink});
 				//console.log	("id:", idDirectives,"idModule:",listModules[nrModule].id ,"nome:", a.text().trim(),"link:",auxLink,"\n");
+				var insert = "INSERT INTO directives (id, idModule, name, link) VALUES ("+idDirectives+","+listModules[nrModule].id+",'"+a.text().trim()+"','"+auxLink+"');\r\n";	
+
+				fs.appendFile(scriptName, insert, function (err) {
+				  if (err) throw err;
+				});
+				
+				
 				idDirectives++;
 			});
 			nrModule++;
@@ -106,22 +122,5 @@ var parseDirectives = function(nrModule) {
 			}
 		});	
 	});
-
-}
-
-var createBD = function(nome) {
-	db = new sqlite3.Database('./'+nome+'.db');
-	console.log('Criada a BD:',nome);
-
-	db.serialize(function() {  
-		db.run("CREATE TABLE IF NOT EXISTS modules (id INT, name TEXT, link TEXT)");
-		console.log("Criada tabela modules");
-		db.run("CREATE TABLE IF NOT EXISTS directives (id INT, idModule INT, name TEXT, link TEXT)");  
-		console.log("Criada tabela directives");
-		db.run("CREATE TABLE IF NOT EXISTS vhost (instancia TEXT,name TEXT, port INT, config TEXT)");  
-		console.log("Criada tabela vhost");
-	});  
-	console.log("CLOSE BD");
-	db.close(); 
 
 }

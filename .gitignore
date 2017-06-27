@@ -1,5 +1,5 @@
 /.vagrant
 node_modules/
 Vagrantfile
-*.log*
+*.log
 ubuntu-xenial-16.04-cloudimg-console.log

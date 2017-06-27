@@ -5,7 +5,7 @@ var express = require('express'),
   cp = require('child_process'),
   bodyParser = require('body-parser'),
   sqlite3 = require('sqlite3').verbose(),
-  db = require('./database/database.js');
+  db = require('./lib/database.js');
 
 var Collector = require('./lib/collector');
 
@@ -65,96 +65,19 @@ app.post('/host', function(req, res) {
           };
 
       db.insertVHostV2(vhost,function(message){
-        return res.status(200).send(
+        console.log("Erro:",message);
+        return res.send(
           message
         );
       });
 
   }catch(err){
-    console.log('apanhou');
-    res.status(500).send({
+    console.log("Erro:",err);
+    res.send({
       'STATUS': 'FAILED',
       'MESSAGE': err
     });
   }
-
-/*
-
-  fs.writeFile('/etc/nginx/conf.d/' + req.body.host + '.conf', confcontent, function(err) {
-    if (err) {
-      return res.status(500).send({
-        'STATUS': 'FAILED',
-        'MESSAGE': err
-      });
-    }else{
-      fs.writeFile('/etc/nginx/conf.d/' + req.body.host + '.conf', confcontent, function(err) {
-        if (err) {
-          return res.status(500).send({
-            'STATUS': 'FAILED',
-            'MESSAGE': err
-          });
-        }else{
-          //chamar insertVHostV2
-          var vhost = {
-                   'id'      :req.body.id
-                  ,'instance':req.body.instance || ''
-                  ,'name'    :req.body.host
-                  ,'port'    :req.body.port
-                  ,'config'  :req.body
-                };
-
-          db.insertVHostV2(vhost,function(message){
-            console.log(message);
-            return res.status(200).send(
-              message
-            );
-          });
-        }
-    });
-  }
-  */
-/*
-      //chamar insertVHostV2
-      var vhost = {
-               'id'      :req.body.id
-              ,'instance':req.body.instance || ''
-              ,'name'    :req.body.host
-              ,'port'    :req.body.port
-              ,'config'  :req.body
-            };
-
-      db.insertVHostV2(vhost,function(message){
-        console.log(message);
-        return res.status(200).send(
-          message
-        );
-      });
-    }
-
-    res.send({
-      'STATUS': 'created'
-    });
-
-  });*/
-
-  /******* ORIGINAL FIM *******/
-
-  /******* TESTES - INI *******//*
-  var vhost = {
-               'id'      :req.body.id
-              ,'instance':req.body.instance || ''
-              ,'name'    :req.body.host
-              ,'port'    :req.body.port
-              ,'config'  :req.body
-            };
-
-      db.insertVHostV2(vhost,function(message){
-        console.log(message);
-        return res.status(200).send(
-          message
-        );
-      });
-  /******* TESTES - FIM ********/
 
 });
 

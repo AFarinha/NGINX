@@ -175,11 +175,12 @@
 
 <script>
 import Chart from 'chart.js'
+/*
 import Vue from 'vue'
 import VueSocketIO from 'vue-socket.io'
 
 Vue.use(VueSocketIO, 'http://socketserver.com:1923')
-
+*/
 export default {
   data () {
     return {

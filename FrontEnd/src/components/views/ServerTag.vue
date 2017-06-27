@@ -13,14 +13,14 @@
         <div class="form-group col-md-6">
           <h5><b> Host </b></h5>
           <div :class="{ 'has-error': vErrors.has('host') }" >
-            <input name="host" v-model="server.host" v-validate="'required'" class="form-control" type="text" placeholder="Host">
+            <input name="host" v-model="server.host" v-validate="'required'" class="form-control" type="text" placeholder="Host" :disabled="server.id !== '' ? true : false">
             <span v-show="vErrors.has('host')" class="help-block">{{ vErrors.first('host') }}</span>
           </div>
         </div>
         <div class="form-group col-md-6">
           <h5><b>Port </b></h5>
           <div :class="{ 'has-error': vErrors.has('port') }">
-            <input name="port" v-model="server.port" v-validate="'required|numeric'" class="form-control" type="text" placeholder="Port">
+            <input name="port" v-model="server.port" v-validate="'required|numeric'" class="form-control" type="text" placeholder="Port" :disabled="server.id !== '' ? true : false">
             <span v-show="vErrors.has('port')" class="help-block">{{ vErrors.first('port') }}</span>
           </div>
         </div>
