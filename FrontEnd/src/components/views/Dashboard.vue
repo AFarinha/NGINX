@@ -202,7 +202,7 @@ export default {
     svr: function (data) {
       var app = this
       app.infoServer = data.info
-      console.log(data)
+      // console.log(data)
     }
   },
   created () {

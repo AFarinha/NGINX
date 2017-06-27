@@ -132,6 +132,14 @@ export default {
       this.server.arrayLocations.splice(index, 1)
     }
   },
+  created () {
+    // para criar location por default
+    var app = this
+    console.log(app.server)
+    if (app.server.id === '') {
+      app.addLocation()
+    }
+  },
   components: {
     GenericItem: GenericItem,
     LocationTag: LocationTag
