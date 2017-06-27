@@ -52,8 +52,8 @@
 
           <div class="info-box-content">
             <span class="info-box-text">Network Interfaces</span>
-            <span class="info-box-text">
-
+            <span class="info-box-text" v-for="item in this.infoServer.networkInterfaces[Object.keys( this.infoServer.networkInterfaces )[1]]">
+             <b>{{ item.family }}</b>  : {{ item.address }}
             </span>
           </div>
           <!-- /.info-box-content -->
@@ -96,13 +96,13 @@
           <span class="info-box-icon"><i class="ion ion-ios-pricetag-outline"></i></span>
 
           <div class="info-box-content">
-            <span class="info-box-text">CPU Load</span>
-            <span class="info-box-number">{{this.infoServer.load}} %</span>
+            <span class="info-box-text">Memory</span>
+            <span class="info-box-number">{{this.infoServer.usedmem}} / {{this.infoServer.totalmem}}</span>
             <div class="progress">
-              <div class="progress-bar" :style="{ width: parseInt( (parseInt(this.infoServer.load) * 100) )  + '%' }" ></div>
+              <div class="progress-bar" :style="{ width: parseInt( (parseInt(this.infoServer.usedmem) / (parseInt(this.infoServer.totalmem))*100) )  + '%' }" ></div>
             </div>
                 <span class="progress-description">
-                  {{ parseInt( (parseInt(this.infoServer.load) * 100) ) }} % Usage
+                  {{parseInt( (parseInt(this.infoServer.usedmem) / (parseInt(this.infoServer.totalmem))*100) )}} % Usage
                 </span>
           </div>
           <!-- /.info-box-content -->
@@ -113,13 +113,14 @@
           <span class="info-box-icon"><i class="ion ion-ios-heart-outline"></i></span>
 
           <div class="info-box-content">
-            <span class="info-box-text">Memory</span>
-            <span class="info-box-number">{{this.infoServer.usedmem}} / {{this.infoServer.totalmem}}</span>
+            <span class="info-box-text">Mentions</span>
+            <span class="info-box-number">92,050</span>
+
             <div class="progress">
-              <div class="progress-bar" :style="{ width: parseInt( (parseInt(this.infoServer.usedmem) / (parseInt(this.infoServer.totalmem))*100) )  + '%' }" ></div>
+              <div class="progress-bar" style="width: 20%"></div>
             </div>
                 <span class="progress-description">
-                  {{parseInt( (parseInt(this.infoServer.usedmem) / (parseInt(this.infoServer.totalmem))*100) )}} % Usage
+                  20% Increase
                 </span>
           </div>
           <!-- /.info-box-content -->
