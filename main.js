@@ -63,7 +63,7 @@ app.post('/host', function(req, res) {
             ,'port'    :req.body.port
             ,'config'  :req.body
           };
-
+          
       db.insertVHostV2(vhost,function(message){
         console.log("Erro:",message);
         return res.send(
@@ -72,10 +72,9 @@ app.post('/host', function(req, res) {
       });
 
   }catch(err){
-    console.log("Erro:",err);
     res.send({
-      'STATUS': 'FAILED',
-      'MESSAGE': err
+      'status': 'failed',
+      'message': err
     });
   }
 
