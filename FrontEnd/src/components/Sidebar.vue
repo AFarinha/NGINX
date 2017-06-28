@@ -8,12 +8,12 @@
         <div class="pull-left image">
           <img :src="pictureUrl" />
         </div>
-        <div class="pull-left info">
+        <div class="pull-center info">
           <div>
             <p class="white">{{ displayName }}</p>
           </div>
           <a href="javascript:;">
-            <i class="fa fa-circle text-success"></i> Online
+            <label class="fa fa-circle text-success"></label> User
           </a>
         </div>
       </div>

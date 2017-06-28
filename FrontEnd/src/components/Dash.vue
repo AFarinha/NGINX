@@ -81,8 +81,8 @@ export default {
     ]),
     demo () {
       return {
-        displayName: faker.name.findName(),
-        avatar: faker.image.avatar(),
+        displayName: 'NGINX',
+        avatar: 'https://pbs.twimg.com/profile_images/567774844322713600/tYoVju31.png',
         email: faker.internet.email(),
         randomCard: faker.helpers.createCard()
       }
