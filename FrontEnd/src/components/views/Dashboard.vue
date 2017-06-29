@@ -64,6 +64,11 @@
     </div>
     <!-- /.row -->
 
+    <ChartCode :arrCodeChar="random" :maxSize="20" ></ChartCode>
+
+    <!-- /.row -->
+    </div>
+    <div class="row">
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header with-border">
@@ -88,7 +93,7 @@
       </div>
     </div>
     <!-- /.row -->
-
+    </div>
     <!-- Main row -->
     <div class="row">
       <div class="col-md-3 col-sm-6 col-xs-12">
@@ -169,18 +174,19 @@
 
 <script>
 import Chart from 'chart.js'
-
-import Vue from 'vue'
-import VueSocketIO from 'vue-socket.io'
-import io from 'socket.io-client'
-
-Vue.use(VueSocketIO, io.connect('http://192.168.56.1:8072'))
+import ChartCode from '../Charts/CodeChart.vue'
+// import Vue from 'vue'
+// import VueSocketIO from 'vue-socket.io'
+// import io from 'socket.io-client'
+//
+// Vue.use(VueSocketIO, io.connect('http://192.168.56.1:8072'))
 
 export default {
   data () {
     return {
       infoServer: {},
       chartLines: '',
+      random: [],
       generateRandomNumbers (numbers, max, min) {
         var a = []
         for (var i = 0; i < numbers; i++) {
@@ -193,6 +199,9 @@ export default {
       }
     }
   },
+  components: {
+    ChartCode: ChartCode
+  },
   sockets: {
     connect: function () {
       // Fired when the socket connects.
@@ -202,7 +211,7 @@ export default {
     svr: function (data) {
       var app = this
       app.infoServer = data.info
-      // console.log(data)
+      console.log(data)
     }
   },
   created () {
@@ -222,6 +231,12 @@ export default {
         app.chartLines.update()
         // app.coPilotNumbers.push(1)
         // console.log('passoy')
+        var date = Date.now()
+        var aux = []
+        for (var i = 0; i < 5; i++) {
+          aux.push({ x: app.generateRandomNumber(5, 1000000, 10000), y: date })
+        }
+        app.random = aux
       }, 1000)
     }
   },
@@ -234,6 +249,12 @@ export default {
     },
     isMobile () {
       return (window.innerWidth <= 800 && window.innerHeight <= 600)
+    },
+    propxx2 () {
+      var self = this
+      setInterval(function () {
+        return self.generateRandomNumber(12, 1000000, 10000)
+      }, 1000)
     }
   },
   mounted () {

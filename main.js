@@ -7,13 +7,13 @@ var express = require('express'),
   sqlite3 = require('sqlite3').verbose(),
   db = require('./lib/database.js');
 
-var Collector = require('./lib/collector');
+//var Collector = require('./lib/collector');
 
 var app = express();
 var databaseName = "nginx";
 //para Dashboard
-var collectorProcess = new Collector();
-collectorProcess.init();
+//var collectorProcess = new Collector();
+//collectorProcess.init();
 
 app.use(express.static('./public'));
 app.use(bodyParser.json());

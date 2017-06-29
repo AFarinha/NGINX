@@ -1,6 +1,6 @@
 var request = require('request');
 
-var urls = ["http://www.google.com","http://www.sapo.pt","http://www.hotmail.com"];
+var urls = ["http://localhost/"];
 
 var requestLoop = setInterval(function(){
   var url = urls[Math.floor(Math.random()*urls.length)];
@@ -12,7 +12,7 @@ var requestLoop = setInterval(function(){
       followRedirect: true,
       maxRedirects: 10
   },function(error, response, body){
-      if(!error && response.statusCode == 200){
+      if(!error && response.statusCode){
           console.log('success!');
       }else{
           console.log('error' + response.statusCode);
