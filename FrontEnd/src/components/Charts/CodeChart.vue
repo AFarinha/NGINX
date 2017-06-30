@@ -38,8 +38,8 @@ export default {
       for (var i = 0; i < self.arrCodeChar.length; i++) {
         self.CodeChart.data.datasets[i].data.shift()
         self.CodeChart.data.datasets[i].data.push(self.arrCodeChar[i].x)
-        console.log(self.arrCodeChar[i].x)
-        console.log(self.arrCodeChar[i].y)
+        // console.log(self.arrCodeChar[i].x)
+        // console.log(self.arrCodeChar[i].y)
       }
       self.CodeChart.update(0)
     }

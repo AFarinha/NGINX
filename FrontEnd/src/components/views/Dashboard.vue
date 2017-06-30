@@ -173,13 +173,9 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Chart from 'chart.js'
 import ChartCode from '../Charts/CodeChart.vue'
-// import Vue from 'vue'
-// import VueSocketIO from 'vue-socket.io'
-// import io from 'socket.io-client'
-//
-// Vue.use(VueSocketIO, io.connect('http://192.168.56.1:8072'))
 
 export default {
   data () {
@@ -201,18 +197,6 @@ export default {
   },
   components: {
     ChartCode: ChartCode
-  },
-  sockets: {
-    connect: function () {
-      // Fired when the socket connects.
-      console.log('isConnected')
-    },
-    // Fired when the server sends something on the "messageChannel" channel.
-    svr: function (data) {
-      var app = this
-      app.infoServer = data.info
-      console.log(data)
-    }
   },
   created () {
     this.start()
@@ -237,7 +221,17 @@ export default {
           aux.push({ x: app.generateRandomNumber(5, 1000000, 10000), y: date })
         }
         app.random = aux
-      }, 1000)
+        // get all
+        axios.get('/api/stats/all')
+          .then(function (response) {
+            console.log(response.data)
+            console.log(response)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+          // get
+      }, 2000)
     }
   },
   computed: {

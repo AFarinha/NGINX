@@ -48,8 +48,8 @@ ufw allow 'Nginx HTTP'
 ufw status
 service nginx start
 
-cp $localFolder/confd/0-cache.conf /etc/nginx/conf.d/0-cache.conf
-cp $localFolder/confd/10-dashboard.conf /etc/nginx/conf.d/10-dashboard.conf
+cp $localFolder/Installer/confd/0-cache.conf /etc/nginx/conf.d/0-cache.conf
+cp $localFolder/Installer/confd/10-dashboard.conf /etc/nginx/conf.d/10-dashboard.conf
 
 cd $localFolder
 
