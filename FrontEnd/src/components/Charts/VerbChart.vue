@@ -1,58 +1,59 @@
 <template>
-  <canvas id="Codechart" ></canvas>
+  <canvas id="verbChart" ></canvas>
 </template>
 <script>
 import Chart from 'chart.js'
 
 export default {
-  props: ['arrCodeChart', 'maxSize'],
-  name: 'CodeChart',
+  props: ['arrVerbChart', 'maxSize'],
+  name: 'VerbChart',
   data () {
     return {
-      CodeChart: ''
+      VerbChart: ''
     }
   },
   watch: {
-    arrCodeChart: function (value) {
+    arrVerbChart: function (value) {
       var self = this
-      self.CodeChart.data.labels.shift()
-      self.CodeChart.data.labels.push(value[0].y)
+
+      self.VerbChart.data.labels.shift()
+      self.VerbChart.data.labels.push(value[0].y)
       for (var i = 0; i < value.length; i++) {
-        self.CodeChart.data.datasets[i].data.shift()
-        self.CodeChart.data.datasets[i].data.push(value[i].x)
+        self.VerbChart.data.datasets[i].data.shift()
+        self.VerbChart.data.datasets[i].data.push(value[i].x)
       }
-      self.CodeChart.update(0)
+      self.VerbChart.update(0)
     }
   },
   mounted () {
     this.$nextTick(() => {
       var self = this
-      var ctx = document.getElementById('Codechart').getContext('2d')
+      var ctx = document.getElementById('verbChart').getContext('2d')
       var config = {
         type: 'line',
         data: {
           labels: [],
           datasets: [{
-            label: '2xx',
+            label: 'GET',
             fill: false,
             borderColor: '#284184',
             pointBackgroundColor: '#284184',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: []
           }, {
-            label: '3xx',
+            label: 'POST',
             borderColor: '#4BC0C0',
             pointBackgroundColor: '#4BC0C0',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: [] // this.xx3
           }, {
-            label: '4xx',
+            label: 'OPTIONS',
             borderColor: '#4BC0C0',
             pointBackgroundColor: '#4BC0C0',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: [] // this.xx4
           }, {
-            label: '5xx',
+            label: 'DELETE',
             borderColor: '#4BC0C0',
             pointBackgroundColor: '#4BC0C0',
             backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -80,16 +81,16 @@ export default {
           }
         }
       }
-      self.CodeChart = new Chart(ctx, config)
-      self.CodeChart.data.datasets.forEach((dataset) => {
+      self.VerbChart = new Chart(ctx, config)
+      self.VerbChart.data.datasets.forEach((dataset) => {
         for (var i = 0; i < self.maxSize; i++) {
           dataset.data.push(0)
         }
       })
       for (var i = 0; i < self.maxSize; i++) {
-        self.CodeChart.data.labels.push('')
+        self.VerbChart.data.labels.push('')
       }
-      self.CodeChart.update()
+      self.VerbChart.update()
     })
   }
 }

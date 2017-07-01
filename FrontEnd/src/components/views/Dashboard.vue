@@ -3,26 +3,26 @@
   <section class="content">
     <!-- Info boxes -->
     <div class="row">
+      <!-- Rquests per second -->
       <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
           <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
-
           <div class="info-box-content">
-            <span class="info-box-text">Up Time</span>
-            <span class="info-box-number">{{this.infoServer.uptime}}</span>
+            <span class="info-box-text">Requests</span>
+            <span class="info-box-number">{{this.infoServers.requestspers}} /s</span>
           </div>
           <!-- /.info-box-content -->
         </div>
         <!-- /.info-box -->
       </div>
-      <!-- /.col -->
+      <!-- MBps -->
       <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
           <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
 
           <div class="info-box-content">
-            <span class="info-box-text">Host Name</span>
-            <span class="info-box-number">{{this.infoServer.hostname}}</span>
+            <span class="info-box-text">MB</span>
+            <span class="info-box-number">{{this.infoServers.mbps}} /s</span>
           </div>
           <!-- /.info-box-content -->
         </div>
@@ -38,8 +38,8 @@
           <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
 
           <div class="info-box-content">
-            <span class="info-box-text">Platform</span>
-            <span class="info-box-number">{{this.infoServer.osTypePlatform}}</span>
+            <span class="info-box-text">Error</span>
+            <span class="info-box-number">{{this.infoServers.errorPercentage}} %</span>
           </div>
           <!-- /.info-box-content -->
         </div>
@@ -51,7 +51,7 @@
           <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
 
           <div class="info-box-content">
-            <span class="info-box-text">Network Interfaces</span>
+            <span class="info-box-text">Hosts</span>
             <span class="info-box-text">
 
             </span>
@@ -63,36 +63,135 @@
       <!-- /.col -->
     </div>
     <!-- /.row -->
-
-    <ChartCode :arrCodeChar="random" :maxSize="20" ></ChartCode>
-
-    <!-- /.row -->
-    </div>
+    <!-- CodeChart -->
     <div class="row">
-    <div class="col-xs-12">
-      <div class="box">
-        <div class="box-header with-border">
-          <h3 class="box-title"></h3>
-          <div class="box-body">
-            <div class="col-sm-6 col-xs-12">
-              <p class="text-center">
-                <strong>Web Traffic Overview</strong>
-              </p>
-              <canvas id="trafficBar" ></canvas>
-            </div>
-            <hr class="visible-xs-block">
-            <div class="col-sm-6 col-xs-12">
-              <p class="text-center">
-                <strong>Language Overview</strong>
-              </p>
-              <canvas id="languagePie"></canvas>
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header with-border">
+            <h3 class="box-title"></h3>
+            <div class="box-body">
+              <div class="col-sm-6 col-xs-12">
+                <p class="text-center">
+                  <strong>CodeChart</strong>
+                </p>
+                <CodeChart :arrCodeChart="CodeChart" :maxSize="20" ></CodeChart>
+              </div>
+              <hr class="visible-xs-block">
+              <div class="col-sm-6 col-xs-12">
+                <p class="text-center">
+                  <strong>VerbChart</strong>
+                </p>
+                <VerbChart :arrVerbChart="VerbChart" :maxSize="20" ></VerbChart>
+              </div>
             </div>
           </div>
         </div>
-        <small class="space"><b>Pro Tip</b> Don"t forget to star us on github!</small>
+      </div>
+    </div>
+    <!-- VerbChart --> <!--
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header with-border">
+            <h3 class="box-title"></h3>
+            <div class="box-body">
+              <div class="col-xs-9">
+                <p class="text-center">
+                  <strong>VerbChart</strong>
+                </p>
+                <VerbChart :arrVerbChart="VerbChart" :maxSize="20" ></VerbChart>
+              </div>
+              <hr class="visible-xs-block">
+              <div class="col-xs-3">
+                <p class="text-center">
+                  <strong>Language Overview</strong>
+                </p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    -->
+    <!-- CacheChart -->
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header with-border">
+            <h3 class="box-title"></h3>
+            <div class="box-body">
+              <div class="col-sm-6 col-xs-12">
+                <p class="text-center">
+                  <strong>CacheChart</strong>
+                </p>
+                <CacheChart :arrCacheChart="CacheChart" :maxSize="20" ></CacheChart>
+              </div>
+              <hr class="visible-xs-block">
+              <div class="col-sm-6 col-xs-12">
+                <p class="text-center">
+                  <strong>BandwidthChart</strong>
+                </p>
+                <BandwidthChart :arrBandwidthChart="BandwidthChart" :maxSize="20" ></BandwidthChart>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- CacheChart --> <!--
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header with-border">
+            <h3 class="box-title"></h3>
+            <div class="box-body">
+              <div class="col-xs-9">
+                <p class="text-center">
+                  <strong>BandwidthChart</strong>
+                </p>
+                <BandwidthChart :arrBandwidthChart="BandwidthChart" :maxSize="20" ></BandwidthChart>
+              </div>
+              <hr class="visible-xs-block">
+              <div class="col-xs-3">
+                <p class="text-center">
+                  <strong>Language Overview</strong>
+                </p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    -->
+    <!-- TimesChart -->
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header with-border">
+            <h3 class="box-title"></h3>
+            <div class="box-body">
+              <div class="col-sm-6 col-xs-12">
+                <p class="text-center">
+                  <strong>TimesChart</strong>
+                </p>
+                <TimesChart :arrTimesChart="TimesChart" :maxSize="20" ></TimesChart>
+              </div>
+              <hr class="visible-xs-block">
+              <div class="col-sm-6 col-xs-12">
+                <p class="text-center">
+                  <strong>Language Overview</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- /.row -->
+    </div>
+    <div class="row">
     </div>
     <!-- Main row -->
     <div class="row">
@@ -102,12 +201,12 @@
 
           <div class="info-box-content">
             <span class="info-box-text">CPU Load</span>
-            <span class="info-box-number">{{this.infoServer.load}} %</span>
+            <span class="info-box-number"> %</span>
             <div class="progress">
-              <div class="progress-bar" :style="{ width: parseInt( (parseInt(this.infoServer.load) * 100) )  + '%' }" ></div>
+              <div class="progress-bar"  ></div>
             </div>
                 <span class="progress-description">
-                  {{ parseInt( (parseInt(this.infoServer.load) * 100) ) }} % Usage
+               % Usage
                 </span>
           </div>
           <!-- /.info-box-content -->
@@ -119,12 +218,12 @@
 
           <div class="info-box-content">
             <span class="info-box-text">Memory</span>
-            <span class="info-box-number">{{this.infoServer.usedmem}} / {{this.infoServer.totalmem}}</span>
+            <span class="info-box-number"></span>
             <div class="progress">
-              <div class="progress-bar" :style="{ width: parseInt( (parseInt(this.infoServer.usedmem) / (parseInt(this.infoServer.totalmem))*100) )  + '%' }" ></div>
+              <div class="progress-bar"  ></div>
             </div>
                 <span class="progress-description">
-                  {{parseInt( (parseInt(this.infoServer.usedmem) / (parseInt(this.infoServer.totalmem))*100) )}} % Usage
+                   % Usage
                 </span>
           </div>
           <!-- /.info-box-content -->
@@ -174,159 +273,103 @@
 
 <script>
 import axios from 'axios'
-import Chart from 'chart.js'
-import ChartCode from '../Charts/CodeChart.vue'
+import CodeChart from '../Charts/CodeChart.vue'
+import VerbChart from '../Charts/VerbChart.vue'
+import CacheChart from '../Charts/CacheChart.vue'
+import BandwidthChart from '../Charts/BandwidthChart.vue'
+import TimesChart from '../Charts/TimesChart.vue'
 
 export default {
   data () {
     return {
-      infoServer: {},
-      chartLines: '',
-      random: [],
-      generateRandomNumbers (numbers, max, min) {
-        var a = []
-        for (var i = 0; i < numbers; i++) {
-          a.push(Math.floor(Math.random() * (max - min + 1)) + max)
-        }
-        return a
+      infoServers: {
+        requestspers: 0,
+        mbps: 0,
+        errorPercentage: 0
       },
-      generateRandomNumber (numbers, max, min) {
-        return Math.floor(Math.random() * (max - min + 1)) + max
-      }
+      CodeChart: [],
+      VerbChart: [],
+      CacheChart: [],
+      BandwidthChart: [],
+      TimesChart: []
     }
-  },
-  components: {
-    ChartCode: ChartCode
   },
   created () {
     this.start()
   },
   methods: {
+    parseStatisticsCodeChart: function (data) {
+      var app = this
+      var auxCodeChart = []
+      Object.keys(data.statistics.codes).forEach((code) => {
+        auxCodeChart.push({ x: data.statistics.codes[code], y: new Date(data.date).toTimeString().split(' ')[0] })
+      })
+      app.CodeChart = auxCodeChart
+    },
+    parseStatisticsVerbChart: function (data) {
+      var app = this
+      var auxVerbChart = []
+      Object.keys(data.statistics.verbs).forEach((code) => {
+        auxVerbChart.push({ x: data.statistics.verbs[code], y: new Date(data.date).toTimeString().split(' ')[0] })
+      })
+      app.VerbChart = auxVerbChart
+    },
+    parseStatisticsCacheChart: function (data) {
+      var app = this
+      app.CacheChart = data
+    },
+    parseStatisticsBandwidthChart: function (data) {
+      var app = this
+      var auxBandwidthChart = []
+      auxBandwidthChart.push({ x: data.statistics.bandwidth, y: new Date(data.date).toTimeString().split(' ')[0] })
+      app.BandwidthChart = auxBandwidthChart
+    },
+    parseStatisticsTimesChart: function (data) {
+      var app = this
+      var auxTimesChart = []
+      auxTimesChart.push({ x: data.statistics.requesttime, y: new Date(data.date).toTimeString().split(' ')[0] })
+      auxTimesChart.push({ x: data.statistics.upstreamtime, y: new Date(data.date).toTimeString().split(' ')[0] })
+
+      app.TimesChart = auxTimesChart
+    },
+    parseStatisticsGeneral: function (data) {
+      var app = this
+      app.infoServers.requestspers = data.statistics.requestspers
+      app.infoServers.mbps = data.statistics.bandwidth
+
+      var errors = data.statistics.codes['400'] + data.statistics.codes['500'] + data.statistics.codes.other
+      errors = parseInt((errors / data.requests) * 100)
+      if (isNaN(errors)) {
+        errors = 0
+      }
+      app.infoServers.errorPercentage = errors
+    },
     start () {
       var app = this
-      setInterval(function () {
-        app.chartLines.data.labels.push('label')
-        app.chartLines.data.labels.splice(0, 1)
-        app.chartLines.data.datasets.forEach((dataset) => {
-          // dataset.data.push(app.generateRandomNumbers(12, 1000000, 10000))
-          dataset.data.push(app.generateRandomNumber(12, 1000000, 10000))
-          dataset.data.splice(0, 1)
-        })
-        app.chartLines.update()
-        // app.coPilotNumbers.push(1)
-        // console.log('passoy')
-        var date = Date.now()
-        var aux = []
-        for (var i = 0; i < 5; i++) {
-          aux.push({ x: app.generateRandomNumber(5, 1000000, 10000), y: date })
-        }
-        app.random = aux
         // get all
+      setInterval(function () {
         axios.get('/api/stats/all')
           .then(function (response) {
+            app.parseStatisticsCodeChart(response.data)
+            app.parseStatisticsVerbChart(response.data)
+            app.parseStatisticsCacheChart(response.data)
+            app.parseStatisticsBandwidthChart(response.data)
+            app.parseStatisticsTimesChart(response.data)
+            app.parseStatisticsGeneral(response.data)
             console.log(response.data)
-            console.log(response)
           })
           .catch(error => {
             console.log(error)
           })
-          // get
       }, 2000)
     }
   },
-  computed: {
-    coPilotNumbers () {
-      return this.generateRandomNumbers(12, 1000000, 10000)
-    },
-    personalNumbers () {
-      return this.generateRandomNumbers(12, 1000000, 10000)
-    },
-    isMobile () {
-      return (window.innerWidth <= 800 && window.innerHeight <= 600)
-    },
-    propxx2 () {
-      var self = this
-      setInterval(function () {
-        return self.generateRandomNumber(12, 1000000, 10000)
-      }, 1000)
-    }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      var app = this
-      var ctx = document.getElementById('trafficBar').getContext('2d')
-      var config = {
-        type: 'line',
-        data: {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-          datasets: [{
-            label: 'CoPilot',
-            fill: false,
-            borderColor: '#284184',
-            pointBackgroundColor: '#284184',
-            backgroundColor: 'rgba(0, 0, 0, 0)',
-            data: app.coPilotNumbers
-          }, {
-            label: 'Personal Site',
-            borderColor: '#4BC0C0',
-            pointBackgroundColor: '#4BC0C0',
-            backgroundColor: 'rgba(0, 0, 0, 0)',
-            data: app.personalNumbers
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: !app.isMobile,
-          legend: {
-            position: 'bottom',
-            display: true
-          },
-          tooltips: {
-            mode: 'label',
-            xPadding: 10,
-            yPadding: 10,
-            bodySpacing: 10
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-
-              }
-            }],
-            xAxes: [{
-              ticks: {
-
-              }
-            }]
-          }
-        }
-      }
-
-      app.chartLines = new Chart(ctx, config) // eslint-disable-line no-new
-
-      var pieChartCanvas = document.getElementById('languagePie').getContext('2d')
-      var pieConfig = {
-        type: 'pie',
-        data: {
-          labels: ['HTML', 'JavaScript', 'CSS'],
-          datasets: [{
-            data: [56.6, 37.7, 4.1],
-            backgroundColor: ['#00a65a', '#f39c12', '#00c0ef'],
-            hoverBackgroundColor: ['#00a65a', '#f39c12', '#00c0ef']
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: !this.isMobile,
-          legend: {
-            position: 'bottom',
-            display: true
-          }
-        }
-      }
-
-      new Chart(pieChartCanvas, pieConfig) // eslint-disable-line no-new
-    })
+  components: {
+    CodeChart: CodeChart,
+    VerbChart: VerbChart,
+    CacheChart: CacheChart,
+    BandwidthChart: BandwidthChart,
+    TimesChart: TimesChart
   }
 }
 </script>
