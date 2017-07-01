@@ -211,6 +211,13 @@ Api.prototype.init = function() {
     });
   });
 
+  this.app.get('/getAllUpstreams', function(req, res) {
+    console.log(message);
+    db.selectAllUpstreams(function(message) {
+      res.send(message);
+    });
+  });
+
   this.app.delete('/deleteVHost/:id', function(req, res) {
     db.deleteVHost(req.params.id, function(message) {
       res.send(message);

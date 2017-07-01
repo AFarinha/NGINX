@@ -16,6 +16,11 @@
         <span class="page">VHost</span>
       </router-link>
     </li>
+    <li class="pageLink" v-on:click="toggleMenu">
+      <router-link to="/upstreams"><i class="fa fa-table"></i>
+        <span class="page">Upstreams</span>
+      </router-link>
+    </li>
   </ul>
 </template>
 <script>

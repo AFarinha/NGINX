@@ -251,6 +251,23 @@ module.exports = {
         if (alreadyRes == false && i == confUpdtreamContent.length) {
             return response({ 'status': 'ok', 'message': {} });
         }
+    },
+    selectAllUpstreams: function(response) {
+
+        openBD();
+
+        db.all("SELECT id,instance, name FROM upstreams", function(err, rows) {
+            if (err) {
+                return response({ 'status': 'failed', 'message': err });
+            }
+            if (rows == 0) {
+                response({ 'status': 'ok', 'message': {} });
+            } else {
+                response({ 'status': 'ok', 'message': JSON.parse(JSON.stringify(rows)) });
+            }
+        });
+
+        closeBD();
     }
 
 };
