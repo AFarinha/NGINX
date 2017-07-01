@@ -28,15 +28,12 @@
         </div>
         <!-- /.info-box -->
       </div>
-      <!-- /.col -->
-
       <!-- fix for small devices only -->
       <div class="clearfix visible-sm-block"></div>
-
+      <!-- errorPercentage -->
       <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
           <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
-
           <div class="info-box-content">
             <span class="info-box-text">Error</span>
             <span class="info-box-number">{{this.infoServers.errorPercentage}} %</span>
@@ -45,25 +42,29 @@
         </div>
         <!-- /.info-box -->
       </div>
-      <!-- /.col -->
+      <!-- Hosts -->
       <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
           <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
 
           <div class="info-box-content">
             <span class="info-box-text">Hosts</span>
-            <span class="info-box-text">
-
-            </span>
+              <div class="form-group">
+                <select class="form-control" v-model="selectedServer">
+                  <option v-for="option in this.infoServers.hostnames" v-bind:value="option">
+                    {{ option }}
+                  </option>
+                </select>
+            </div>
           </div>
           <!-- /.info-box-content -->
         </div>
         <!-- /.info-box -->
       </div>
-      <!-- /.col -->
+
     </div>
-    <!-- /.row -->
-    <!-- CodeChart -->
+
+    <!-- CodeChart General -->
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
@@ -79,42 +80,71 @@
               <hr class="visible-xs-block">
               <div class="col-sm-6 col-xs-12">
                 <p class="text-center">
-                  <strong>VerbChart</strong>
+                  <strong>General</strong>
                 </p>
-                <VerbChart :arrVerbChart="VerbChart" :maxSize="20" ></VerbChart>
+                <div class="row">
+                  <div class="col-sm-6 col-xs-12">
+                    <div class="row" >
+                      <div class="box">
+                        <div class="box-header">
+                          <h3 class="box-title"> Top Server</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                         <b>  {{this.infoServers.topRequests}} </b>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" >
+                      <div class="box">
+                        <div class="box-header">
+                          <h3 class="box-title"> Top Error</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                          <b> {{this.infoServers.topError}} </b>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" >
+                      <div class="box">
+                        <div class="box-header">
+                          <h3 class="box-title">Number Servers Monitoring</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                          <b> {{this.infoServers.hostnames.length}} </b>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="visible-xs-block">
+                  <div class="col-sm-6 col-xs-12">
+                    <div class="box">
+                      <div class="box-header">
+                        <h3 class="box-title">Top Domains</h3>
+                      </div><!-- /.box-header -->
+                      <div class="box-body">
+                        <table class="table table-striped table-bordered">
+                          <tbody>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Domains</th>
+                            </tr>
+                            <tr v-for="(item, index) in this.infoServers.topSites">
+                                <td>{{ index + 1 }}.</td>
+                                <td>{{ item }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- VerbChart --> <!--
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="box">
-          <div class="box-header with-border">
-            <h3 class="box-title"></h3>
-            <div class="box-body">
-              <div class="col-xs-9">
-                <p class="text-center">
-                  <strong>VerbChart</strong>
-                </p>
-                <VerbChart :arrVerbChart="VerbChart" :maxSize="20" ></VerbChart>
-              </div>
-              <hr class="visible-xs-block">
-              <div class="col-xs-3">
-                <p class="text-center">
-                  <strong>Language Overview</strong>
-                </p>
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    -->
-    <!-- CacheChart -->
+    <!-- CacheChart  VerbChart-->
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
@@ -130,42 +160,16 @@
               <hr class="visible-xs-block">
               <div class="col-sm-6 col-xs-12">
                 <p class="text-center">
-                  <strong>BandwidthChart</strong>
+                  <strong>VerbChart</strong>
                 </p>
-                <BandwidthChart :arrBandwidthChart="BandwidthChart" :maxSize="20" ></BandwidthChart>
+                <VerbChart :arrVerbChart="VerbChart" :maxSize="20" ></VerbChart>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- CacheChart --> <!--
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="box">
-          <div class="box-header with-border">
-            <h3 class="box-title"></h3>
-            <div class="box-body">
-              <div class="col-xs-9">
-                <p class="text-center">
-                  <strong>BandwidthChart</strong>
-                </p>
-                <BandwidthChart :arrBandwidthChart="BandwidthChart" :maxSize="20" ></BandwidthChart>
-              </div>
-              <hr class="visible-xs-block">
-              <div class="col-xs-3">
-                <p class="text-center">
-                  <strong>Language Overview</strong>
-                </p>
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    -->
-    <!-- TimesChart -->
+    <!-- TimesChart BandwidthChart -->
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
@@ -181,94 +185,17 @@
               <hr class="visible-xs-block">
               <div class="col-sm-6 col-xs-12">
                 <p class="text-center">
-                  <strong>Language Overview</strong>
+                  <strong>BandwidthChart</strong>
                 </p>
+                <BandwidthChart :arrBandwidthChart="BandwidthChart" :maxSize="20" ></BandwidthChart>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- /.row -->
-    </div>
-    <div class="row">
-    </div>
-    <!-- Main row -->
-    <div class="row">
-      <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box bg-yellow">
-          <span class="info-box-icon"><i class="ion ion-ios-pricetag-outline"></i></span>
 
-          <div class="info-box-content">
-            <span class="info-box-text">CPU Load</span>
-            <span class="info-box-number"> %</span>
-            <div class="progress">
-              <div class="progress-bar"  ></div>
-            </div>
-                <span class="progress-description">
-               % Usage
-                </span>
-          </div>
-          <!-- /.info-box-content -->
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box bg-green">
-          <span class="info-box-icon"><i class="ion ion-ios-heart-outline"></i></span>
-
-          <div class="info-box-content">
-            <span class="info-box-text">Memory</span>
-            <span class="info-box-number"></span>
-            <div class="progress">
-              <div class="progress-bar"  ></div>
-            </div>
-                <span class="progress-description">
-                   % Usage
-                </span>
-          </div>
-          <!-- /.info-box-content -->
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box bg-red">
-          <span class="info-box-icon"><i class="ion ion-ios-cloud-download-outline"></i></span>
-
-          <div class="info-box-content">
-            <span class="info-box-text">Downloads</span>
-            <span class="info-box-number">45</span>
-
-            <div class="progress">
-              <div class="progress-bar" style="width: 70%"></div>
-            </div>
-                <span class="progress-description">
-                  70% Increase
-                </span>
-          </div>
-          <!-- /.info-box-content -->
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box bg-aqua">
-          <span class="info-box-icon"><i class="ion-ios-chatbubble-outline"></i></span>
-
-          <div class="info-box-content">
-            <span class="info-box-text">Direct Messages</span>
-            <span class="info-box-number">163,921</span>
-
-            <div class="progress">
-              <div class="progress-bar" style="width: 40%"></div>
-            </div>
-                <span class="progress-description">
-                  40% Increase
-                </span>
-          </div>
-          <!-- /.info-box-content -->
-        </div>
-      </div>
-    </div>
-    <!-- /.row -->
   </section>
-  <!-- /.content -->
 </template>
 
 <script>
@@ -285,13 +212,18 @@ export default {
       infoServers: {
         requestspers: 0,
         mbps: 0,
-        errorPercentage: 0
+        errorPercentage: 0,
+        topError: '',
+        topRequests: '',
+        topSites: [],
+        hostnames: ['All']
       },
       CodeChart: [],
       VerbChart: [],
       CacheChart: [],
       BandwidthChart: [],
-      TimesChart: []
+      TimesChart: [],
+      selectedServer: 'All'
     }
   },
   created () {
@@ -343,12 +275,22 @@ export default {
         errors = 0
       }
       app.infoServers.errorPercentage = errors
+      app.infoServers.topError = data.top.error
+      app.infoServers.topRequests = data.top.requests
+      app.infoServers.topSites = data.top.sites
+
+      data.hostnames.push('All')
+      data.hostnames.forEach((code) => {
+        if (app.infoServers.hostnames.indexOf(code) < 0) {
+          app.infoServers.hostnames.push(code)
+        }
+      })
     },
     start () {
       var app = this
         // get all
       setInterval(function () {
-        axios.get('/api/stats/all')
+        axios.get('/api/stats/' + app.selectedServer.toLowerCase())
           .then(function (response) {
             app.parseStatisticsCodeChart(response.data)
             app.parseStatisticsVerbChart(response.data)
