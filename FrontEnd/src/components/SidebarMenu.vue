@@ -21,6 +21,11 @@
         <span class="page">Upstreams</span>
       </router-link>
     </li>
+	<li class="pageLink" v-on:click="toggleMenu">
+      <router-link to="/templates"><i class="fa fa-table"></i>
+        <span class="page">Templates</span>
+      </router-link>
+    </li>
   </ul>
 </template>
 <script>

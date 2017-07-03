@@ -10,6 +10,7 @@ import ReposView from './components/views/Repos.vue'
 import VHostView from './components/views/VHost.vue'
 import ListVHostView from './components/views/VHostsList.vue'
 import UpstreamsView from './components/views/Upstreams.vue'
+import TemplatesView from './components/views/Templates.vue'
 
 // Routes
 const routes = [
@@ -47,6 +48,11 @@ const routes = [
         component: UpstreamsView,
         name: 'List or Create Upstreams',
         meta: {description: 'Here is possible to list or create Upstreams'}
+      }, {
+        path: 'templates',
+        component: TemplatesView,
+        name: 'List Templates',
+        meta: {description: 'Here is possible to list Templates'}
       }, {
         path: 'tables',
         component: TablesView,
