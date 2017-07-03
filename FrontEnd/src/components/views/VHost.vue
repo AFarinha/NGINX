@@ -105,7 +105,6 @@ export default {
             app.server.id = response.data.message.id.toString()
             app.responseSuccess = response.data
             app.responseError = false
-            window.location = '/listVHosts' // JH
           }
         })
         .catch(error => {
