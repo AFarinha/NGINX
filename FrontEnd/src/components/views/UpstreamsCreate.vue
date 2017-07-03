@@ -10,10 +10,14 @@
           </div>
         </div>
         <div class="box-body">
-          <UpstreamItem v-for="(upstream, index) in this.arrayUpstreams" :upstream="upstream" :key="upstream" v-on:removeUpstream="removeUpstream(index)">
-          </UpstreamItem>
+        {{upstream}}
+          <input name="proxyPass" v-model="upstream.upstreamName" class="form-control" type="text" placeholder="Upstream name">
+
+          <UpstreamItem v-for="(upstream, index) in this.upstream.arrayUpstremItems" :upstream="upstream" :key="upstream" v-on:removeUpstream="removeUpstream(index)">
+          </UpstreamItem> 
+
           </br>
-          <button @click="addUpstream" type="button" class="btn btn-success">Add Upstream item</button>
+           <button @click="addUpstream" type="button" class="btn btn-success">Add Upstream item</button>
         </div>
       </div>
     </div>
@@ -21,27 +25,34 @@
 </template>
 
 <script>
-//Imports
-import { EventBus } from '../../main.js'
-
-
-
+// Imports
+import UpstreamItem from './UpstreamItem'
+// import { EventBus } from '../../main.js'
 
 export default {
-  pname: 'Upstremas',
   data () {
-    return arrayUpstreams[]
+    return {
+      upstream: {
+        upstreamName: '',
+        arrayUpstremItems: []
+      }
+    }
   },
   methods: {
     addUpstream: function () {
-      this.arrayUpstreams = arrayUpstreams []
+      this.upstream.arrayUpstremItems.push({
+        name: '',
+        weight: ''
+      })
+    },
+    removeUpstream (index) {
+      this.upstream.arrayUpstremItems.splice(index, 1)
     }
   },
   created () {
-    // para criar Streams por default
-    var app = this
-    console.log(app.server)
-    app.addUpstream()
+  },
+  components: {
+    UpstreamItem: UpstreamItem
   }
 }
 </script>

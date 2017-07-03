@@ -11,9 +11,7 @@
 		      <div class="box-body">
 		      	<label>Content List</label>
 
-		        <UpstreamsList v-for="(upstream, index) in this.arrayUpstreams"
-		            :upstream="upstream"
-		            :key= "upstream"
+		        <UpstreamsList>
 		        </UpstreamsList>
 
 		        </br>
@@ -31,10 +29,9 @@
 		          </div>
 		      </div>
 		      <div class="box-body">
-		      	<UpstreamItem v-for="(upstream, index) in this.arrayUpstreams" :upstream="upstream" :key="upstream" v-on:removeUpstream="removeUpstream(index)">
-			      </UpstreamItem>
-			      </br>
-		      <button @click="addUpstream" type="button" class="btn btn-success">Add Upstream item</button>
+		      	<UpstreamsCreate>
+			    </UpstreamsCreate>
+			    </br>
 
 		      </div>
 		    </div>
@@ -47,6 +44,8 @@
 <script>
 // Imports
 // import { EventBus } from '../../main.js'
+import UpstreamsCreate from './UpstreamsCreate'
+import UpstreamsList from './UpstreamsList'
 
 export default {
   props: {
@@ -55,15 +54,13 @@ export default {
     return {
     }
   },
-  created () {
-    // para criar Streams por default
-    var app = this
-    console.log(app)
-    // this.arrayUpstreams = arrayUpstreams []
+  components: {
+    UpstreamsCreate: UpstreamsCreate,
+    UpstreamsList: UpstreamsList
   }
 }
 </script>
 
 <style>
-
 </style>
+

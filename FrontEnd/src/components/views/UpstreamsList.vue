@@ -1,14 +1,11 @@
 <template>
 	<section class="content">
-		{{server}}
-
+		{{upstream}}
 		<data-tables
-	      :data='this.server'
+	      :data='this.upstream'
 	      :has-action-col='false'>
 	      <el-table-column prop='id' label="id" sortable="custom"></el-table-column>
-	      <el-table-column prop='status' label="Status" sortable="custom"></el-table-column>
 	      <el-table-column prop='name' label="Host Name"  sortable="custom"></el-table-column>
-	      <el-table-column prop='port' label="Port" sortable="custom"></el-table-column>
 	      <el-table-column prop='instance' label="Instance" sortable="custom"></el-table-column>
 	    </data-tables>
 
@@ -38,30 +35,29 @@
 	Vue.use(DataTables)
 
 	export default {
-	  props: {
-	    upstream: {
-	      type: Object,
-	      required: true
-	    }
-	  },data () {
+	  data () {
 	    return {
-	      server: [],
+	      upstream: [{
+	        upstreamName: '',
+	        arrayUpstremItems: []
+	      }],
+	      responseSuccess: false,
 	      responseError: false
 	    }
 	  },
 	  methods: {
 	  },
 	  created: function () {
-	    var app = this
+	    var self = this
 	    axios.get('/api/getAllUpstreams/')
 	      .then(function (response) {
 	        console.log(response.data)
-	        app.server = response.data.message
+	        self.upstream = response.data.message
 	        console.log(response)
 	      })
 	      .catch(error => {
 	        console.log(error)
-	        app.responseError = error.response.statusText + ' : ' + error.response.data
+	        self.responseError = error.response.statusText + ' : ' + error.response.data
 	      })
 	  }
 	}

@@ -212,7 +212,6 @@ Api.prototype.init = function() {
   });
 
   this.app.get('/getAllUpstreams', function(req, res) {
-    console.log(message);
     db.selectAllUpstreams(function(message) {
       res.send(message);
     });
