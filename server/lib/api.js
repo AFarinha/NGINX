@@ -101,7 +101,7 @@ Api.prototype.init = function() {
                 console.log('Desejado para VHost:', VHostFileName);
 
                 var confcontent = generateFiles.createServerConf(req.body);
-                var confUpdtreamContent = generateFiles.createUpstreamConf(req.body.arrayLocations);
+                var confUpdtreamContent = generateFiles.createUpstreamConfMulti(req.body.arrayLocations);
 
                 /*
                 código replicado em baixo, mas para poder seguir o processo, é necessário validar
@@ -185,42 +185,51 @@ Api.prototype.init = function() {
     });
 
     this.app.post('/insertUpstream', function(req, res) {
-        db.selectNextSeedUpstream(function(message1) {
-            seedUptreams = JSON.parse(JSON.stringify(message1)).message.seed;
-            console.log('\n',req.body,'\n');
-            var upstream = {
-                'instance': req.body.instance || '',
-                'name': req.body.upstreamName,
-                'config': req.body.arrayUpstreamItems
-            };
+        //Se ID vazio e, nome já existir na BD, não deixar fazer nada
+        db.canInsertUpstream(function(message1) {
+            if ((upstream.id == undefined || upstream.id == null || upstream.id == '' || isNaN(upstream.id)) && message1.message.status === 'ok') {
+                db.selectNextSeedUpstream(function(message2) {
+                    seedUptreams = JSON.parse(JSON.stringify(message2)).message.seed;
 
-            try {
-                var confUpdtreamContent = generateFiles.createUpstreamConf(req.body.config.arrayUpstreamItems);
-                console.log('confUpdtreamContent\n:', confUpdtreamContent, '\n');
-                confUpdtreamContent.forEach(function(item) {
+                    try {
+                        var jsonConfig = JSON.parse(JSON.stringify(req.body));
+                        var confUpdtreamContent = generateFiles.createUpstreamConfSingle(jsonConfig);
 
-                    UpstreamFileName = seedUptreams + '-' + item.name.replace('https://', '').replace('http://', '');
-                    UpstreamDBName = item.name.replace('https://', '').replace('http://', '');
+                        console.log('confUpdtreamContent\n:', confUpdtreamContent, '\n');
+                        // é só uma upstream por isso só faz o ciclo 1x
+                        confUpdtreamContent.forEach(function(item) {
 
-                    console.log('Desejado para upstream:', UpstreamFileName);
+                            UpstreamFileName = seedUptreams + '-' + item.name.replace('https://', '').replace('http://', '');
+                            UpstreamDBName = item.name.replace('https://', '').replace('http://', '');
 
-                    var upstream = {
-                        'instance': req.body.instance || '',
-                        'name': UpstreamDBName
-                    };
+                            console.log('Desejado para upstream:', UpstreamFileName);
 
-                    utils.writeFileSync(UpstreamFileName, item.conf);
+                            utils.writeFileSync(UpstreamFileName, item.conf);
 
-                    db.insertUpstream(upstream, function(message) {
-                        console.log("Resultado do insertUpstream:", message);
-                    });
+                            var upstream = {
+                                'id': req.body.id,
+                                'instance': req.body.instance || '',
+                                'name': req.body.upstreamName,
+                                'config': JSON.stringify(req.body)
+                            };
+                            console.log('Upstream para BD', upstream, '\n');
 
-                    seedUptreams++;
-                });
-            } catch (err) {
-                console.log('Erro:', err);
+                            db.insertUpstream(upstream, function(message) {
+                                console.log("Resultado do insertUpstream:", message);
+                                res.send(message);
+                            });
+
+                            seedUptreams++;
+                        });
+
+                    } catch (err) {
+                        console.log('Erro:', err);
+                    }
+                }); // fim selectNextSeedUpstream
+            }else{
+              return res.send(message1);;
             }
-        }); // fim selectNextSeedUpstream
+        }); // fim do canInsertUpstream
     });
 
     this.app.post('/insertVHostV2', function(req, res) {

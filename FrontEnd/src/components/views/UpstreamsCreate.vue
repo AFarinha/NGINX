@@ -13,12 +13,23 @@
         {{upstream}}
           <input name="proxyPass" v-model="upstream.upstreamName" class="form-control" type="text" placeholder="Upstream name">
 
-          <UpstreamItem v-for="(upstream, index) in this.upstream.arrayUpstremItems" :upstream="upstream" :key="upstream" v-on:removeUpstream="removeUpstream(index)">
+          <UpstreamItem v-for="(upstream, index) in this.upstream.arrayUpstreamItems" :upstream="upstream" :key="upstream" v-on:removeUpstream="removeUpstream(index)">
           </UpstreamItem> 
 
           </br>
            <button @click="addUpstream" type="button" class="btn btn-success">Add Upstream item</button>
            <button @click="postSaveUpstream" type="button" class="btn btn-success">Save Upstream</button>
+        </div>
+        <div v-if="responseError" class="alert alert-danger alert-dismissable">
+           <i class="fa fa-ban"></i>
+           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+           <b>Alert! </b>{{this.responseError}}
+        </div>
+
+        <div v-if="responseSuccess" class="alert alert-success alert-dismissable">
+          <i class="fa fa-check"></i>
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <b>Alert! </b> {{this.responseSuccess}}
         </div>
       </div>
     </div>
@@ -35,14 +46,20 @@ export default {
   data () {
     return {
       upstream: {
+        id: '',
         upstreamName: '',
         arrayUpstreamItems: []
-      }
+      },
+      responseSuccess: false,
+      responseError: false
     }
   },
   methods: {
     addUpstream: function () {
       this.upstream.arrayUpstreamItems.push({
+        type: '',
+        subType: '',
+        config: ''
       })
     },
     postSaveUpstream: function () {
@@ -54,7 +71,7 @@ export default {
             app.responseError = response.data
             app.responseSuccess = false
           } else {
-            app.server.id = response.data.message.id.toString()
+            app.upstream.id = response.data.message.id.toString()
             app.responseSuccess = response.data
             app.responseError = false
           }
@@ -66,7 +83,7 @@ export default {
         })
     },
     removeUpstream (index) {
-      this.upstream.arrayUpstreamItems.splice(index, 1)
+      this.upstream.arrayUpstremItems.splice(index, 1)
     }
   },
   components: {

@@ -9,15 +9,8 @@
 		          </div>
 		      </div>
 		      <div class="box-body">
-		      	<label>Content List</label>
-
 		        <UpstreamsList>
 		        </UpstreamsList>
-
-		        </br>
-
-		        <label>Content List Fim</label>
-
 		      </div>
 		    </div>
 

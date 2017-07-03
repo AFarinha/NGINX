@@ -203,18 +203,34 @@ module.exports = {
         openBD();
 
         console.log('\nInsert Upstream: ', upstream, '\n');
+        // Insert
+        if (upstream.id == undefined || upstream.id == null || upstream.id == '' || isNaN(upstream.id)) {
 
-        db.run("INSERT INTO upstreams (instance, name, config) VALUES (?,?,?)", upstream.instance, upstream.name, upstream.config, function(err) {
-            if (err) {
-                console.log('Erro no insertUpstream');
-                console.log({ 'status': 'failed', 'message': err });
-                response({ 'status': 'failed', 'message': err });
-            } else {
-                console.log('\nInsert upstream com id ' + this.lastID);
-                response({ 'status': 'ok', 'message': { 'id': this.lastID } });
-            }
-        });
-
+            db.run("INSERT INTO upstreams (instance, name, config) VALUES (?,?,?)", upstream.instance, upstream.name, upstream.config, function(err) {
+                if (err) {
+                    console.log('Erro no insertUpstream');
+                    console.log({ 'status': 'failed', 'message': err });
+                    response({ 'status': 'failed', 'message': err });
+                } else {
+                    console.log('\nInsert upstream com id ' + this.lastID);
+                    response({ 'status': 'ok', 'message': { 'id': this.lastID } });
+                }
+            });
+        }else{
+            // UPDATE
+            console.log("UPDATE upstreams set config = ? where instance = ? and name = ?", upstream.config, upstream.instance, upstream.name);
+            db.run("UPDATE upstreams set config = ? where instance = ? and name = ?"
+                , JSON.stringify(upstream.config), upstream.instance, upstream.name, function(err) {
+                if (err) {
+                    console.log('Erro no UpdateUpstream');
+                    console.log({ 'status': 'failed', 'message': err });
+                    response({ 'status': 'failed', 'message': err });
+                } else {
+                    console.log('\nUpdate upstream com id ' + upstream.id);
+                    response({ 'status': 'ok', 'message': { 'id': upstream.id } });
+                }
+            });
+        }
         closeBD();
     },
     canInsertUpstream: function(confUpdtreamContent, instance, response) {

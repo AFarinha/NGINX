@@ -15,7 +15,7 @@
       </div>
       <div class="col-xs-3">
         <div :class="{ 'has-error': vErrors.has('config') }">
-          <input name="config" v-model="upstream.config" v-validate="'required|text'" placeholder="weight"  class="form-control" type="text">
+          <input name="config" v-model="upstream.config" v-validate="'required|text'" placeholder="weight=1"  class="form-control" type="text">
           <span v-show="vErrors.has('config')" class="help-block">{{ vErrors.first('config') }}</span>
         </div>
       </div>
