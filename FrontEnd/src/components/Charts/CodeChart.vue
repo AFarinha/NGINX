@@ -35,32 +35,32 @@ export default {
           datasets: [{
             label: '2xx',
             fill: false,
-            borderColor: '#284184',
-            pointBackgroundColor: '#284184',
+            borderColor: '#CDD452',
+            pointBackgroundColor: '#CDD452',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: []
           }, {
             label: '3xx',
-            borderColor: '#4BC0C0',
-            pointBackgroundColor: '#4BC0C0',
+            borderColor: '#FEE169',
+            pointBackgroundColor: '#FEE169',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: [] // this.xx3
           }, {
             label: '4xx',
-            borderColor: '#4BC0C0',
-            pointBackgroundColor: '#4BC0C0',
+            borderColor: '#F9722E',
+            pointBackgroundColor: '#F9722E',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: [] // this.xx4
           }, {
             label: '5xx',
-            borderColor: '#4BC0C0',
-            pointBackgroundColor: '#4BC0C0',
+            borderColor: '#C9313D',
+            pointBackgroundColor: '#C9313D',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: [] // this.xx5
           }, {
             label: 'other',
-            borderColor: '#4BC0C0',
-            pointBackgroundColor: '#4BC0C0',
+            borderColor: '#68776C',
+            pointBackgroundColor: '#68776C',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: [] // this.other
           }]

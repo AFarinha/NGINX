@@ -98,56 +98,56 @@ export default {
           datasets: [{
             label: 'HIT',
             fill: false,
-            borderColor: '#284184',
-            pointBackgroundColor: '#284184',
+            borderColor: '#CDD452',
+            pointBackgroundColor: '#CDD452',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: []
           }, {
             label: 'Bypass',
-            borderColor: '#4BC0C0',
-            pointBackgroundColor: '#4BC0C0',
+            borderColor: '#FEE169',
+            pointBackgroundColor: '#FEE169',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: []
           }, {
             label: 'Miss',
-            borderColor: '#4BC0C0',
-            pointBackgroundColor: '#4BC0C0',
+            borderColor: '#F9722E',
+            pointBackgroundColor: '#F9722E',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: []
           }, {
             label: 'Expired',
-            borderColor: '#4BC0C0',
-            pointBackgroundColor: '#4BC0C0',
+            borderColor: '#C9313D',
+            pointBackgroundColor: '#C9313D',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: []
           }, {
             label: 'Internal',
-            borderColor: '#4BC0C0',
-            pointBackgroundColor: '#4BC0C0',
+            borderColor: '#68776C',
+            pointBackgroundColor: '#68776C',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: []
           }, {
             label: 'Stale',
-            borderColor: '#4BC0C0',
-            pointBackgroundColor: '#4BC0C0',
+            borderColor: 'rgb(138, 92, 92)',
+            pointBackgroundColor: 'rgb(138, 92, 92)',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: []
           }, {
             label: 'Updating',
-            borderColor: '#4BC0C0',
-            pointBackgroundColor: '#4BC0C0',
+            borderColor: 'rgb(20, 140, 0)',
+            pointBackgroundColor: 'rgb(20, 140, 0)',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: []
           }, {
             label: 'Revalidated',
-            borderColor: '#4BC0C0',
-            pointBackgroundColor: '#4BC0C0',
+            borderColor: 'rgb(13, 87, 206)',
+            pointBackgroundColor: 'rgb(13, 87, 206)',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: []
           }, {
             label: 'Other',
-            borderColor: '#4BC0C0',
-            pointBackgroundColor: '#4BC0C0',
+            borderColor: 'rgb(41, 188, 197)',
+            pointBackgroundColor: 'rgb(41, 188, 197)',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: []
           }]

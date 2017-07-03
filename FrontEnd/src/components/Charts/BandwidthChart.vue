@@ -36,8 +36,8 @@ export default {
           datasets: [{
             label: 'MB',
             fill: false,
-            borderColor: '#284184',
-            pointBackgroundColor: '#284184',
+            borderColor: '#CDD452',
+            pointBackgroundColor: '#CDD452',
             backgroundColor: 'rgba(0, 0, 0, 0)',
             data: []
           }]
