@@ -9,13 +9,13 @@
       </div>
       <div class="col-xs-3">
         <div :class="{ 'has-error': vErrors.has('subType') }">
-          <input name="subType" v-model="upstream.subType" v-validate="'required|numeric'" placeholder="HostName"  class="form-control" type="text">
+          <input name="subType" v-model="upstream.subType" v-validate="'required|text'" placeholder="HostName"  class="form-control" type="text">
           <span v-show="vErrors.has('subType')" class="help-block">{{ vErrors.first('subType') }}</span>
         </div>
       </div>
       <div class="col-xs-3">
         <div :class="{ 'has-error': vErrors.has('config') }">
-          <input name="config" v-model="upstream.config" v-validate="'required|numeric'" placeholder="weight"  class="form-control" type="text">
+          <input name="config" v-model="upstream.config" v-validate="'required|text'" placeholder="weight"  class="form-control" type="text">
           <span v-show="vErrors.has('config')" class="help-block">{{ vErrors.first('config') }}</span>
         </div>
       </div>

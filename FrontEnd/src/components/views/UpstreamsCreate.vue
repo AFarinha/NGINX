@@ -18,6 +18,7 @@
 
           </br>
            <button @click="addUpstream" type="button" class="btn btn-success">Add Upstream item</button>
+           <button @click="postSaveUpstream" type="button" class="btn btn-success">Save Upstream</button>
         </div>
       </div>
     </div>
@@ -27,6 +28,7 @@
 <script>
 // Imports
 import UpstreamItem from './UpstreamItem'
+import axios from 'axios'
 // import { EventBus } from '../../main.js'
 
 export default {
@@ -34,19 +36,37 @@ export default {
     return {
       upstream: {
         upstreamName: '',
-        arrayUpstremItems: []
+        arrayUpstreamItems: []
       }
     }
   },
   methods: {
     addUpstream: function () {
-      this.upstream.arrayUpstremItems.push({
-        name: '',
-        weight: ''
+      this.upstream.arrayUpstreamItems.push({
       })
     },
+    postSaveUpstream: function () {
+      var app = this
+      axios.post('/api/insertUpstream', app.upstream)
+        .then(function (response) {
+          if (response.data.status === 'failed') {
+            console.log(response.data)
+            app.responseError = response.data
+            app.responseSuccess = false
+          } else {
+            app.server.id = response.data.message.id.toString()
+            app.responseSuccess = response.data
+            app.responseError = false
+          }
+        })
+        .catch(error => {
+          console.log('error')
+          app.responseSuccess = false
+          app.responseError = error.response
+        })
+    },
     removeUpstream (index) {
-      this.upstream.arrayUpstremItems.splice(index, 1)
+      this.upstream.arrayUpstreamItems.splice(index, 1)
     }
   },
   components: {
