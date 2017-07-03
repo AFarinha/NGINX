@@ -52,8 +52,8 @@
 
           <div class="info-box-content">
             <span class="info-box-text">Network Interfaces</span>
-            <span class="info-box-text" v-for="item in this.infoServer.networkInterfaces[Object.keys( this.infoServer.networkInterfaces )[1]]">
-             <b>{{ item.family }}</b>  : {{ item.address }}
+            <span class="info-box-text">
+
             </span>
           </div>
           <!-- /.info-box-content -->
@@ -64,6 +64,11 @@
     </div>
     <!-- /.row -->
 
+    <ChartCode :arrCodeChar="random" :maxSize="20" ></ChartCode>
+
+    <!-- /.row -->
+    </div>
+    <div class="row">
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header with-border">
@@ -88,7 +93,7 @@
       </div>
     </div>
     <!-- /.row -->
-
+    </div>
     <!-- Main row -->
     <div class="row">
       <div class="col-md-3 col-sm-6 col-xs-12">
@@ -96,13 +101,13 @@
           <span class="info-box-icon"><i class="ion ion-ios-pricetag-outline"></i></span>
 
           <div class="info-box-content">
-            <span class="info-box-text">Memory</span>
-            <span class="info-box-number">{{this.infoServer.usedmem}} / {{this.infoServer.totalmem}}</span>
+            <span class="info-box-text">CPU Load</span>
+            <span class="info-box-number">{{this.infoServer.load}} %</span>
             <div class="progress">
-              <div class="progress-bar" :style="{ width: parseInt( (parseInt(this.infoServer.usedmem) / (parseInt(this.infoServer.totalmem))*100) )  + '%' }" ></div>
+              <div class="progress-bar" :style="{ width: parseInt( (parseInt(this.infoServer.load) * 100) )  + '%' }" ></div>
             </div>
                 <span class="progress-description">
-                  {{parseInt( (parseInt(this.infoServer.usedmem) / (parseInt(this.infoServer.totalmem))*100) )}} % Usage
+                  {{ parseInt( (parseInt(this.infoServer.load) * 100) ) }} % Usage
                 </span>
           </div>
           <!-- /.info-box-content -->
@@ -113,14 +118,13 @@
           <span class="info-box-icon"><i class="ion ion-ios-heart-outline"></i></span>
 
           <div class="info-box-content">
-            <span class="info-box-text">Mentions</span>
-            <span class="info-box-number">92,050</span>
-
+            <span class="info-box-text">Memory</span>
+            <span class="info-box-number">{{this.infoServer.usedmem}} / {{this.infoServer.totalmem}}</span>
             <div class="progress">
-              <div class="progress-bar" style="width: 20%"></div>
+              <div class="progress-bar" :style="{ width: parseInt( (parseInt(this.infoServer.usedmem) / (parseInt(this.infoServer.totalmem))*100) )  + '%' }" ></div>
             </div>
                 <span class="progress-description">
-                  20% Increase
+                  {{parseInt( (parseInt(this.infoServer.usedmem) / (parseInt(this.infoServer.totalmem))*100) )}} % Usage
                 </span>
           </div>
           <!-- /.info-box-content -->
@@ -170,18 +174,19 @@
 
 <script>
 import Chart from 'chart.js'
-
-import Vue from 'vue'
-import VueSocketIO from 'vue-socket.io'
-import io from 'socket.io-client'
-
-Vue.use(VueSocketIO, io.connect('http://192.168.56.1:8072'))
+import ChartCode from '../Charts/CodeChart.vue'
+// import Vue from 'vue'
+// import VueSocketIO from 'vue-socket.io'
+// import io from 'socket.io-client'
+//
+// Vue.use(VueSocketIO, io.connect('http://192.168.56.1:8072'))
 
 export default {
   data () {
     return {
       infoServer: {},
       chartLines: '',
+      random: [],
       generateRandomNumbers (numbers, max, min) {
         var a = []
         for (var i = 0; i < numbers; i++) {
@@ -193,6 +198,9 @@ export default {
         return Math.floor(Math.random() * (max - min + 1)) + max
       }
     }
+  },
+  components: {
+    ChartCode: ChartCode
   },
   sockets: {
     connect: function () {
@@ -223,6 +231,12 @@ export default {
         app.chartLines.update()
         // app.coPilotNumbers.push(1)
         // console.log('passoy')
+        var date = Date.now()
+        var aux = []
+        for (var i = 0; i < 5; i++) {
+          aux.push({ x: app.generateRandomNumber(5, 1000000, 10000), y: date })
+        }
+        app.random = aux
       }, 1000)
     }
   },
@@ -235,6 +249,12 @@ export default {
     },
     isMobile () {
       return (window.innerWidth <= 800 && window.innerHeight <= 600)
+    },
+    propxx2 () {
+      var self = this
+      setInterval(function () {
+        return self.generateRandomNumber(12, 1000000, 10000)
+      }, 1000)
     }
   },
   mounted () {

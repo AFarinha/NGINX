@@ -9,3 +9,18 @@ var one = new OpenNebula(credencials, host);
 one.version(function(err, data) {
   console.log(data);
 });
+
+one.getVMs(function(err, data) {
+  //console.log(data);
+});
+
+one.getHosts(function(err, data) {
+  //console.log(data);
+});
+
+var vm = one.getVM(0);
+
+// query API for vm info
+vm.info(function (err, data) {
+  console.log(data);
+});
