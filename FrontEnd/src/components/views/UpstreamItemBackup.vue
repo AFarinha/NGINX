@@ -1,22 +1,16 @@
 <template>
 
   <div class="row center-block" style="margin-top: 0.5em">
-      <div class="col-xs-3">
-        <div :class="{ 'has-error': vErrors.has('type') }">
-          <input name="type" v-model="upstream.type" v-validate="'required'" placeholder="server"  class="form-control" type="text">
-          <span v-show="vErrors.has('type')" class="help-block">{{ vErrors.first('name') }}</span>
+      <div class="col-xs-6">
+        <div :class="{ 'has-error': vErrors.has('name') }">
+          <input name="name" v-model="upstream.name" v-validate="'required'" placeholder="Host"  class="form-control" type="text">
+          <span v-show="vErrors.has('name')" class="help-block">{{ vErrors.first('name') }}</span>
         </div>
       </div>
-      <div class="col-xs-3">
-        <div :class="{ 'has-error': vErrors.has('subType') }">
-          <input name="subType" v-model="upstream.subType" v-validate="'required|numeric'" placeholder="HostName"  class="form-control" type="text">
-          <span v-show="vErrors.has('subType')" class="help-block">{{ vErrors.first('subType') }}</span>
-        </div>
-      </div>
-      <div class="col-xs-3">
-        <div :class="{ 'has-error': vErrors.has('config') }">
-          <input name="config" v-model="upstream.config" v-validate="'required|numeric'" placeholder="weight"  class="form-control" type="text">
-          <span v-show="vErrors.has('config')" class="help-block">{{ vErrors.first('config') }}</span>
+      <div class="col-xs-4">
+        <div :class="{ 'has-error': vErrors.has('weight') }">
+          <input name="weight" v-model="upstream.weight" v-validate="'required|numeric'" placeholder="Weight"  class="form-control" type="text">
+          <span v-show="vErrors.has('weight')" class="help-block">{{ vErrors.first('weight') }}</span>
         </div>
       </div>
       <div class="col-xs-2">

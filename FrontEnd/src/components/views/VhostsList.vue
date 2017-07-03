@@ -4,7 +4,7 @@
 
     <data-tables
       :data='this.server'
-      :has-action-col='false'
+      action-col-label='Actions'
       @row-click='rowClick'>
       <el-table-column prop='id' label="id" sortable="custom"></el-table-column>
       <el-table-column prop='status' label="Status" sortable="custom"></el-table-column>

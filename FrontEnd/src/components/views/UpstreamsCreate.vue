@@ -1,6 +1,6 @@
 <template>
   <section class="content">
-    <div class="col-md-6">
+    <div class="col-md-12">
       <div class="box box-solid box-default">
         <div class="box-header">
           <h3 class="box-title">Upstream</h3>
@@ -48,8 +48,6 @@ export default {
     removeUpstream (index) {
       this.upstream.arrayUpstremItems.splice(index, 1)
     }
-  },
-  created () {
   },
   components: {
     UpstreamItem: UpstreamItem

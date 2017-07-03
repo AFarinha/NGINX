@@ -31,8 +31,6 @@
 		      <div class="box-body">
 		      	<UpstreamsCreate>
 			    </UpstreamsCreate>
-			    </br>
-
 		      </div>
 		    </div>
 

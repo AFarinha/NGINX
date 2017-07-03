@@ -13,7 +13,7 @@ module.exports = {
             db.run("CREATE TABLE IF NOT EXISTS directives (id INT, idModule INT, name TEXT, link TEXT)");
 
             db.run("CREATE TABLE IF NOT EXISTS vhosts (id INTEGER PRIMARY KEY AUTOINCREMENT, instance TEXT,name TEXT, port INT , config TEXT, UNIQUE(instance,name,port))");
-            db.run("CREATE TABLE IF NOT EXISTS upstreams (id INTEGER PRIMARY KEY AUTOINCREMENT, instance TEXT, name TEXT, UNIQUE(instance,name))");
+            db.run("CREATE TABLE IF NOT EXISTS upstreams (id INTEGER PRIMARY KEY AUTOINCREMENT, instance TEXT, name TEXT, config TEXT, UNIQUE(instance,name))");
         });
 
         closeBD();
@@ -204,7 +204,7 @@ module.exports = {
 
         console.log('\nInsert Upstream: ', upstream, '\n');
 
-        db.run("INSERT INTO upstreams (instance, name) VALUES (?,?)", upstream.instance, upstream.name, function(err) {
+        db.run("INSERT INTO upstreams (instance, name, config) VALUES (?,?,?)", upstream.instance, upstream.name, upstream.config, function(err) {
             if (err) {
                 console.log('Erro no insertUpstream');
                 console.log({ 'status': 'failed', 'message': err });
@@ -218,9 +218,9 @@ module.exports = {
         closeBD();
     },
     canInsertUpstream: function(confUpdtreamContent, instance, response) {
-        
+
         openBD();
-  
+
         var alreadyRes = false;
 
         var processItems = function(x) {
@@ -256,12 +256,9 @@ module.exports = {
 
         openBD();
 
-        db.all("SELECT id,instance, name FROM upstreams", function(err, rows) {
+        db.all("SELECT id,instance, name, config FROM upstreams", function(err, rows) {
             if (err) {
                 return response({ 'status': 'failed', 'message': err });
-            }
-            if (rows == 0) {
-                response({ 'status': 'ok', 'message': {} });
             } else {
                 response({ 'status': 'ok', 'message': JSON.parse(JSON.stringify(rows)) });
             }
