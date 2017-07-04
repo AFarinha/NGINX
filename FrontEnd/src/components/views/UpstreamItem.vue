@@ -4,22 +4,22 @@
       <div class="col-xs-3">
         <div :class="{ 'has-error': vErrors.has('type') }">
           <input name="type" v-model="upstream.type" v-validate="'required'" placeholder="server"  class="form-control" type="text">
-          <span v-show="vErrors.has('type')" class="help-block">{{ vErrors.first('name') }}</span>
+          <span v-show="vErrors.has('type')" class="help-block">{{ vErrors.first('type') }}</span>
         </div>
       </div>
-      <div class="col-xs-3">
+      <div class="col-xs-4">
         <div :class="{ 'has-error': vErrors.has('subType') }">
-          <input name="subType" v-model="upstream.subType" v-validate="'required|text'" placeholder="HostName"  class="form-control" type="text">
+          <input name="subType" v-model="upstream.subType" v-validate="'required'" placeholder="HostName"  class="form-control" type="text">
           <span v-show="vErrors.has('subType')" class="help-block">{{ vErrors.first('subType') }}</span>
         </div>
       </div>
-      <div class="col-xs-3">
+      <div class="col-xs-4">
         <div :class="{ 'has-error': vErrors.has('config') }">
-          <input name="config" v-model="upstream.config" v-validate="'required|text'" placeholder="weight=1"  class="form-control" type="text">
+          <input name="config" v-model="upstream.config" v-validate="'required'" placeholder="weight=1"  class="form-control" type="text">
           <span v-show="vErrors.has('config')" class="help-block">{{ vErrors.first('config') }}</span>
         </div>
       </div>
-      <div class="col-xs-2">
+      <div class="col-xs-1">
           <button @click="remove" type="button" class="btn btn-danger fa fa-times"></button>
       </div>
   </div>
