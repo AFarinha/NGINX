@@ -75,7 +75,7 @@ export default {
       [{
         type: 'primary',
         handler (row) {
-          //var self = this
+          // var self = this
           console.log(row)
           console.log('Edit in row clicked', row)
         },
@@ -110,4 +110,3 @@ export default {
 
 <style>
 </style>
-
