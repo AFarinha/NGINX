@@ -35,135 +35,124 @@
         					</div>
       				  </div>
 	             <div class="row">
-              <!-- INICIO LOCATION PATH -->
-              <div class="form-group col-md-10" v-if="selected == '1' " >
-                <div :class="{ 'has-error': vErrors.has('path') }">
-                  <div class="input-group">
-                    <div class="input-group-addon">
-                      Path Generic
+                <!-- INICIO LOCATION PATH -->
+                <div class="form-group col-md-10" v-if="selected == '1' " >
+                  <div :class="{ 'has-error': vErrors.has('path') }">
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        Path Generic
+                      </div>
+                      <input name="path" v-model="location.path" v-validate="'required'" class="form-control input-sm" type="text" placeholder="Path">
                     </div>
-                    <input name="path" v-model="location.path" v-validate="'required'" class="form-control input-sm" type="text" placeholder="Path">
+                    <span v-show="vErrors.has('path')" class="help-block">{{ vErrors.first('path') }}</span>
                   </div>
-                  <span v-show="vErrors.has('path')" class="help-block">{{ vErrors.first('path') }}</span>
                 </div>
-              </div>
-              <div class="form-group col-md-10" v-if="selected == '2' " >
-                <div :class="{ 'has-error': vErrors.has('path') }">
-                  <multiselect
-                    v-model="location.pathFileType"
-                    :options="options"
-                    :multiple="true"
-                    :taggable="true"
-                    @tag="addTag"
-                    tag-placeholder="Add this as new tag"
-                    >
-                  </multiselect>
-                  <span v-show="vErrors.has('path')" class="help-block">{{ vErrors.first('path') }}</span>
+                <div class="form-group col-md-10" v-if="selected == '2' " >
+                  <div :class="{ 'has-error': vErrors.has('path') }">
+                    <multiselect
+                      v-model="location.pathFileType"
+                      :options="options"
+                      :multiple="true"
+                      :taggable="true"
+                      @tag="addTag"
+                      tag-placeholder="Add this as new tag"
+                      >
+                    </multiselect>
+                    <span v-show="vErrors.has('path')" class="help-block">{{ vErrors.first('path') }}</span>
+                  </div>
                 </div>
-              </div>
-              <!-- FIM LOCATION PATH -->
+                <!-- FIM LOCATION PATH -->
                 </div>
               </div>
             </div>
 		       </div>
-           <!-- Begin Proxy Pass -->
-          <div class="col-md-6">
-            <div class="box box-solid box-default">
-              <div class="box-header">
-                <h3 class="box-title">Proxy Pass</h3>
-                <div class="box-tools pull-right">
-                  <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                  <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
-                </div>
-              </div>
-              <div class="box-body">
-                  <input type="checkbox" v-model="location.IsProxyPass"> <b> Proxy Pass </b>
-                  <br />
-                  <div :class="{ 'has-error': vErrors.has('proxyPass') }">
-                    <input name="proxyPass" v-model="location.proxyPass" v-validate="`${(location.IsProxyPass || location.arrayUpstreams.length != 0) ? 'required' : ''}`" class="form-control" type="text" placeholder="Proxy Pass">
-                    <span v-show="vErrors.has('proxyPass')" class="help-block">{{ vErrors.first('proxyPass') }}</span>
+           <!-- Begin Cache -->
+            <div class="col-md-6">
+              <div class="box box-solid box-default">
+                <div class="box-header">
+                  <h3 class="box-title">Location - Cache</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
                   </div>
+                </div>
+                <div class="box-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <input type="checkbox" v-model="this.location.cacheServer" @change="changeCacheServer"> <b>Cache Server</b>
+                    </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" v-model="this.location.cacheClient"  @change="showHideTime" > <b>Cache Browser</b>
+                  </div>
+                </div>
+                <div class="row center-block" style="margin-top: 0.5em" v-show="this.location.cacheClient" >
+                  <h5>Time Client Cache</h5>
+                    <div class="col-xs-6">
+                      <div :class="{ 'has-error': vErrors.has('ClientCache') }" >
+                        <input name="ClientCache" v-model="location.cacheClientTimeNumber" v-validate="`${location.cacheClient  ? 'required|numeric' : ''}`" class="form-control" type="text" placeholder="Time to Cache">
+                        <span v-show="vErrors.has('ClientCache')" class="help-block">{{ vErrors.first('ClientCache') }}</span>
+                      </div>
+                    </div>
+                    <div class="col-xs-6">
+                      <select v-model="location.cacheClientTimeUnit" class="form-control">
+                        <option v-for="timeUnit in ddlTimeUnit"  :value="timeUnit"> {{ timeUnit.description }} </option>
+                    </select>
+                    </div>
+                </div>
               </div>
             </div>
           </div>
-          <!-- End Proxy Pass -->
+            <!-- End Cache -->
+          
         </div>
         <div class="row">
-          <!-- Begin Upstreams -->
-          <div class="col-md-6">
-            <div class="box box-solid box-default">
-              <div class="box-header">
-                <h3 class="box-title">Upstream</h3>
-                <div class="box-tools pull-right">
-                  <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                  <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
-                </div>
-              </div>
-              <div class="box-body">
-                <UpstreamItem v-for="(upstream, index) in this.location.arrayUpstreams" :upstream="upstream" :key="upstream" v-on:removeUpstream="removeUpstream(index)">
-                </UpstreamItem>
-                </br>
-                <button @click="addUpstream" type="button" class="btn btn-success">Add Upstream item</button>
-              </div>
-            </div>
-          </div>
-          <!-- End Upstreams -->
 
-          <!-- Begin Cache -->
-          <div class="col-md-6">
+          <!-- Begin LocationsGeneric -->
+          <div class="col-md-12">
             <div class="box box-solid box-default">
-              <div class="box-header">
-                <h3 class="box-title">Location - Cache</h3>
-                <div class="box-tools pull-right">
-                  <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                </div>
-              </div>
-              <div class="box-body">
-                <div class="row">
-                  <div class="col-md-6">
-                    <input type="checkbox" v-model="this.location.cacheServer" @change="changeCacheServer"> <b>Cache Server</b>
-                  </div>
-                <div class="col-md-6">
-                  <input type="checkbox" v-model="this.location.cacheClient"  @change="showHideTime" > <b>Cache Browser</b>
-                </div>
-              </div>
-              <div class="row center-block" style="margin-top: 0.5em" v-show="this.location.cacheClient" >
-                <h5>Time Client Cache</h5>
-                  <div class="col-xs-6">
-                    <div :class="{ 'has-error': vErrors.has('ClientCache') }" >
-                      <input name="ClientCache" v-model="location.cacheClientTimeNumber" v-validate="`${location.cacheClient  ? 'required|numeric' : ''}`" class="form-control" type="text" placeholder="Time to Cache">
-                      <span v-show="vErrors.has('ClientCache')" class="help-block">{{ vErrors.first('ClientCache') }}</span>
-                    </div>
-                  </div>
-                  <div class="col-xs-6">
-                    <select v-model="location.cacheClientTimeUnit" class="form-control">
-                      <option v-for="timeUnit in ddlTimeUnit"  :value="timeUnit"> {{ timeUnit.description }} </option>
-                  </select>
-                  </div>
+            <div class="box-header">
+              <h3 class="box-title">Upstreams</h3>
+              <div class="box-tools pull-right">
+              <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
               </div>
             </div>
+            <div class="box-body">
+              <select v-model="selectedUpstream" class="form-control" @change="showConfig(selectedUpstream)">
+                <option v-for="option in this.Upstreams" v-bind:value="option.id">
+                  {{ option.name }}
+                </option>
+              </select>
+              {{this.UpstreamChoosed.config}}
+              
+              <input name="proxyPass" v-model="this.UpstreamChoosed.name" class="form-control" type="text" placeholder="Upstream name">
+              
+              <UpstreamItem v-for="(upstream, index) in this.UpstreamChoosed.config.arrayUpstreamItems" :upstream="upstream" :key="upstream" >
+              </UpstreamItem> 
+              
+            </div>
+            </div>
           </div>
-        </div>
-          <!-- End Cache -->
+          <!-- End LocationsGeneric -->
+          
         </div>
         <div class="row">
           <!-- Begin LocationsGeneric -->
-		  <div class="col-md-12">
-			  <div class="box box-solid box-default">
-				<div class="box-header">
-				  <h3 class="box-title">Location - Generic Items</h3>
-				  <div class="box-tools pull-right">
-					<button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-					<!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
-				  </div>
-				</div>
-				<div class="box-body">
-				  <GenericItem v-for="(generic, index) in this.location.arrayGeneric" :generic="generic" :key="generic" v-on:removeGeneric="removeGeneric(index)">
-				  </GenericItem>
-				  <button @click="addGeneric" type="button" class="btn btn-success">Add Generic Item</button>
-				</div>
-			  </div>
-		  </div>
+    		  <div class="col-md-12">
+    			  <div class="box box-solid box-default">
+    				<div class="box-header">
+    				  <h3 class="box-title">Location - Generic Items</h3>
+    				  <div class="box-tools pull-right">
+    					<button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+    					<!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
+    				  </div>
+    				</div>
+    				<div class="box-body">
+    				  <GenericItem v-for="(generic, index) in this.location.arrayGeneric" :generic="generic" :key="generic" v-on:removeGeneric="removeGeneric(index)">
+    				  </GenericItem>
+    				  <button @click="addGeneric" type="button" class="btn btn-success">Add Generic Item</button>
+    				</div>
+    			  </div>
+    		  </div>
           <!-- End LocationsGeneric -->
         </div>
       </div>
@@ -178,6 +167,7 @@ import { EventBus } from '../../main.js'
 import { find, propEq } from 'ramda'
 import GenericItem from './GenericItem'
 import UpstreamItem from './UpstreamItem'
+import axios from 'axios'
 
 export default {
   props: {
@@ -198,8 +188,31 @@ export default {
         {code: 'd', description: 'days'},
         {code: 'w', description: 'weeks'}
       ],
-      options: ['list', 'of', 'options']
+      options: ['list', 'of', 'options'],
+      Upstreams: [],
+      selectedUpstream: '',
+      UpstreamChoosed: {
+        id: '',
+        name: '',
+        instance: '',
+        config: '{}'
+      }
     }
+  },
+  created: function () {
+    var self = this
+    // console.log('/api/getAllUpstreams/')
+    axios.get('/api/getAllUpstreams/')
+      .then(function (response) {
+        // console.log(response)
+        // console.log(response.data)
+        self.Upstreams = response.data.message
+        console.log(self.Upstreams)
+        // colocar os dados no select
+      })
+      .catch(error => {
+        console.log(error)
+      })
   },
   mounted: function () {
     // Listen on the bus for the parent component running validation
@@ -229,6 +242,18 @@ export default {
         console.log('error Location')
         EventBus.$emit('errors-changed', this.vErrors.errors)
       })
+    },
+    showConfig: function (id) {
+      var self = this
+      for (var i = self.Upstreams.length - 1; i >= 0; i--) {
+        if (self.Upstreams[i].id === id) {
+          self.UpstreamChoosed = self.Upstreams[i]
+          console.log(typeof (self.UpstreamChoosed.config))
+          if (typeof (self.UpstreamChoosed.config) === 'string') {
+            self.UpstreamChoosed.config = JSON.parse(self.UpstreamChoosed.config)
+          }
+        }
+      }
     },
     addTag (newTag) {
       this.location.pathFileType.push(newTag)
