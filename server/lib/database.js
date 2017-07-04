@@ -216,11 +216,10 @@ module.exports = {
                     response({ 'status': 'ok', 'message': { 'id': this.lastID } });
                 }
             });
-        }else{
+        } else {
             // UPDATE
             console.log("UPDATE upstreams set config = ? where instance = ? and name = ?", upstream.config, upstream.instance, upstream.name);
-            db.run("UPDATE upstreams set config = ? where instance = ? and name = ?"
-                , JSON.stringify(upstream.config), upstream.instance, upstream.name, function(err) {
+            db.run("UPDATE upstreams set config = ? where instance = ? and name = ?", JSON.stringify(upstream.config), upstream.instance, upstream.name, function(err) {
                 if (err) {
                     console.log('Erro no UpdateUpstream');
                     console.log({ 'status': 'failed', 'message': err });
@@ -233,40 +232,64 @@ module.exports = {
         }
         closeBD();
     },
-    canInsertUpstream: function(confUpdtreamContent, instance, response) {
-
+    canInsertUpstreamMulti: function(confUpdtreamContent, instance, response) {
+        //NOTA: NÃO ESTÁ SINCRONO...
         openBD();
 
         var alreadyRes = false;
+        var count = 0;
+
+        console.log('confUpdtreamContent.length:', confUpdtreamContent.length);
 
         var processItems = function(x) {
             if (x < confUpdtreamContent.length) {
+                console.log('confUpdtreamContent:', confUpdtreamContent);
                 UpstreamDBName = confUpdtreamContent[x].name.replace('https://', '').replace('http://', '');
                 console.log('canInsertUpstream', UpstreamDBName);
                 db.all("SELECT * FROM upstreams WHERE name = ? and instance = ?", UpstreamDBName, instance, function(err, rows) {
                     if (err) {
-                        console.log("IF")
+                        console.log("ERRO")
                         alreadyRes = true;
                         return response({ 'status': 'failed', 'message': err });
-                    }
-                    if (rows == 0) {
-                        //não existe, pode utilizar
                     } else {
-                        console.log("ELSE")
+                        console.log("Já existe");
                         alreadyRes = true;
-                        return response({ 'status': 'failed', 'message': 'A uptream ' + UpstreamDBName + ' na instancia ' + instance + ' já existe' });
                     }
                 });
+                count = count + 1;
                 processItems(x + 1);
             }
         };
         processItems(0);
 
         closeBD();
+
         //se correr tudo bem
-        if (alreadyRes == false && i == confUpdtreamContent.length) {
+        if (alreadyRes == false && count == confUpdtreamContent.length) {
+            console.log('Pode inserir');
             return response({ 'status': 'ok', 'message': {} });
+        } else {
+            return response({ 'status': 'failed', 'message': 'A uptream ' + UpstreamDBName + ' na instancia ' + instance + ' já existe' });
         }
+    },
+    canInsertUpstreamSingle: function(confUpdtreamContent, instance, response) {
+        openBD();
+        UpstreamDBName = confUpdtreamContent[0].name.replace('https://', '').replace('http://', '');
+        console.log('canInsertUpstream', UpstreamDBName);
+        db.all("SELECT * FROM upstreams WHERE name = ? and instance = ?", UpstreamDBName, instance, function(err, rows) {
+            if (err) {
+                console.log("ERRO")
+                return response({ 'status': 'failed', 'message': err });
+            }
+            if (rows == 0) {
+                return response({ 'status': 'ok', 'message': {} });
+            } else {
+                console.log("Já existe");
+                return response({ 'status': 'failed', 'message': 'A uptream ' + UpstreamDBName + ' na instancia ' + instance + ' já existe' });
+            }
+        });
+
+        closeBD();
     },
     selectAllUpstreams: function(response) {
 
