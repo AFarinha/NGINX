@@ -12,7 +12,10 @@ var colectServer = process.env.SERVER;
 //Inicia processos para para Dashboard
 var station = new Station(8080);
 station.init();
-var api = new Api(port, station, databaseName);
-api.init();
+
 var collector = new Collector(8080);
 collector.init();
+
+
+var api = new Api(port, station, databaseName);
+api.init();

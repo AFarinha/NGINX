@@ -1,8 +1,8 @@
 var OpenNebula = require('opennebula');
 
 //var credencials = 'root:opennebula';
-var credencials = 'oneadmin:opennebula';
-var host = 'http://192.168.56.101:2633/RPC2';
+var credencials = 'oneadmin:fbc2e553ad9fa747cf12f83bb072c5f8';
+var host = 'http://192.168.1.190:2633/RPC2';
 var one = new OpenNebula(credencials, host);
 
 
@@ -18,7 +18,7 @@ one.getHosts(function(err, data) {
   //console.log(data);
 });
 
-var vm = one.getVM(7);
+var vm = one.getVM(1);
 
 // query API for vm info
 vm.info(function (err, data) {
