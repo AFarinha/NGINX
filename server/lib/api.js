@@ -183,7 +183,7 @@ Api.prototype.init = function() {
                 //Este Id é para saber se é insert ou update
                 var idToObj = req.body.id;
                 //Este Id é para inserir no config o futuro id
-                req.body.id = (seedVHosts-1000).toString();
+                req.body.id = (seedVHosts - 1000).toString();
                 var vhost = {
                     'id': idToObj,
                     'instance': req.body.instance || '',
@@ -335,9 +335,19 @@ Api.prototype.init = function() {
         });
     });
 
-    this.app.delete('/deleteVHost/:id', function(req, res) {
-        db.deleteVHost(req.params.id, function(message) {
-            res.send(message);
+    this.app.delete('/deleteVHost/:id/:name/:port', function(req, res) {
+        var idToDelete = parseInt(req.params.id) + 1000;
+        var fileName = idToDelete + '-' + req.params.name + req.params.port;
+        console.log('Apagar ficheiro' + fileName + '.config');
+        utils.deleteFile(fileName, function(message) {
+            console.log('Resultado:', message);
+            if (message.status === 'failed') {
+                res.send(message);
+            } else {
+                db.deleteVHost(req.params.id, function(message) {
+                    res.send(message);
+                });
+            }
         });
     });
 

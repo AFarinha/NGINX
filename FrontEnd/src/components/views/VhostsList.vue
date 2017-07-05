@@ -75,6 +75,7 @@ export default {
     return {
       server: [],
       responseError: false,
+      responseSuccess: false,
       rowActionsDef: this.getRowActionsDef()
     }
   },
@@ -86,12 +87,12 @@ export default {
         }
       )
     },
-    getRowActionsDef () { // JH
+    getRowActionsDef () {
       let app = this
       return [{
         type: 'warning',
         handler (row) {
-          axios.delete('/api/deleteVHost/' + row.id)
+          axios.delete('/api/deleteVHost/' + row.id + '/' + row.name + '/' + row.port)
           .then(function (response) {
             app.responseSuccess = response.data
             app.responseError = false
