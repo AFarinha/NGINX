@@ -66,41 +66,70 @@ export default {
       upstream: {
         id: '',
         upstreamName: '',
-        arrayUpstreamItems: [{type: '', subType: '', config: ''}]
+        arrayUpstreamItems: []
       },
-      upstreamList: [{id: '', name: '', instance: '', config: ''}],
+      upstreamList: [{ id: '', upstreamName: '', arrayUpstreamItems: [] }],
       responseSuccess: false,
       responseError: false,
-      rowActionsDef:
-      [{
-        type: 'primary',
-        handler (row) {
-          // var self = this
-          console.log(row)
-          console.log('Edit in row clicked', row)
-        },
-        name: 'Edit'
-      }, {
-        type: 'primary',
-        handler (row) {
-          console.log('Remove in row clicked', row)
-        },
-        name: 'Remove'
-      }]
+      rowActionsDef: this.getRowActionsDef()
     }
   },
   created: function () {
     var self = this
     axios.get('/api/getAllUpstreams/')
       .then(function (response) {
-        console.log(response.data)
+        // console.log(response.data.message)
         self.upstreamList = response.data.message
-        console.log(response)
       })
       .catch(error => {
         console.log(error)
         self.responseError = error.response.statusText + ' : ' + error.response.data
       })
+  },
+  methods: {
+    getRowActionsDef () {
+      let self = this
+      return [{
+        type: 'primary',
+        handler (row) {
+          // self.$message('Edit clicked')
+          for (var i = self.upstreamList.length - 1; i >= 0; i--) {
+            if (self.upstreamList[i].id === row.id) {
+              self.upstream = JSON.parse(self.upstreamList[i].config)
+            }
+          }
+        },
+        name: 'Edit'
+      }, {
+        type: 'primary',
+        handler (row) {
+          console.log('Delete in row clicked', row, self.upstream)
+          // self.$message('Delete in row clicked')
+          axios.delete('/api/deleteUpstream/' + row.id + '/' + row.name)
+          .then(function (response) {
+            if (response.data.status === 'failed') {
+              self.responseSuccess = false
+              self.responseError = response.data
+            } else {
+              console.log('Resposta ok')
+              axios.get('/api/getAllUpstreams/')
+                .then(function (response) {
+                  self.upstreamList = response.data.message
+                })
+                .catch(error => {
+                  self.responseSuccess = false
+                  self.responseError = error.response
+                })
+            }
+          })
+          .catch(error => {
+            self.responseSuccess = false
+            self.responseError = error.response
+          })
+        },
+        name: 'Delete'
+      }]
+    }
   },
   components: {
     UpstreamsCreate: UpstreamsCreate

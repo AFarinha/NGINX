@@ -180,9 +180,12 @@ Api.prototype.init = function() {
 
                 var confcontent = generateFiles.createServerConf(req.body);
                 utils.writeFileSync(VHostFileName, confcontent);
-
+                //Este Id é para saber se é insert ou update
+                var idToObj = req.body.id;
+                //Este Id é para inserir no config o futuro id
+                req.body.id = (seedVHosts-1000).toString();
                 var vhost = {
-                    'id': req.body.id,
+                    'id': idToObj,
                     'instance': req.body.instance || '',
                     'name': req.body.host,
                     'port': req.body.port,
@@ -220,6 +223,22 @@ Api.prototype.init = function() {
             res.send(message);
         });
 
+    });
+    // NOTA: 
+    this.app.delete('/deleteUpstream/:id/:name', function(req, res) {
+        var idToDelete = parseInt(req.params.id) + 100;
+        var fileName = idToDelete + '-' + req.params.name;
+        console.log('Apagar ficheiro' + fileName + '.config');
+        utils.deleteFile(fileName, function(message) {
+            console.log('Resultado:', message);
+            if (message.status === 'failed') {
+                res.send(message);
+            } else {
+                db.deleteUpstream(req.params.id, function(message) {
+                    res.send(message);
+                });
+            }
+        });
     });
 
     this.app.post('/insertUpstream', function(req, res) {

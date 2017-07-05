@@ -13,7 +13,7 @@
    //console.log(data);
 
    var opts = {
-     'url': 'http://' + self.serverHostname + '/stats/' + self.hostname + '/push',
+     'url': self.serverHostname + '/stats/' + self.hostname + '/push',
      'json': data
    };
 

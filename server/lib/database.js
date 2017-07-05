@@ -139,9 +139,6 @@ module.exports = {
         db.all("SELECT id,instance, name, port,config FROM vhosts", function(err, rows) {
             if (err) {
                 return response({ 'status': 'failed', 'message': err });
-            }
-            if (rows == 0) {
-                response({ 'status': 'ok', 'message': {} });
             } else {
                 response({ 'status': 'ok', 'message': JSON.parse(JSON.stringify(rows)) });
             }
@@ -161,6 +158,20 @@ module.exports = {
             }
         });
 
+        closeBD();
+    },
+    deleteUpstream: function(id, response) {
+
+        openBD();
+        
+        db.all("DELETE FROM upstreams where id = ?", id, function(err, rows) {
+            if (err) {
+                return response({ 'status': 'failed', 'message': err });
+            } else {
+                response({ 'status': 'ok', 'message': {} });
+            }
+        });
+        
         closeBD();
     },
     selectNextSeedVHost: function(response) {
@@ -309,7 +320,7 @@ module.exports = {
 };
 
 var openBD = function() {
-    console.log('./database/' + dbName + '.db');
+    //console.log('./database/' + dbName + '.db');
     try {
         db = new sqlite3.Database('./database/' + dbName + '.db'); //main normal
     } catch (e) {

@@ -117,7 +117,7 @@
               </div>
             </div>
             <div class="box-body">
-              <select v-model="selectedUpstream" class="form-control" @change="showConfig(selectedUpstream)">
+              <select v-model="this.location.upstreamId" class="form-control" @change="showConfig(this.location.upstreamId)">
                 <option v-for="option in this.Upstreams" v-bind:value="option.id">
                   {{ option.name }}
                 </option>
@@ -190,7 +190,7 @@ export default {
       ],
       options: ['list', 'of', 'options'],
       Upstreams: [],
-      selectedUpstream: '',
+      // selectedUpstream: '',
       UpstreamChoosed: {
         id: '',
         name: '',
@@ -204,11 +204,12 @@ export default {
     // console.log('/api/getAllUpstreams/')
     axios.get('/api/getAllUpstreams/')
       .then(function (response) {
-        // console.log(response)
-        // console.log(response.data)
         self.Upstreams = response.data.message
+        console.log('/api/getAllUpstreams/')
         console.log(self.Upstreams)
-        // colocar os dados no select
+        if (self.location.upstreamId !== '') {
+          self.showConfig(parseInt(self.location.upstreamId))
+        }
       })
       .catch(error => {
         console.log(error)
@@ -248,12 +249,12 @@ export default {
       for (var i = self.Upstreams.length - 1; i >= 0; i--) {
         if (self.Upstreams[i].id === id) {
           self.UpstreamChoosed = self.Upstreams[i]
-          console.log(typeof (self.UpstreamChoosed.config))
           if (typeof (self.UpstreamChoosed.config) === 'string') {
             self.UpstreamChoosed.config = JSON.parse(self.UpstreamChoosed.config)
           }
         }
       }
+      self.location.upstreamId = id.toString()
     },
     addTag (newTag) {
       this.location.pathFileType.push(newTag)
