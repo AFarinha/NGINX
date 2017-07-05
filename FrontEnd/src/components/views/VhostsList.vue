@@ -1,9 +1,9 @@
 <template>
   <section class="content">
 
-
     <data-tables
       :data='this.server'
+	    :row-action-def='rowActionsDef'
       action-col-label='Actions'
       @row-click='rowClick'>
       <el-table-column prop='id' label="id" sortable="custom"></el-table-column>
@@ -47,12 +47,17 @@
        <b>Alert! </b>{{this.responseError}}
     </div>
 
+	<div v-if="responseSuccess" class="alert alert-success alert-dismissable">
+      <i class="fa fa-check"></i>
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <b>Alert! </b> {{this.responseSuccess}}
+    </div>
+	
   </section>
 </template>
 
 <script>
 import axios from 'axios'
-
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
@@ -69,7 +74,8 @@ export default {
   data () {
     return {
       server: [],
-      responseError: false
+      responseError: false,
+      rowActionsDef: this.getRowActionsDef()
     }
   },
   methods: {
@@ -79,6 +85,30 @@ export default {
           path: 'VHost/' + row.id
         }
       )
+    },
+    getRowActionsDef () { // JH
+      let app = this
+      return [{
+        type: 'primary',
+        handler (row) {
+          axios.delete('/api/deleteVHost/' + row.id)
+          .then(function (response) {
+            app.responseSuccess = response.data
+            app.responseError = false
+            app.server.forEach((svr, i) => {
+              if (svr.id === row.id) {
+                app.server.splice(i, 1)
+              }
+            })
+          })
+          .catch(error => {
+            console.log('error')
+            app.responseSuccess = false
+            app.responseError = error.response.statusText + ' : ' + error.response.data
+          })
+        },
+        name: 'Delete'
+      }]
     }
   },
   created: function () {

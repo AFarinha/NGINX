@@ -1,6 +1,5 @@
 <template>
 <section class="content">
-    {{server}}
 
 
       <!--   <div class="box-body"> -->
@@ -14,7 +13,6 @@
           <button v-on:click="validateBeforeSubmit" id="createHost" type="button" class="btn btn-info">Create Host</button>
           <button v-on:click="postTestNginx" id="testNginx" type="button" class="btn btn-info">Test NginX</button>
           <button v-on:click="postReloadNginx" id="reloadNginx" type="button" class="btn btn-info">Reload NginX</button>
-		  <button v-on:click="deleteRemoveNginx" id="removeNginx" type="button" class="btn btn-danger">Delete NginX</button><!--JH-->
         </div>
       </div>
     </div>
@@ -129,26 +127,6 @@ export default {
         .then(function (response) {
           console.log(response)
           app.responseSuccess = response.data.status + ' : ' + response.data.stderr
-        })
-        .catch(error => {
-          console.log(error)
-          app.responseError = error.response.statusText + ' : ' + error.response.data
-        })
-    },
-    deleteRemoveNginx: function () { // JH
-      var app = this
-      axios.delete('/api/deleteVHost/' + app.$route.params.id, app.server)
-      // axios.delete('/api/deleteVHost/' + app.server.id, app.server)
-        .then(function (response) {
-          app.server.id = null
-          app.responseSuccess = response.data
-          app.responseError = false
-          // console.log(response)
-          app.responseSuccess = response.data.status + ' : ' + response.data.stderr
-          // console.log(app.responseSuccess)
-          if (app.responseError === false) {
-            window.location = '/listVHosts'
-          }
         })
         .catch(error => {
           console.log(error)
