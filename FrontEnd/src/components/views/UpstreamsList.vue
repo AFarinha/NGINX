@@ -1,14 +1,14 @@
 <template>
 	<section class="content">
-		{{upstream}}
+		<!-- {{upstream}} -->
 		<data-tables
 	      :data='this.upstream'
 	      :has-action-col='false'>
 	      <el-table-column prop='id' label="id" sortable="custom"></el-table-column>
 	      <el-table-column prop='name' label="Name" sortable="custom"></el-table-column>
 	      <el-table-column prop='instance' label="Instance" sortable="custom"></el-table-column>
-	      <el-table-column prop='config' label="Config" sortable="custom"></el-table-column>
 	    </data-tables>
+	    <!-- <el-table-column prop='config' label="Config" sortable="custom"></el-table-column> -->
 
 	    <div v-if="responseError" class="alert alert-danger alert-dismissable">
 	       <i class="fa fa-ban"></i>

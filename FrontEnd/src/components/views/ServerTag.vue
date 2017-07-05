@@ -125,7 +125,8 @@ export default {
         cacheClientTimeUnit: { code: 'm', description: 'minutes' },
         IsProxyPass: true,
         proxyPass: '',
-        arrayUpstreams: [],
+        // arrayUpstreams: [],
+        upstreamId: '',
         arrayGeneric: [] })
     },
     removeLocation (index) {
