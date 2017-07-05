@@ -188,7 +188,7 @@ export default {
         {code: 'd', description: 'days'},
         {code: 'w', description: 'weeks'}
       ],
-      options: ['list', 'of', 'options'],
+      options: ['3gp', 'gif', 'jpg', 'jpeg', 'png', 'ico', 'wmv', 'avi', 'asf', 'asx', 'mpg', 'mpeg', 'mp4', 'pls', 'mp3', 'mid', 'wav', 'swf', 'flv', 'html', 'htm', 'txt', 'js', 'css', 'exe', 'zip', 'tar', 'rar', 'gz', 'tgz', 'bz2', 'uha', '7z', 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'iso'],
       Upstreams: [],
       // selectedUpstream: '',
       UpstreamChoosed: {
