@@ -30,7 +30,7 @@
 
         					<div class="form-group col-md-6">
           					<input type="radio" id="two" value="2" name="loc" v-model="selected">
-          					<label for="two">File Types</label>
+          					<label for="two">MIMES</label>
           					<br>
         					</div>
       				  </div>
@@ -188,7 +188,7 @@ export default {
         {code: 'd', description: 'days'},
         {code: 'w', description: 'weeks'}
       ],
-      options: ['3gp', 'gif', 'jpg', 'jpeg', 'png', 'ico', 'wmv', 'avi', 'asf', 'asx', 'mpg', 'mpeg', 'mp4', 'pls', 'mp3', 'mid', 'wav', 'swf', 'flv', 'html', 'htm', 'txt', 'js', 'css', 'exe', 'zip', 'tar', 'rar', 'gz', 'tgz', 'bz2', 'uha', '7z', 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'iso'],
+      options: ['css', 'xml', 'gif', 'jpeg', 'jpg', 'js', 'atom', 'rss', 'mml', 'txt', 'jad', 'wml', 'htc', ' png', 'tif', 'tiff', 'wbmp', 'ico', 'jng', 'bmp', 'svg', 'svgz', 'webp', 'woff', 'jar', 'war', 'ear', 'json', 'hqx', 'doc', 'pdf', 'ps', 'eps', 'ai', 'rtf', 'm3u8', 'xls', 'eot', 'ppt', 'wmlc', 'kml', 'kmz', '7z', 'cco', 'jardiff', 'jnlp', 'run', 'pl', 'pm', 'prc:pdb', 'rar', 'rpm', 'sea', 'swf', 'sit', 'tcl', 'tk', 'der', 'pem', 'crt', 'xpi', 'xhtml', 'xspf', 'zip', 'bin', 'exe', 'dll', 'deb', 'dmg', 'iso', 'img', 'msi', 'msp', 'msm', 'mid', 'midi', 'kar', 'mp3', 'ogg', 'm4a', 'ra', '3gpp', '3gp', 'ts', 'mp4', 'mpeg', 'mpg', 'mov', 'webm', 'flv', 'm4v', 'mng', 'asx', 'asf', 'wmv', 'avi'],
       Upstreams: [],
       // selectedUpstream: '',
       UpstreamChoosed: {
