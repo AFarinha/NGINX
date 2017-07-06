@@ -90,7 +90,7 @@ export default {
     getRowActionsDef () {
       let app = this
       return [{
-        type: 'primary',
+        type: 'warning',
         handler (row) {
           axios.delete('/api/deleteVHost/' + row.id + '/' + row.name + '/' + row.port)
           .then(function (response) {
