@@ -6,7 +6,7 @@
       <!-- Rquests per second -->
       <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
-          <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+          <span class="info-box-icon bg-aqua"><i class="fa fa-cogs"></i></span>
           <div class="info-box-content">
             <span class="info-box-text">Requests</span>
             <span class="info-box-number">{{this.infoServers.requestspers}} /s</span>
@@ -18,7 +18,7 @@
       <!-- MBps -->
       <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
-          <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+          <span class="info-box-icon bg-yellow"><i class="fa fa-cloud-download"></i></span>
 
           <div class="info-box-content">
             <span class="info-box-text">MB</span>
@@ -33,7 +33,7 @@
       <!-- errorPercentage -->
       <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
-          <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+          <span class="info-box-icon bg-red"><i class="fa fa-warning"></i></span>
           <div class="info-box-content">
             <span class="info-box-text">Error</span>
             <span class="info-box-number">{{this.infoServers.errorPercentage}} %</span>
@@ -45,7 +45,7 @@
       <!-- Hosts -->
       <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
-          <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+          <span class="info-box-icon bg-green"><i class="fa fa-television"></i></span>
 
           <div class="info-box-content">
             <span class="info-box-text">Hosts</span>
