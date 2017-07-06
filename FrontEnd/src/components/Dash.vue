@@ -45,7 +45,9 @@
 
     <!-- Main Footer -->
     <footer class="main-footer">
-      <strong>Copyright &copy; {{year}}
+      Developed in the scope of the class of <strong>Computação em Nuvem e Virtualização</strong>, lectured by <strong>Pedro Dias</strong> - Developed by André Farinha, João Henriques and Pedro Ferreira
+	  <br>
+	  <strong>Copyright &copy; {{year}}
         <a href="javascript:;">CoPilot</a>.</strong> All rights reserved.
     </footer>
   </div>
