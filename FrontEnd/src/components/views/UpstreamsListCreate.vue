@@ -9,20 +9,16 @@
 		          </div>
 		      </div>
 		      <div class="box-body">
-		      <!--
-		        <UpstreamsList>
-		        </UpstreamsList>
-		       -->
+
 		       <data-tables
 			      :data='this.upstreamList'
 			      :row-action-def='rowActionsDef'
-      			   action-col-label='Actions'
+    			   action-col-label='Actions'
 			      :has-action-col='true'>
 			      <el-table-column prop='id' label="id" sortable="custom"></el-table-column>
 			      <el-table-column prop='name' label="Name" sortable="custom"></el-table-column>
 			      <el-table-column prop='instance' label="Instance" sortable="custom"></el-table-column>
 			    </data-tables>
-			    <!-- <el-table-column prop='config' label="Config" sortable="custom"></el-table-column> -->
 
 			    <div v-if="responseError" class="alert alert-danger alert-dismissable">
 			       <i class="fa fa-ban"></i>
@@ -32,46 +28,27 @@
 		      </div>
 		    </div>
 
-		    <div class="box box-solid box-primary">
-		      <div class="box-header">
-		          <h3 class="box-title"><b> Create - Upstreams </b></h3>
-		          <div class="box-tools pull-right">
-		              <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-		          </div>
-		      </div>
-		      <div class="box-body">
-		      	<UpstreamsCreate v-bind:upstream="upstream">
-			    </UpstreamsCreate>
-		      </div>
-		    </div>
-
+				<UpstreamsCreate :upstreamProp="EditProp"></UpstreamsCreate>
 		</div>
 	</section>
 </template>
 
-
 <script>
-// Imports
-// import { EventBus } from '../../main.js'
-import UpstreamsCreate from './UpstreamsCreate'
-// import UpstreamsList from './UpstreamsList'
 import axios from 'axios'
+import Upstream from './Upstream'
+import UpstreamsCreate from './UpstreamsCreate'
+import { EventBus } from '../../main.js'
+
 import 'element-ui/lib/theme-default/index.css'
 
 export default {
-  props: {
-  },
   data () {
     return {
-      upstream: {
-        id: '',
-        upstreamName: '',
-        arrayUpstreamItems: []
-      },
-      upstreamList: [{ id: '', upstreamName: '', arrayUpstreamItems: [] }],
+      upstreamList: [],
       responseSuccess: false,
       responseError: false,
-      rowActionsDef: this.getRowActionsDef()
+      rowActionsDef: this.getRowActionsDef(),
+      EditProp: undefined
     }
   },
   created: function () {
@@ -85,6 +62,10 @@ export default {
         console.log(error)
         self.responseError = error.response.statusText + ' : ' + error.response.data
       })
+    // Event bus para fazer update
+    EventBus.$on('addedUpstream', (up) => {
+      self.upstreamList.push({ id: up.id, name: up.upstreamName })
+    })
   },
   methods: {
     getRowActionsDef () {
@@ -92,10 +73,9 @@ export default {
       return [{
         type: 'primary',
         handler (row) {
-          // self.$message('Edit clicked')
           for (var i = self.upstreamList.length - 1; i >= 0; i--) {
             if (self.upstreamList[i].id === row.id) {
-              self.upstream = JSON.parse(self.upstreamList[i].config)
+              self.EditProp = JSON.parse(self.upstreamList[i].config)
             }
           }
         },
@@ -132,6 +112,7 @@ export default {
     }
   },
   components: {
+    Upstream: Upstream,
     UpstreamsCreate: UpstreamsCreate
   }
 }

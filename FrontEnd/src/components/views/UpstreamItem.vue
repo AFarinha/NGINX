@@ -3,23 +3,23 @@
   <div class="row center-block" style="margin-top: 0.5em">
       <div class="col-xs-3">
         <div :class="{ 'has-error': vErrors.has('type') }">
-          <input name="type" v-model="upstream.type" v-validate="'required'" placeholder="server"  class="form-control" type="text">
+          <input :disabled="readOnly" name="type" v-model="upstream.type" v-validate="'required'" placeholder="server"  class="form-control" type="text">
           <span v-show="vErrors.has('type')" class="help-block">{{ vErrors.first('type') }}</span>
         </div>
       </div>
       <div class="col-xs-4">
         <div :class="{ 'has-error': vErrors.has('subType') }">
-          <input name="subType" v-model="upstream.subType" v-validate="'required'" placeholder="HostName"  class="form-control" type="text">
+          <input :disabled="readOnly" name="subType" v-model="upstream.subType" v-validate="'required'" placeholder="HostName"  class="form-control" type="text">
           <span v-show="vErrors.has('subType')" class="help-block">{{ vErrors.first('subType') }}</span>
         </div>
       </div>
       <div class="col-xs-4">
         <div :class="{ 'has-error': vErrors.has('config') }">
-          <input name="config" v-model="upstream.config" placeholder="weight=1|optional"  class="form-control" type="text">
+          <input :disabled="readOnly" name="config" v-model="upstream.config" placeholder="weight=1|optional"  class="form-control" type="text">
           <span v-show="vErrors.has('config')" class="help-block">{{ vErrors.first('config') }}</span>
         </div>
       </div>
-      <div class="col-xs-1">
+      <div class="col-xs-1" v-if="!readOnly">
           <button @click="remove" type="button" class="btn btn-danger fa fa-times"></button>
       </div>
   </div>
@@ -34,6 +34,10 @@ export default {
   props: {
     upstream: {
       type: Object,
+      required: true
+    },
+    readOnly: {
+      type: Boolean,
       required: true
     }
   },
@@ -59,9 +63,9 @@ export default {
   methods: {
     onValidate: function () {
       this.$validator.validateAll().then(() => {
-        console.log('Upstream Validated')
+        console.log('UpstreamItem Validated')
       }).catch(() => {
-        console.log('error Upstream')
+        console.log('error UpstreamItem')
         EventBus.$emit('errors-changed', this.vErrors.errors)
       })
     },

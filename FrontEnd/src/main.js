@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import { sync } from 'vuex-router-sync'
 import routes from './routes'
 import store from './store'
+import VeeValidate from 'vee-validate'
 
 // Globally
 export const EventBus = new Vue()
@@ -22,6 +23,10 @@ Vue.filter('prettyDate', prettyDate)
 Vue.filter('pluralize', pluralize)
 
 Vue.use(VueRouter)
+
+Vue.use(VeeValidate, {
+  errorBagName: 'vErrors'
+})
 
 // Routing logic
 var router = new VueRouter({

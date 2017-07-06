@@ -1,74 +1,112 @@
 <template>
-  <section class="content">
-    <div class="col-md-12">
-      <div class="box box-solid box-default">
-        <div class="box-header">
-          <h3 class="box-title">Upstream</h3>
-          <div class="box-tools pull-right">
-            <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-            <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
-          </div>
-        </div>
-        <div class="box-body">
-        {{upstream}}
-          <div :class="{ 'has-error': vErrors.has('proxyPass') }">
-            <input name="proxyPass" v-validate="'required'" v-model="upstream.upstreamName" class="form-control" type="text" placeholder="Upstream name">
-            <span v-show="vErrors.has('proxyPass')" class="help-block">{{ vErrors.first('proxyPass') }}</span>
-          </div>
-          <UpstreamItem v-for="(upstream, index) in this.upstream.arrayUpstreamItems" :upstream="upstream" :key="upstream" v-on:removeUpstream="removeUpstream(index)">
-          </UpstreamItem> 
+		<div>
+	    <div class="box box-solid box-primary">
+	      <div class="box-header">
+	          <h3 class="box-title"><b> Create - Upstreams </b></h3>
+	          <div class="box-tools pull-right">
+	              <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+	          </div>
+	      </div>
+	      <div class="box-body">
+					<button v-on:click="clearUpstream" type="button" class="btn btn-info">Clear</button>
+					<br />
+	      	<Upstream :readOnly="false" v-bind:upstream="upstream"></Upstream>
+				</br>
+				<button @click="addUpstream" type="button" class="btn btn-success">Add Upstream item</button>
+				 </br></br>
+					<div :class="{ 'box box-solid box-primary': !responseErrorCreate && !responseSuccesscreate,'box box-solid box-danger': responseErrorCreate && !responseSuccesscreate,'box box-solid box-success': !responseErrorCreate && responseSuccesscreate,  }">
+			      <div class="box-header">
+			        <h3 class="box-title">Submition</h3>
+			        <div class="box-tools pull-right">
+								<button v-on:click="validateBeforeSubmit" type="button" class="btn btn-info">Save Upstream</button>
+								<button v-on:click="postTestNginx" id="testNginx" type="button" class="btn btn-info">Test NginX</button>
+								<button v-on:click="postReloadNginx" id="reloadNginx" type="button" class="btn btn-info">Reload NginX</button>
+			        </div>
+			      </div>
+			    </div>
 
-          </br>
-           <button @click="addUpstream" type="button" class="btn btn-success">Add Upstream item</button>
-           <button v-on:click="validateBeforeSubmit" type="button" class="btn btn-success">Save Upstream</button>
-           <button v-on:click="postTestNginx" id="testNginx" type="button" class="btn btn-success">Test NginX</button>
-           <button v-on:click="postReloadNginx" id="reloadNginx" type="button" class="btn btn-success">Reload NginX</button>
-        </div>
-        <div v-if="responseError" class="alert alert-danger alert-dismissable">
-           <i class="fa fa-ban"></i>
-           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-           <b>Alert! </b>{{this.responseError}}
-        </div>
-
-        <div v-if="responseSuccess" class="alert alert-success alert-dismissable">
-          <i class="fa fa-check"></i>
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <b>Alert! </b> {{this.responseSuccess}}
-        </div>
-      </div>
-    </div>
-  </section>    
+					<div v-if="responseErrorCreate" class="alert alert-danger alert-dismissable">
+						 <i class="fa fa-ban"></i>
+						 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						 <b>Alert! </b>{{this.responseErrorCreate}}
+					</div>
+					<div v-if="responseSuccesscreate" class="alert alert-success alert-dismissable">
+						<i class="fa fa-check"></i>
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<b>Alert! </b> {{this.responseSuccesscreate}}
+					</div>
+	      </div>
+	    </div>
+		</div>
 </template>
 
 <script>
-// Imports
-import UpstreamItem from './UpstreamItem'
 import axios from 'axios'
+import Upstream from './Upstream'
 import { EventBus } from '../../main.js'
+
+import 'element-ui/lib/theme-default/index.css'
 
 export default {
   props: {
-    upstream: {
-      type: Object,
-      required: true
+    upstreamProp: {
+      type: Object
     }
   },
   data () {
     return {
-      responseSuccess: false,
-      responseError: false
+      upstream: {
+        id: '',
+        upstreamName: '',
+        arrayUpstreamItems: []
+      },
+      responseSuccesscreate: false,
+      responseErrorCreate: false
     }
+  },
+  watch: {
+    upstreamProp: function (value) {
+      var self = this
+      self.upstream = self.upstreamProp
+    }
+  },
+  mounted: function () {
+    var self = this
+    // Emit that validation is required on the bus
+    self.$on('veeValidate', () => {
+      EventBus.$emit('validate')
+    })
+    // Listen on the bus for changers to the child components error bag and merge in/remove errors
+    EventBus.$on('errors-changed', (newErrors, oldErrors) => {
+      newErrors.forEach(error => {
+        if (!this.vErrors.has(error.field)) {
+          self.vErrors.add(error.field, error.msg)
+        }
+      })
+      if (oldErrors) {
+        oldErrors.forEach(error => {
+          self.vErrors.remove(error.field)
+        })
+      }
+    })
   },
   methods: {
     validateBeforeSubmit: function () {
-      var self = this
       EventBus.$emit('validate')
       setTimeout(() => {
-        if (!self.vErrors.any()) {
-          self.postSaveUpstream()
+        if (!this.vErrors.any()) {
+          this.postSaveUpstream()
           console.log('Post To Server')
         }
       }, 200)
+    },
+    clearUpstream: function () {
+      var self = this
+      self.upstream = {
+        id: '',
+        upstreamName: '',
+        arrayUpstreamItems: []
+      }
     },
     addUpstream: function () {
       var self = this
@@ -79,10 +117,10 @@ export default {
           subType: '',
           config: ''
         })
-        self.responseError = false
+        self.responseErrorCreate = false
       } else {
-        self.responseSuccess = false
-        self.responseError = 'As configurações do último item encontram-se vazias'
+        self.responseSuccesscreate = false
+        self.responseErrorCreate = 'As configurações do último item encontram-se vazias'
       }
     },
     postSaveUpstream: function () {
@@ -91,38 +129,31 @@ export default {
         .then(function (response) {
           if (response.data.status === 'failed') {
             console.log(response.data)
-            self.responseError = response.data
-            self.responseSuccess = false
+            self.responseErrorCreate = response.data
+            self.responseSuccesscreate = false
           } else {
             self.upstream.id = response.data.message.id.toString()
-            self.responseSuccess = response.data
-            self.responseError = false
+            self.responseSuccesscreate = response.data
+            self.responseErrorCreate = false
+            // emits event to parent to reload
+            EventBus.$emit('addedUpstream', self.upstream)
           }
         })
         .catch(error => {
           console.log('error')
           console.log(error)
-          self.responseSuccess = false
-          self.responseError = error.response
+          self.responseSuccesscreate = false
+          self.responseErrorCreate = error.response
         })
-    },
-    removeUpstream (index) {
-      var self = this
-      if (index > 0) {
-        self.upstream.arrayUpstreamItems.splice(index, 1)
-      } else {
-        self.responseSuccess = false
-        self.responseError = 'É necessário existir pelo menos 1 item'
-      }
     },
     postTestNginx: function () {
       var self = this
       axios.post('/api/nginx/test', self.server)
         .then(function (response) {
-          self.responseSuccess = response.data.stderr
+          self.responseSuccesscreate = response.data.stderr
         })
         .catch(error => {
-          self.responseError = error.response.statusText + ' : ' + error.response.data
+          self.responseErrorCreate = error.response.statusText + ' : ' + error.response.data
         })
     },
     postReloadNginx: function () {
@@ -130,16 +161,16 @@ export default {
       axios.post('/api/nginx/reload', self.server)
         .then(function (response) {
           console.log(response)
-          self.responseSuccess = response.data.status + ' : ' + response.data.stderr
+          self.responseSuccesscreate = response.data.status + ' : ' + response.data.stderr
         })
         .catch(error => {
           console.log(error)
-          self.responseError = error.response.statusText + ' : ' + error.response.data
+          self.responseErrorCreate = error.response.statusText + ' : ' + error.response.data
         })
     }
   },
   components: {
-    UpstreamItem: UpstreamItem
+    Upstream: Upstream
   }
 }
 </script>

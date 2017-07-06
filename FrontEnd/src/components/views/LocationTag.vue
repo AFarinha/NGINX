@@ -23,20 +23,20 @@
               <div class="box-body">
                 <div class="row">
                   <div class="form-group col-md-6">
-	                  <input type="radio" id="one" value="1" name="loc" v-model="selected">
+	                  <input type="radio" id="zero" value="0" name="loc" v-model="location.pathGeneric">
           					<label for="one">Generic</label>
           					<br>
         				  </div>
 
         					<div class="form-group col-md-6">
-          					<input type="radio" id="two" value="2" name="loc" v-model="selected">
+          					<input type="radio" id="one" value="1" name="loc" v-model="location.pathGeneric">
           					<label for="two">MIMES</label>
           					<br>
         					</div>
       				  </div>
 	             <div class="row">
                 <!-- INICIO LOCATION PATH -->
-                <div class="form-group col-md-10" v-if="selected == '1' " >
+                <div class="form-group col-md-10" v-if="location.pathGeneric == '0' " >
                   <div :class="{ 'has-error': vErrors.has('path') }">
                     <div class="input-group">
                       <div class="input-group-addon">
@@ -47,7 +47,7 @@
                     <span v-show="vErrors.has('path')" class="help-block">{{ vErrors.first('path') }}</span>
                   </div>
                 </div>
-                <div class="form-group col-md-10" v-if="selected == '2' " >
+                <div class="form-group col-md-10" v-if="location.pathGeneric == '1' " >
                   <div :class="{ 'has-error': vErrors.has('path') }">
                     <multiselect
                       v-model="location.pathFileType"
@@ -102,7 +102,7 @@
             </div>
           </div>
             <!-- End Cache -->
-          
+
         </div>
         <div class="row">
 
@@ -117,49 +117,45 @@
               </div>
             </div>
             <div class="box-body">
-            
+
 
             <!-- inicio -->
-            
+
               <div class="row">
                 <div class="form-group col-md-4">
-                  <input type="radio" id="one" value="0" name="prox" v-model="selectedProxy">
+                  <input type="radio" id="one" value="0" name="prox" v-model="location.StateProxyPass">
                   <label for="one">None</label>
                   <br>
                 </div>
 
                 <div class="form-group col-md-4">
-                  <input type="radio" id="two" value="1" name="prox" v-model="selectedProxy">
+                  <input type="radio" id="two" value="1" name="prox" v-model="location.StateProxyPass">
                   <label for="two">Upstream</label>
                   <br>
                 </div>
 
                 <div class="form-group col-md-4">
-                  <input type="radio" id="two" value="2" name="prox" v-model="selectedProxy">
+                  <input type="radio" id="two" value="2" name="prox" v-model="location.StateProxyPass">
                   <label for="two">Proxy Pass</label>
                   <br>
                 </div>
               </div>
+
              <div class="row">
               <!-- INICIO NONE -->
-              <div class="form-group col-md-10" v-if="selectedProxy == '0' " >
+              <div class="form-group col-md-10" v-if="location.StateProxyPass == '0' " >
               </div>
               <!-- FIM NONE | INICIO UPSTREAM -->
-              <div class="form-group col-md-10" v-if="selectedProxy == '1' " >
+              <div class="form-group col-md-10" v-if="location.StateProxyPass == '1' " >
                 <select v-model="this.location.upstreamId" class="form-control" @change="showConfig(this.location.upstreamId)">
                   <option v-for="option in this.Upstreams" v-bind:value="option.id">
                   {{ option.name }}
                   </option>
                 </select>
-                {{this.UpstreamChoosed.config}}
-              
-                <input name="proxyPass" v-model="this.UpstreamChoosed.name" class="form-control" type="text" placeholder="Upstream name">
-                
-                <UpstreamItem v-for="(upstream, index) in this.UpstreamChoosed.config.arrayUpstreamItems" :upstream="upstream" :key="upstream" >
-                </UpstreamItem> 
+                <Upstream :readOnly="true" v-bind:upstream="this.UpstreamChoosed.config"></Upstream>
               </div>
               <!-- FIM UPSTREAM | INICIO PROXY PASS -->
-              <div class="form-group col-md-10" v-if="selectedProxy == '2' " >
+              <div class="form-group col-md-10" v-if="location.StateProxyPass == '2' " >
                 <div :class="{ 'has-error': vErrors.has('proxyPass') }">
                   <!-- v-validate="`${(location.IsProxyPass || location.arrayUpstreams.length != 0) ? 'required' : ''}`" -->
                   <input name="proxyPass" v-model="location.proxyPass"  class="form-control" type="text" placeholder="Proxy Pass">
@@ -168,15 +164,13 @@
               </div>
               <!-- FIM PROXY PASS -->
               </div>
-            
 
-              
-              
+
             </div>
             </div>
           </div>
           <!-- End LocationsGeneric -->
-          
+
         </div>
         <div class="row">
           <!-- Begin LocationsGeneric -->
@@ -209,7 +203,7 @@ import Multiselect from 'vue-multiselect'
 import { EventBus } from '../../main.js'
 import { find, propEq } from 'ramda'
 import GenericItem from './GenericItem'
-import UpstreamItem from './UpstreamItem'
+import Upstream from './Upstream'
 import axios from 'axios'
 
 export default {
@@ -222,7 +216,6 @@ export default {
   data () {
     return {
       selected: '1',
-      selectedProxy: '0',
       selectedCacheClient: true,
       ddlTimeUnit: [
         {code: 'ms', description: 'milliseconds'},
@@ -239,17 +232,19 @@ export default {
         id: '',
         name: '',
         instance: '',
-        config: '{}'
+        config: {}
       }
     }
   },
   created: function () {
     var self = this
-    // console.log('/api/getAllUpstreams/')
     axios.get('/api/getAllUpstreams/')
       .then(function (response) {
         self.Upstreams = response.data.message
         console.log('/api/getAllUpstreams/')
+        self.Upstreams.forEach((code) => {
+          code.config = JSON.parse(code.config)
+        })
         console.log(self.Upstreams)
         if (self.location.upstreamId !== '') {
           self.showConfig(parseInt(self.location.upstreamId))
@@ -274,10 +269,7 @@ export default {
     })
   },
   watch: {
-    selected: function (newRole) {
-      this.selected = newRole
-      this.location.pathGeneric = newRole === '1'
-    }
+
   },
   methods: {
     onValidate: function () {
@@ -293,12 +285,10 @@ export default {
       for (var i = self.Upstreams.length - 1; i >= 0; i--) {
         if (self.Upstreams[i].id === id) {
           self.UpstreamChoosed = self.Upstreams[i]
-          if (typeof (self.UpstreamChoosed.config) === 'string') {
-            self.UpstreamChoosed.config = JSON.parse(self.UpstreamChoosed.config)
-          }
         }
       }
       self.location.upstreamId = id.toString()
+      self.location.upstreamName = self.UpstreamChoosed.config.upstreamName
     },
     addTag (newTag) {
       this.location.pathFileType.push(newTag)
@@ -309,9 +299,6 @@ export default {
     },
     changeCacheServer: function () {
       this.location.cacheServer = !this.location.cacheServer
-    },
-    changeValue: function (newValue) {
-      this.selectedValue = newValue
     },
     addGeneric: function () {
       this.location.arrayGeneric.push({
@@ -339,7 +326,7 @@ export default {
   },
   components: {
     GenericItem: GenericItem,
-    UpstreamItem: UpstreamItem,
+    Upstream: Upstream,
     Multiselect: Multiselect
   }
 }

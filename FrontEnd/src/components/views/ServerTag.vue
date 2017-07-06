@@ -46,14 +46,7 @@
           <button @click="addGeneric" type="button" class="btn btn-success">Add Generic Item</button>
       </div>
     </div>
-    <!-- Locations
 
-    <div class="box box-solid box-warning">
-      <div class="box-header">
-          <h3 class="box-title">Locations</h3>
-      </div>
-    </div>-->
-  <!--    <div class="box-body"> -->
         <LocationTag v-for="(location, index) in this.server.arrayLocations"
           :location="location"
           :key= "location"
@@ -116,17 +109,21 @@ export default {
     },
     addLocation: function () {
       this.server.arrayLocations.push({
-        pathGeneric: true,
+        pathGeneric: 0,
         path: '/',
         pathFileType: [],
         cacheServer: false,
         cacheClient: false,
         cacheClientTimeNumber: '',
         cacheClientTimeUnit: { code: 'm', description: 'minutes' },
-        IsProxyPass: 0,
+        // para setar o radio button List
+        StateProxyPass: 0,
+        // para o guardar o valor caso seja 2 (ProxyPass)
         proxyPass: '',
-        // arrayUpstreams: [],
+        // para setar a ddl
         upstreamId: '',
+        // para conseguir escrever no ficheiro
+        upstreamName: '',
         arrayGeneric: [] })
     },
     removeLocation (index) {

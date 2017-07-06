@@ -27,8 +27,12 @@ module.exports = {
             });
 
             loc += utils.prepareConf('location', {
-                'PATH': item.pathGeneric ? item.path : '~* ^.+\.(' + item.pathFileType.join('|') + ')$',
-                'PROXYPASS': (item.IsProxyPass || item.arrayUpstreams.length != 0) ? 'proxy_pass ' + item.proxyPass + ';' : '',
+                'PATH': item.pathGeneric == 0 ? item.path : '~* ^.+\.(' + item.pathFileType.join('|') + ')$',
+                'PROXYPASS': (function(){
+                    if ( item.StateProxyPass == 0 ) return ''
+                    else if ( item.StateProxyPass == 1 ) return 'proxy_pass ' + item.upstreamName + ';'
+                    else if ( item.StateProxyPass == 2 ) return 'proxy_pass ' + item.proxyPass + ';'
+                }),
                 'CACHESERVER': item.cacheServer ? 'include /etc/nginx/dashboard/cache.conf;' : '',
                 'CACHECLIENT': item.cacheClient ? 'expires ' + item.cacheClientTimeNumber + '' + item.cacheClientTimeUnit.code + ';' : '',
                 'GNERICITEMSLOCATION': locationItems
@@ -86,7 +90,7 @@ module.exports = {
         });
 
         upstream = utils.prepareConf('upstreams', {
-            'PROXYPASS': proxyPass, 
+            'PROXYPASS': proxyPass,
             'UPSTREAMITEMS': upstreamItems
         });
         console.log(upstream);

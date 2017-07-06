@@ -4,12 +4,9 @@ import NotFoundView from './components/404.vue'
 
 // Import Views - Dash
 import DashboardView from './components/views/Dashboard.vue'
-import TablesView from './components/views/Tables.vue'
-import SettingView from './components/views/Setting.vue'
-import ReposView from './components/views/Repos.vue'
 import VHostView from './components/views/VHost.vue'
 import ListVHostView from './components/views/VHostsList.vue'
-import UpstreamsView from './components/views/Upstreams.vue'
+import UpstreamsListCreateView from './components/views/UpstreamsListCreate.vue'
 import TemplatesView from './components/views/Templates.vue'
 
 // Routes
@@ -45,7 +42,7 @@ const routes = [
         meta: {description: 'Here is possible to list all Virtual Hosts'}
       }, {
         path: 'upstreams',
-        component: UpstreamsView,
+        component: UpstreamsListCreateView,
         name: 'List or Create Upstreams',
         meta: {description: 'Here is possible to list or create Upstreams'}
       }, {
@@ -53,21 +50,6 @@ const routes = [
         component: TemplatesView,
         name: 'List Templates',
         meta: {description: 'Here is possible to list Templates'}
-      }, {
-        path: 'tables',
-        component: TablesView,
-        name: 'Tables',
-        meta: {description: 'Simple and advance table in CoPilot'}
-      }, {
-        path: 'setting',
-        component: SettingView,
-        name: 'Settings',
-        meta: {description: 'User settings page'}
-      }, {
-        path: 'repos',
-        component: ReposView,
-        name: 'Repository',
-        meta: {description: 'List of popular javascript repos'}
       }
     ]
   }, {

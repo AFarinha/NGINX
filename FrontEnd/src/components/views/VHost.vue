@@ -1,7 +1,7 @@
 <template>
 <section class="content">
 
-
+  {{this.server}}
       <!--   <div class="box-body"> -->
     <ServerTag v-bind:server="server" ></ServerTag>
 
@@ -29,8 +29,6 @@
       <b>Alert! </b> {{this.responseSuccess}}
     </div>
 
-  <!--   -->
-
 </section>
 </template>
 
@@ -38,15 +36,8 @@
 import axios from 'axios'
 import { EventBus } from '../../main.js'
 import ServerTag from './ServerTag'
-import Vue from 'vue'
-import VeeValidate from 'vee-validate'
-
-Vue.use(VeeValidate, {
-  errorBagName: 'vErrors'
-})
 
 export default {
-
   name: 'Vhost',
   data () {
     return {
@@ -59,6 +50,20 @@ export default {
       },
       responseSuccess: false,
       responseError: false
+    }
+  },
+  created: function () {
+    var app = this
+    if (app.$route.params.id !== undefined) {
+      axios.get('/api/getVHost/' + app.$route.params.id)
+        .then(function (response) {
+          console.log(response.data)
+          app.server = JSON.parse(response.data.message.config)
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   mounted: function () {
@@ -136,22 +141,7 @@ export default {
   },
   components: {
     ServerTag: ServerTag
-  },
-  created: function () {
-    var app = this
-    if (app.$route.params.id !== undefined) {
-      axios.get('/api/getVHost/' + app.$route.params.id)
-        .then(function (response) {
-          console.log(response.data)
-          app.server = JSON.parse(response.data.message.config)
-          console.log(response)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    }
   }
-
 }
 </script>
 
