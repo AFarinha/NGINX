@@ -117,17 +117,60 @@
               </div>
             </div>
             <div class="box-body">
-              <select v-model="this.location.upstreamId" class="form-control" @change="showConfig(this.location.upstreamId)">
-                <option v-for="option in this.Upstreams" v-bind:value="option.id">
+            
+
+            <!-- inicio -->
+            
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <input type="radio" id="one" value="0" name="prox" v-model="selectedProxy">
+                  <label for="one">None</label>
+                  <br>
+                </div>
+
+                <div class="form-group col-md-4">
+                  <input type="radio" id="two" value="1" name="prox" v-model="selectedProxy">
+                  <label for="two">Upstream</label>
+                  <br>
+                </div>
+
+                <div class="form-group col-md-4">
+                  <input type="radio" id="two" value="2" name="prox" v-model="selectedProxy">
+                  <label for="two">Proxy Pass</label>
+                  <br>
+                </div>
+              </div>
+             <div class="row">
+              <!-- INICIO NONE -->
+              <div class="form-group col-md-10" v-if="selectedProxy == '0' " >
+              </div>
+              <!-- FIM NONE | INICIO UPSTREAM -->
+              <div class="form-group col-md-10" v-if="selectedProxy == '1' " >
+                <select v-model="this.location.upstreamId" class="form-control" @change="showConfig(this.location.upstreamId)">
+                  <option v-for="option in this.Upstreams" v-bind:value="option.id">
                   {{ option.name }}
-                </option>
-              </select>
-              {{this.UpstreamChoosed.config}}
+                  </option>
+                </select>
+                {{this.UpstreamChoosed.config}}
               
-              <input name="proxyPass" v-model="this.UpstreamChoosed.name" class="form-control" type="text" placeholder="Upstream name">
+                <input name="proxyPass" v-model="this.UpstreamChoosed.name" class="form-control" type="text" placeholder="Upstream name">
+                
+                <UpstreamItem v-for="(upstream, index) in this.UpstreamChoosed.config.arrayUpstreamItems" :upstream="upstream" :key="upstream" >
+                </UpstreamItem> 
+              </div>
+              <!-- FIM UPSTREAM | INICIO PROXY PASS -->
+              <div class="form-group col-md-10" v-if="selectedProxy == '2' " >
+                <div :class="{ 'has-error': vErrors.has('proxyPass') }">
+                  <!-- v-validate="`${(location.IsProxyPass || location.arrayUpstreams.length != 0) ? 'required' : ''}`" -->
+                  <input name="proxyPass" v-model="location.proxyPass"  class="form-control" type="text" placeholder="Proxy Pass">
+                  <span v-show="vErrors.has('proxyPass')" class="help-block">{{ vErrors.first('proxyPass') }}</span>
+                </div>
+              </div>
+              <!-- FIM PROXY PASS -->
+              </div>
+            
+
               
-              <UpstreamItem v-for="(upstream, index) in this.UpstreamChoosed.config.arrayUpstreamItems" :upstream="upstream" :key="upstream" >
-              </UpstreamItem> 
               
             </div>
             </div>
@@ -179,6 +222,7 @@ export default {
   data () {
     return {
       selected: '1',
+      selectedProxy: '0',
       selectedCacheClient: true,
       ddlTimeUnit: [
         {code: 'ms', description: 'milliseconds'},

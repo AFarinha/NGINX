@@ -123,7 +123,7 @@ export default {
         cacheClient: false,
         cacheClientTimeNumber: '',
         cacheClientTimeUnit: { code: 'm', description: 'minutes' },
-        IsProxyPass: true,
+        IsProxyPass: 0,
         proxyPass: '',
         // arrayUpstreams: [],
         upstreamId: '',
