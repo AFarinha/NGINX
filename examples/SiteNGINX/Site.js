@@ -2,7 +2,7 @@ var https = require("https"),
 	cheerio = require('cheerio'),
 	request = require('request'),
 	sqlite3 = require('sqlite3').verbose(),
-	db = require('/vagrant/lib/database.js'),
+	db = require('/vagrant/server/lib/database.js'),
 	fs = require('fs');
 
 var dbName = 'nginx';
@@ -82,11 +82,11 @@ var parseDirectives = function(nrModule) {
 	var start = 1;
 	var idDirectives=1;
 	var auxLink="";
-	
+
 	options.path = originalPath;
 	options.path = options.path + listModules[nrModule].linka;
-	
-	//console.log("PATH",options.path,"\n");
+	console.log('\n------------------------------------------\n');
+	console.log("\nPATH: ",options.path,"\n");
 	
 	https.get(options, function (http_res) {
 		// initialize the container for our data
@@ -96,28 +96,32 @@ var parseDirectives = function(nrModule) {
 		http_res.on("data", function (chunk) {
 			data += chunk;
 		});
+		var excludeTags = ['Directives','Example Configuration','Embedded Variables'];
 
 		//Ao ter a resposta toda
 		http_res.on("end", function () {
 			var $ = cheerio.load(data);
 			$('#content table tbody tr td a').each(function(i, element){
 				var a = $(this);
-				auxLink = options.host+options.path.trim()+a.attr('href').toString().trim();
-				listDirectives.push({"id": idDirectives,"idModule":listModules[nrModule].id ,"nome": a.text().trim(),"link":auxLink});
-				//console.log	("id:", idDirectives,"idModule:",listModules[nrModule].id ,"nome:", a.text().trim(),"link:",auxLink,"\n");
-				var insert = "INSERT INTO directives (id, idModule, name, link) VALUES ("+idDirectives+","+listModules[nrModule].id+",'"+a.text().trim()+"','"+auxLink+"');\r\n";	
+				//console.log("id", idDirectives,"idModule",listModules[nrModule].id ,"nome", a.text().trim(),"link",auxLink);
+				//if(excludeTags.indexOf(a.text().trim()) === -1){
+				if(a.text().trim() !== 'Directives' && a.text().trim() !== 'Example Configuration' && a.text().trim() !== 'Embedded Variables' ){
+					auxLink = options.host+options.path.trim()+a.attr('href').toString().trim();
+					listDirectives.push({"id": idDirectives,"idModule":listModules[nrModule].id ,"nome": a.text().trim(),"link":auxLink});
+					//console.log	("id:", idDirectives,"idModule:",listModules[nrModule].id ,"nome:", a.text().trim(),"link:",auxLink,"\n");
+					var insert = "INSERT INTO directives (id, idModule, name, link) VALUES ("+idDirectives+","+listModules[nrModule].id+",'"+a.text().trim()+"','"+auxLink+"');\r\n";	
 
-				fs.appendFile(scriptName, insert, function (err) {
-				  if (err) throw err;
-				});
-				
-				
-				idDirectives++;
+					fs.appendFile(scriptName, insert, function (err) {
+					  if (err) throw err;
+					});
+					idDirectives++;
+				}
 			});
 			nrModule++;
 			
 			//Se houver mais modules, passa ao proximo
-			if(nrModule<listModules.length){
+			if(nrModule < listModules.length){
+				console.log('nrModule: ',nrModule);
 				parseDirectives(nrModule);
 			}
 		});	

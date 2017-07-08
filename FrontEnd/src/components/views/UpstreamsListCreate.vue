@@ -64,7 +64,15 @@ export default {
       })
     // Event bus para fazer update
     EventBus.$on('addedUpstream', (up) => {
-      self.upstreamList.push({ id: up.id, name: up.upstreamName })
+      axios.get('/api/getAllUpstreams/')
+      .then(function (response) {
+        // console.log(response.data.message)
+        self.upstreamList = response.data.message
+      })
+      .catch(error => {
+        console.log(error)
+        self.responseError = error.response.statusText + ' : ' + error.response.data
+      })
     })
   },
   methods: {
@@ -75,6 +83,7 @@ export default {
         handler (row) {
           for (var i = self.upstreamList.length - 1; i >= 0; i--) {
             if (self.upstreamList[i].id === row.id) {
+              console.log(typeof JSON.parse(self.upstreamList[i].config))
               self.EditProp = JSON.parse(self.upstreamList[i].config)
             }
           }

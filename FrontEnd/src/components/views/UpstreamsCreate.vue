@@ -111,7 +111,7 @@ export default {
     addUpstream: function () {
       var self = this
       var lastItem = self.upstream.arrayUpstreamItems[self.upstream.arrayUpstreamItems.length - 1]
-      if (lastItem === undefined || (lastItem.type !== '' && lastItem.subType !== '' && lastItem.config !== '')) {
+      if (lastItem === undefined || (lastItem.type !== '' && lastItem.subType !== '')) {
         self.upstream.arrayUpstreamItems.push({
           type: '',
           subType: '',
