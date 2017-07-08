@@ -99,10 +99,6 @@ module.exports = {
                         if (err) {
                             console.log('message: ', err);
                             return response({ 'status': 'failed select do update', 'message': err });
-                        }
-                        if (rows == 0) {
-                            console.log('Sem linhas');
-                            response({ 'status': 'ok', 'message': 'Registo não existe' });
                         } else {
                             rows.forEach(function(row) {
                                 console.log('\nUpdate ao ID ', row.id);
