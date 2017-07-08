@@ -1,9 +1,9 @@
-#!/bin/sh
-#sudo /bin/bash installer.sh
+#!/bin/bash
+usermod --password $(echo root | openssl passwd -1 -stdin) root
 
-yum -y install
+#yum update -y
 
-localFolder=/usr/bin/NGINXAdmin
+localFolder=/opt/NGINXAdmin
 repository="https://github.com/AFarinha/NGINX.git"
 
 rm -rf $localFolder
@@ -15,6 +15,10 @@ if ! rpm -q  git ; then
   yum install -y git
 fi
 
+if ! rpm -q  nano ; then
+  echo 'Installing nano...'
+  yum install -y nano
+fi
 
 if ! rpm -q  epel-release  ; then
   echo 'Installing epel-release...'
@@ -69,4 +73,4 @@ cd $localFolder
 
 npm install
 
-SERVER=192.168.1.200:8080 MODE=collector node main.js
+#SERVER=192.168.1.200:8080 MODE=collector node main.js
