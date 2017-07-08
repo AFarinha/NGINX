@@ -77,6 +77,7 @@ module.exports = {
         console.log('\nVHOST', vhost, '\n');
         //não tem ID, faz insert
         if (vhost.id == undefined || vhost.id == null || vhost.id == '' || isNaN(vhost.id)) {
+            console.log('DB: INSERT');
             db.run("INSERT INTO vhosts (instance, name, port,config) VALUES (?,?,?,?)", vhost.instance, vhost.name, vhost.port, JSON.stringify(vhost.config), function(err) {
                 if (err) {
                     console.log({ 'status': 'failed', 'message': err });
@@ -88,7 +89,7 @@ module.exports = {
             });
         } else {
             //console.log("UPDATE vhosts set config = ",vhost.config," where instance = ", vhost.instance," and name = " , vhost.name," and port = ", vhost.port," and id = ", vhost.id);
-
+            console.log('DB: UPDATE');
             db.run("UPDATE vhosts set config = ? where instance = ? and name = ? and port = ? and id = ?", JSON.stringify(vhost.config), vhost.instance, vhost.name, vhost.port, vhost.id, function(err) {
                 if (err) {
                     console.log({ 'status': 'failed update', 'message': err });
@@ -163,7 +164,7 @@ module.exports = {
     deleteUpstream: function(id, response) {
 
         openBD();
-        
+
         db.all("DELETE FROM upstreams where id = ?", id, function(err, rows) {
             if (err) {
                 return response({ 'status': 'failed', 'message': err });
@@ -171,7 +172,7 @@ module.exports = {
                 response({ 'status': 'ok', 'message': {} });
             }
         });
-        
+
         closeBD();
     },
     selectNextSeedVHost: function(response) {

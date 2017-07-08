@@ -330,7 +330,7 @@ Api.prototype.init = function() {
     });
 
     this.app.post('/insertVHostV2', function(req, res) {
-
+        console.log('ID do HOST',req.body.id);
         var vhost = {
             'id': req.body.id,
             'instance': req.body.instance == undefined ? '' : req.body.instance,
