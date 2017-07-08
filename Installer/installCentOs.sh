@@ -78,10 +78,10 @@ npm install
 
 # ----- Instalar servico  ------
 
-cp $localFolder/Installer/service/NGINXAdmin /etc/systemd/system/nodeserver.service/NGINXAdmin
+cp $localFolder/Installer/service/NGINXAdmin /etc/systemd/system/NGINXAdmin.service
 
-systemctl enable nodeserver.service
-systemctl start nodeserver.service
+systemctl enable NGINXAdmin.service
+systemctl start NGINXAdmin.service
 
 # FIM
 
