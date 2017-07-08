@@ -212,8 +212,7 @@ module.exports = {
     },
     insertUpstream: function(upstream, response) {
         openBD();
-
-        console.log('\nInsert Upstream: ', upstream, '\n');
+        //console.log('\nInsert Upstream: ', upstream, '\n');
         // Insert
         if (upstream.id == undefined || upstream.id == null || upstream.id == '' || isNaN(upstream.id)) {
 
@@ -229,8 +228,8 @@ module.exports = {
             });
         } else {
             // UPDATE
-            console.log("UPDATE upstreams set config = ? where instance = ? and name = ?", upstream.config, upstream.instance, upstream.name);
-            db.run("UPDATE upstreams set config = ? where instance = ? and name = ?", JSON.stringify(upstream.config), upstream.instance, upstream.name, function(err) {
+            //console.log("UPDATE upstreams set config = ? where instance = ? and name = ?", upstream.config, upstream.instance, upstream.name);
+            db.run("UPDATE upstreams set config = ? where instance = ? and name = ?", upstream.config, upstream.instance, upstream.name, function(err) {
                 if (err) {
                     console.log('Erro no UpdateUpstream');
                     console.log({ 'status': 'failed', 'message': err });

@@ -242,63 +242,91 @@ Api.prototype.init = function() {
     });
 
     this.app.post('/insertUpstream', function(req, res) {
-
+        console.log('\n------------------------- POST -------------------------\n');
         var jsonConfig = JSON.parse(JSON.stringify(req.body));
         var confUpdtreamContent = generateFiles.createUpstreamConfSingle(jsonConfig);
 
-        //console.log('confUpdtreamContent\n:', confUpdtreamContent, '\n');
-        //console.log('req.body\n:', req.body, '\n');
-        //Se ID vazio e, nome já existir na BD, não deixar fazer nada
-        db.canInsertUpstreamSingle(confUpdtreamContent, req.body.instance || '', function(message1) {
-            console.log('Status:', message1.status, '\nID:', req.body.id);
-            if ((req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id)) && message1.status === 'ok') {
-                console.log('Dentro do if');
-                db.selectNextSeedUpstream(function(message2) {
-                    seedUptreams = JSON.parse(JSON.stringify(message2)).message.seed;
-                    try {
+        if ((req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id))) {
+            db.selectNextSeedUpstream(function(message2) {
+                seedUptreams = JSON.parse(JSON.stringify(message2)).message.seed;
 
-                        // é só uma upstream por isso só faz o ciclo 1x
-                        confUpdtreamContent.forEach(function(item) {
+                try {
+                    // é só uma upstream por isso só faz o ciclo 1x
+                    confUpdtreamContent.forEach(function(item) {
 
-                            UpstreamFileName = seedUptreams + '-' + item.name.replace('https://', '').replace('http://', '');
-                            UpstreamDBName = item.name.replace('https://', '').replace('http://', '');
+                        UpstreamFileName = seedUptreams + '-' + item.name.replace('https://', '').replace('http://', '');
+                        UpstreamDBName = item.name.replace('https://', '').replace('http://', '');
 
-                            console.log('Desejado para upstream:', UpstreamFileName);
+                        console.log('Desejado para upstream:', UpstreamFileName);
 
-                            utils.writeFileSync(UpstreamFileName, item.conf);
-                            // Deixa o ID original para fazer distincao entre insert e update
-                            var idFromReq = req.body.id;
+                        utils.writeFileSync(UpstreamFileName, item.conf);
+                        // Deixa o ID original para fazer distincao entre insert e update
+                        var idFromReq = req.body.id;
 
-                            // Se não tiver ID, guardar futuro ID (para ficar no config) no JSON antes de inserir na BD
-                            if (req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id)) {
-                                req.body.id = (seedUptreams - 100).toString();
-                            }
-                            var upstream = {
-                                'id': idFromReq,
-                                'instance': req.body.instance || '',
-                                'name': req.body.upstreamName,
-                                'config': JSON.stringify(req.body)
-                            };
+                        // Se não tiver ID, guardar futuro ID (para ficar no config) no JSON antes de inserir na BD
+                        if (req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id)) {
+                            req.body.id = (seedUptreams - 100).toString();
+                        }
+                        var upstream = {
+                            'id': idFromReq,
+                            'instance': req.body.instance || '',
+                            'name': req.body.upstreamName,
+                            'config': JSON.stringify(req.body)
+                        };
 
-
-                            console.log('Upstream para BD', upstream, '\n');
-
-                            db.insertUpstream(upstream, function(message) {
-                                console.log("Resultado do insertUpstream:", message);
-                                res.send(message);
-                            });
-
-                            seedUptreams++;
+                        db.insertUpstream(upstream, function(message) {
+                            console.log("Resultado do insertUpstream (INSERT):", message);
+                            res.send(message);
                         });
 
-                    } catch (err) {
-                        console.log('Erro:', err);
+                        seedUptreams++;
+                    });
+
+                } catch (err) {
+                    console.log('Erro:', err);
+                }
+            }); // fim selectNextSeedUpstream
+        } else {
+            //fazer update
+            seedUptreams = parseInt(req.body.id) + 100;
+            console.log('Update stream ', seedUptreams);
+            try {
+                // é só uma upstream por isso só faz o ciclo 1x
+                confUpdtreamContent.forEach(function(item) {
+
+                    UpstreamFileName = seedUptreams + '-' + item.name.replace('https://', '').replace('http://', '');
+                    UpstreamDBName = item.name.replace('https://', '').replace('http://', '');
+
+                    console.log('Desejado para upstream:', UpstreamFileName);
+
+                    utils.writeFileSync(UpstreamFileName, item.conf);
+                    // Deixa o ID original para fazer distincao entre insert e update
+                    var idFromReq = req.body.id;
+
+                    // Se não tiver ID, guardar futuro ID (para ficar no config) no JSON antes de inserir na BD
+                    if (req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id)) {
+                        req.body.id = (seedUptreams - 100).toString();
                     }
-                }); // fim selectNextSeedUpstream
-            } else {
-                return res.send(message1);;
+                    var upstream = {
+                        'id': idFromReq,
+                        'instance': req.body.instance || '',
+                        'name': req.body.upstreamName,
+                        'config': JSON.stringify(req.body)
+                    };
+
+                    db.insertUpstream(upstream, function(message) {
+                        console.log("Resultado do insertUpstream (UPDATE):", message);
+                        res.send(message);
+                    });
+
+                    seedUptreams++;
+                });
+
+            } catch (err) {
+                console.log('Erro:', err);
             }
-        }); // fim do canInsertUpstream
+        }
+
     });
 
     this.app.post('/insertVHostV2', function(req, res) {
