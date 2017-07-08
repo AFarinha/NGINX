@@ -3,7 +3,7 @@ usermod --password $(echo root | openssl passwd -1 -stdin) root
 
 #yum update -y
 
-localFolder=/opt/NGINXAdmin
+localFolder=/opt/NginxAdmin
 repository="https://github.com/AFarinha/NGINX.git"
 
 rm -rf $localFolder
@@ -53,7 +53,7 @@ if ! rpm -q  net-tools  ; then
   yum  install -y net-tools
 fi
 
-#Instalar solucao
+#----- Instalar solucao ------
 if [ ! -d $localFolder ]; then
   mkdir -p $localFolder;
   echo 'Creating folder '$localFolder
@@ -61,16 +61,28 @@ fi
 
 git clone $repository $localFolder
 
+#----- Configurar nginx  ------
 cd /etc/nginx/
 mkdir -p dashboard
 cd ~
 
-cp $localFolder/Installer/confd/cache.conf /etc/nginx/dashboard/cache.conf
-cp $localFolder/Installer/confd/0-cache.conf /etc/nginx/conf.d/0-cache.conf
-cp $localFolder/Installer/confd/10-dashboard.conf /etc/nginx/conf.d/10-dashboard.conf
+cp $localFolder/Installer/nginx/nginx.conf /etc/nginx/nginx.conf
+
+cp $localFolder/Installer/nginx/confd/cache.conf /etc/nginx/dashboard/cache.conf
+cp $localFolder/Installer/nginx/confd/0-cache.conf /etc/nginx/conf.d/0-cache.conf
+cp $localFolder/Installer/nginx/confd/10-dashboard.conf /etc/nginx/conf.d/10-dashboard.conf
 
 cd $localFolder
 
 npm install
+
+# ----- Instalar servico  ------
+
+cp $localFolder/Installer/service/NGINXAdmin /etc/systemd/system/nodeserver.service/NGINXAdmin
+
+systemctl enable nodeserver.service
+systemctl start nodeserver.service
+
+# FIM
 
 #SERVER=192.168.1.200:8080 MODE=collector node main.js

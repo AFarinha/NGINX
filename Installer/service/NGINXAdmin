@@ -1,0 +1,19 @@
+[Unit]
+Description=NginxAdmin - To a simple management
+
+[Service]
+User=root
+Group=root
+ExecStart=/usr/bin/node /opt/NginxAdmin/main.js
+WorkingDirectory=/opt/NginxAdmin
+Restart=always
+  # Restart service after 10 seconds if node service crashes
+  RestartSec=10
+ # Output to syslog
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=NginxAdmin
+Environment=NODE_ENV=production PORT=3000
+
+[Install]
+WantedBy=multi-user.target
