@@ -170,9 +170,17 @@ Api.prototype.init = function() {
     });
 
     this.app.post('/host', function(req, res) {
-
+        console.log('\n------------------------- POST /host -------------------------\n');
         db.selectNextSeedVHost(function(message1) {
-            seedVHosts = JSON.parse(JSON.stringify(message1)).message.seed;
+            //Este Id é para inserir no config o futuro id
+            var idToObj = req.body.id;
+            if(req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id)){
+              seedVHosts = JSON.parse(JSON.stringify(message1)).message.seed;
+              req.body.id = (seedVHosts - 1000).toString();
+            }else{
+              seedVHosts = parseInt(req.body.id)+1000;
+            }
+            
             VHostFileName = seedVHosts + '-' + req.body.host + req.body.port;
 
             try {
@@ -181,9 +189,8 @@ Api.prototype.init = function() {
                 var confcontent = generateFiles.createServerConf(req.body);
                 utils.writeFileSync(VHostFileName, confcontent);
                 //Este Id é para saber se é insert ou update
-                var idToObj = req.body.id;
-                //Este Id é para inserir no config o futuro id
-                req.body.id = (seedVHosts - 1000).toString();
+                
+
                 var vhost = {
                     'id': idToObj,
                     'instance': req.body.instance || '',
@@ -242,7 +249,7 @@ Api.prototype.init = function() {
     });
 
     this.app.post('/insertUpstream', function(req, res) {
-        console.log('\n------------------------- POST -------------------------\n');
+        console.log('\n------------------------- POST UPSTREAM -------------------------\n');
         var jsonConfig = JSON.parse(JSON.stringify(req.body));
         var confUpdtreamContent = generateFiles.createUpstreamConfSingle(jsonConfig);
 
@@ -330,6 +337,7 @@ Api.prototype.init = function() {
     });
 
     this.app.post('/insertVHostV2', function(req, res) {
+        console.log('\n------------------------- /insertVHostV2 -------------------------\n');
         console.log('ID do HOST',req.body.id);
         var vhost = {
             'id': req.body.id,
@@ -364,6 +372,7 @@ Api.prototype.init = function() {
     });
 
     this.app.delete('/deleteVHost/:id/:name/:port', function(req, res) {
+        console.log('\n------------------------- /deleteVHost -------------------------\n');
         var idToDelete = parseInt(req.params.id) + 1000;
         var fileName = idToDelete + '-' + req.params.name + req.params.port;
         console.log('Apagar ficheiro' + fileName + '.config');

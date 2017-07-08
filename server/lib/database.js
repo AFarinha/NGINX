@@ -73,7 +73,7 @@ module.exports = {
     },
     insertVHostV2: function(vhost, response) {
         openBD();
-
+        console.log('\n------------------------- DB insertVHostV2 -------------------------\n');
         console.log('\nVHOST', vhost, '\n');
         //não tem ID, faz insert
         if (vhost.id == undefined || vhost.id == null || vhost.id == '' || isNaN(vhost.id)) {
