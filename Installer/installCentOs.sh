@@ -67,6 +67,7 @@ mkdir -p dashboard
 cd ~
 
 cp $localFolder/Installer/nginx/nginx.conf /etc/nginx/nginx.conf
+systemctl restart nginx
 
 cp $localFolder/Installer/nginx/confd/cache.conf /etc/nginx/dashboard/cache.conf
 cp $localFolder/Installer/nginx/confd/0-cache.conf /etc/nginx/conf.d/0-cache.conf
