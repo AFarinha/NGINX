@@ -27,7 +27,7 @@ Api.prototype.init = function() {
     console.log('(server) Dashboard server listening on port ' + this.port);
     db.initBD(this.databaseName);
 
-    this.app.get('/stats/:hostname', function(req, res) {
+    this.app.get('/api/stats/:hostname', function(req, res) {
         var keys = Object.keys(self.station.collectors);
 
         var hostname = req.params.hostname;
@@ -66,7 +66,7 @@ Api.prototype.init = function() {
         });
     });
 
-    this.app.post('/nginx/reload', function(req, res) {
+    this.app.post('/api/nginx/reload', function(req, res) {
         var output = cp.spawnSync('/usr/sbin/nginx', ['-s', 'reload'], {
             encoding: 'utf8'
         });
@@ -78,7 +78,7 @@ Api.prototype.init = function() {
         });
     });
 
-    this.app.post('/nginx/test', function(req, res) {
+    this.app.post('/api/nginx/test', function(req, res) {
         var output = cp.spawnSync('/usr/sbin/nginx', ['-t'], {
             encoding: 'utf8'
         });
@@ -90,7 +90,7 @@ Api.prototype.init = function() {
         });
     });
 
-    this.app.post('/hostOld', function(req, res) {
+    this.app.post('/api/hostOld', function(req, res) {
 
         db.selectNextSeedVHost(function(message1) {
             db.selectNextSeedUpstream(function(message2) {
@@ -169,7 +169,7 @@ Api.prototype.init = function() {
         });
     });
 
-    this.app.post('/host', function(req, res) {
+    this.app.post('/api/host', function(req, res) {
         console.log('\n------------------------- POST /host -------------------------\n');
         db.selectNextSeedVHost(function(message1) {
             //Este Id é para inserir no config o futuro id
@@ -180,7 +180,7 @@ Api.prototype.init = function() {
             }else{
               seedVHosts = parseInt(req.body.id)+1000;
             }
-            
+
             VHostFileName = seedVHosts + '-' + req.body.host + req.body.port;
 
             try {
@@ -189,7 +189,7 @@ Api.prototype.init = function() {
                 var confcontent = generateFiles.createServerConf(req.body);
                 utils.writeFileSync(VHostFileName, confcontent);
                 //Este Id é para saber se é insert ou update
-                
+
 
                 var vhost = {
                     'id': idToObj,
@@ -217,7 +217,7 @@ Api.prototype.init = function() {
         });
     });
 
-    this.app.post('/insertVHost', function(req, res) {
+    this.app.post('/api/insertVHost', function(req, res) {
 
         var vhost = {
             'instance': req.body.instance,
@@ -231,8 +231,8 @@ Api.prototype.init = function() {
         });
 
     });
-    // NOTA: 
-    this.app.delete('/deleteUpstream/:id/:name', function(req, res) {
+    // NOTA:
+    this.app.delete('/api/deleteUpstream/:id/:name', function(req, res) {
         var idToDelete = parseInt(req.params.id) + 100;
         var fileName = idToDelete + '-' + req.params.name;
         console.log('Apagar ficheiro' + fileName + '.config');
@@ -248,7 +248,7 @@ Api.prototype.init = function() {
         });
     });
 
-    this.app.post('/insertUpstream', function(req, res) {
+    this.app.post('/api/insertUpstream', function(req, res) {
         console.log('\n------------------------- POST UPSTREAM -------------------------\n');
         var jsonConfig = JSON.parse(JSON.stringify(req.body));
         var confUpdtreamContent = generateFiles.createUpstreamConfSingle(jsonConfig);
@@ -336,7 +336,7 @@ Api.prototype.init = function() {
 
     });
 
-    this.app.post('/insertVHostV2', function(req, res) {
+    this.app.post('/api/insertVHostV2', function(req, res) {
         console.log('\n------------------------- /insertVHostV2 -------------------------\n');
         console.log('ID do HOST',req.body.id);
         var vhost = {
@@ -352,26 +352,26 @@ Api.prototype.init = function() {
         });
     });
 
-    this.app.get('/getVHost/:id', function(req, res) {
+    this.app.get('/api/getVHost/:id', function(req, res) {
         db.selectVHost(req.params.id, function(message) {
             console.log(message);
             res.send(message);
         });
     });
 
-    this.app.get('/getAllVHosts', function(req, res) {
+    this.app.get('/api/getAllVHosts', function(req, res) {
         db.selectAllVHosts(function(message) {
             res.send(message);
         });
     });
 
-    this.app.get('/getAllUpstreams', function(req, res) {
+    this.app.get('/api/getAllUpstreams', function(req, res) {
         db.selectAllUpstreams(function(message) {
             res.send(message);
         });
     });
 
-    this.app.delete('/deleteVHost/:id/:name/:port', function(req, res) {
+    this.app.delete('/api/deleteVHost/:id/:name/:port', function(req, res) {
         console.log('\n------------------------- /deleteVHost -------------------------\n');
         var idToDelete = parseInt(req.params.id) + 1000;
         var fileName = idToDelete + '-' + req.params.name + req.params.port;

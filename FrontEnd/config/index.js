@@ -26,9 +26,9 @@ module.exports = {
           target: 'http://192.168.56.1:8079',
           //target: 'http://192.168.1.200:8090',
           changeOrigin: true,
-          pathRewrite: {
-           '^/api': ''
-        }
+        //  pathRewrite: {
+        //   '^/api': ''
+        //}
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
