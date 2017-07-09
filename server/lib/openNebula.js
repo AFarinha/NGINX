@@ -28,13 +28,13 @@ module.exports = {
     fs.readFile(installer, function(err, data) {
       console.log(data.toString('utf-8'));
       if(params.isCollector){
-        data = data.toString('utf-8').replace('[IPStation]', '"'+ params.ipStation + '"' )
+        data = data.toString('utf-8').replace('[IPStation]',  params.ipStation.replace('https://', '').replace('http://', '') )
       }
       console.log(data.toString('utf-8'));
        var base64data = new Buffer(data).toString('base64');
        initScript = base64data
        initScript = initScript.slice(0,-4)
-       var context = 'CONTEXT = [ NETWORK = "YES",SSH_PUBLIC_KEY = "' + params.sshKey + '",START_SCRIPT_BASE64 ="' + initScript + '",TARGET = "hda" ]\n'
+       var context = 'CONTEXT = [ SET_HOSTNAME = "' + params.hostname + '", NETWORK = "YES",SSH_PUBLIC_KEY = "' + params.sshKey + '",START_SCRIPT_BASE64 ="' + initScript + '",TARGET = "hda" ]\n'
 
        one.createVM( context + 'GRAPHICS=[TYPE="vnc",LISTEN="0.0.0.0"]\nMEMORY="512"\n HYPERVISOR="kvm"\nVCPU="1"\nNAME="' + params.vmName + '"\nOS=[ARCH="x86_64"]\n NIC=[NETWORK="private"]\nLOGO="images/logos/centos.png"\nCPU="0.5"\n DISK=[IMAGE="CentOS 7 - KVM",IMAGE_UNAME="oneadmin"]\nTEMPLATE_ID = "5"\n', false, function(err, vm) {
 

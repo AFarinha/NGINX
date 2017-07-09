@@ -1,6 +1,7 @@
 <template>
   <section class="content">
     <div class="row center-block">
+      {{this.vm}}
       <div class="box box-solid box-primary">
         <div class="box-header">
             <h3 class="box-title"><b> Create VM</b></h3>
@@ -27,6 +28,35 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="form-group col-md-6">
+        <input type="radio" id="dashboard" value="false" name="prox" v-model="vm.isCollector">
+        <label for="one">Dashboard</label>
+        <br>
+      </div>
+
+      <div class="form-group col-md-6">
+        <input type="radio" id="collector" value="true" name="prox" v-model="vm.isCollector">
+        <label for="two">Collector</label>
+        <br>
+      </div>
+    </div>
+
+   <div class="row">
+    <div class="form-group col-md-6" v-if="vm.isCollector == 'false'" >
+      <label for="two">A Virtual Machine will be deployed configured with a new Dashboard</label>
+    </div>
+    <div class="form-group col-md-6" v-if="vm.isCollector == 'true'" >
+      <div class="form-group col-md-12">
+        <h5><b>IP </b></h5>
+        <div :class="{ 'has-error': vErrors.has('ipStation') }">
+          <input name="ipStation" v-model="vm.ipStation" class="form-control" type="text" placeholder="ipStation" >
+          <span v-show="vErrors.has('ipStation')" class="help-block">{{ vErrors.first('ipStation') }}</span>
+        </div>
+      </div>
+    </div>
+   </div>
+
 
           <button v-on:click="CreateVM" type="button" class="btn btn-info">Create Vm</button>
 
@@ -55,7 +85,8 @@ export default {
         sshKey: '',
         vmName: 'Name',
         isCollector: true,
-        ipStation: '192.168.1.200:8080'
+        ipStation: 'http://192.168.1.200:8080',
+        hostname: 'collector1'
       },
       responseSuccess: false,
       responseError: false
@@ -77,32 +108,5 @@ export default {
 </script>
 
 <style>
-/* Using the bootstrap style, but overriding the font to not draw in
-   the Glyphicons Halflings font as an additional requirement for sorting icons.
 
-   An alternative to the solution active below is to use the jquery style
-   which uses images, but the color on the images does not match adminlte.
-
-@import url('/static/js/plugins/datatables/jquery.dataTables.min.css');
-*/
-
-@import url('/static/js/plugins/datatables/dataTables.bootstrap.css');
-
-table.dataTable thead .sorting:after,
-table.dataTable thead .sorting_asc:after,
-table.dataTable thead .sorting_desc:after {
-  font-family: 'FontAwesome';
-}
-
-table.dataTable thead .sorting:after {
-  content: "\f0dc";
-}
-
-table.dataTable thead .sorting_asc:after {
-  content: "\f0dd";
-}
-
-table.dataTable thead .sorting_desc:after {
-  content: "\f0de";
-}
 </style>
