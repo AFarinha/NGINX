@@ -19,7 +19,7 @@ module.exports = {
     console.log('passou');
     var installer;
 
-    if(params.isCollector){
+    if(params.isCollector == 'true'){
       installer = './Installer/installCentOsNginxAdminCollector.sh';
     }else{
       installer = './Installer/installCentOsNginxAdmin.sh';
@@ -27,7 +27,7 @@ module.exports = {
 
     fs.readFile(installer, function(err, data) {
       console.log(data.toString('utf-8'));
-      if(params.isCollector){
+      if(params.isCollector == 'true'){
         data = data.toString('utf-8').replace('[IPStation]',  params.ipStation.replace('https://', '').replace('http://', '') )
       }
       console.log(data.toString('utf-8'));

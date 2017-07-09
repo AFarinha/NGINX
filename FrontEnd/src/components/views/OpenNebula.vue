@@ -4,30 +4,44 @@
       {{this.vm}}
       <div class="box box-solid box-primary">
         <div class="box-header">
-            <h3 class="box-title"><b> Create VM</b></h3>
+            <h3 class="box-title"><b> Create VM </b></h3>
             <div class="box-tools pull-right">
-                <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-              <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
             </div>
         </div>
         <div class="box-body">
-          <div class="form-group col-md-6">
-            <h5><b> Host </b></h5>
-            <div :class="{ 'has-error': vErrors.has('vmame') }" >
-              <input name="vmame" v-model="vm.vmName" v-validate="'required'" class="form-control" type="text" placeholder="vmame" >
-              <span v-show="vErrors.has('vmame')" class="help-block">{{ vErrors.first('vmame') }}</span>
+          <div class="row center-block">
+            <div class="form-group col-md-6">
+              <h5><b> Host </b></h5>
+              <div :class="{ 'has-error': vErrors.has('vmame') }" >
+                <input name="vmame" v-model="vm.vmName" v-validate="'required'" class="form-control" type="text" placeholder="vmame" >
+                <span v-show="vErrors.has('vmame')" class="help-block">{{ vErrors.first('vmame') }}</span>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <h5><b>HostName </b></h5>
+              <div :class="{ 'has-error': vErrors.has('hostname') }">
+                <input name="hostname" v-model="vm.hostname" class="form-control" type="text" placeholder="hostname" >
+                <span v-show="vErrors.has('vmssh')" class="help-block">{{ vErrors.first('hostname') }}</span>
+              </div>
             </div>
           </div>
-          <div class="form-group col-md-6">
-            <h5><b>Port </b></h5>
-            <div :class="{ 'has-error': vErrors.has('vmssh') }">
-              <input name="vmssh" v-model="vm.sshKey" class="form-control" type="text" placeholder="vmssh" >
-              <span v-show="vErrors.has('vmssh')" class="help-block">{{ vErrors.first('vmssh') }}</span>
+          <div class="row center-block">
+            <div class="form-group col-md-6">
+              <h5><b>Port </b></h5>
+              <div :class="{ 'has-error': vErrors.has('vmssh') }">
+                <input name="vmssh" v-model="vm.sshKey" class="form-control" type="text" placeholder="vmssh" >
+                <span v-show="vErrors.has('vmssh')" class="help-block">{{ vErrors.first('vmssh') }}</span>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+
             </div>
           </div>
         </div>
       </div>
     </div>
+
+
     <div class="row">
       <div class="form-group col-md-6">
         <input type="radio" id="dashboard" value="false" name="prox" v-model="vm.isCollector">
@@ -43,10 +57,10 @@
     </div>
 
    <div class="row">
-    <div class="form-group col-md-6" v-if="vm.isCollector == 'false'" >
+    <div class="form-group col-md-6" v-if="this.vm.isCollector == 'false'" >
       <label for="two">A Virtual Machine will be deployed configured with a new Dashboard</label>
     </div>
-    <div class="form-group col-md-6" v-if="vm.isCollector == 'true'" >
+    <div class="form-group col-md-6" v-if="this.vm.isCollector == 'true'" >
       <div class="form-group col-md-12">
         <h5><b>IP </b></h5>
         <div :class="{ 'has-error': vErrors.has('ipStation') }">
@@ -84,7 +98,7 @@ export default {
       vm: {
         sshKey: '',
         vmName: 'Name',
-        isCollector: true,
+        isCollector: 'true',
         ipStation: 'http://192.168.1.200:8080',
         hostname: 'collector1'
       },
