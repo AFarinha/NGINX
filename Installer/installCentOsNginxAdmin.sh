@@ -29,12 +29,11 @@ if ! rpm -q nginx  ; then
   echo 'Installing nginx...'
   yum install -y nginx
 
-  #Nginx does not start on its own. To get Nginx running, type:
-  sudo systemctl start nginx
-
-  #Nginx to start when your system boots.
-  systemctl enable nginx
 fi
+#Nginx does not start on its own. To get Nginx running, type:
+sudo systemctl start nginx
+#Nginx to start when your system boots.
+systemctl enable nginx
 
 
 if ! rpm -q  curl  ; then

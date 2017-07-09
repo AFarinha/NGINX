@@ -81,7 +81,7 @@ npm install
 #fazer um script de node seria mais inteligente!!!! mas agora já está!
 sed -i -e 's/\[\]/["http:\/\/[IPStation]"]/' config.json
 
-cp $localFolder/Installer/service/NGINXAdmin /etc/systemd/system/NGINXAdminCollector.service
+cp $localFolder/Installer/service/NGINXAdminCollector /etc/systemd/system/NGINXAdminCollector.service
 
 systemctl enable NGINXAdmin.service
 systemctl start NGINXAdmin.service
