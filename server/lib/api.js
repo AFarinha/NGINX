@@ -4,7 +4,8 @@ var express = require('express'),
     cp = require('child_process'),
     bodyParser = require('body-parser'),
     sqlite3 = require('sqlite3').verbose(),
-    db = require('./database.js');
+    db = require('./database.js'),
+    opennebula = require('./openNebula.js');
 
 var Api = function(port, station, databaseName) {
     this.station = station;
@@ -388,6 +389,11 @@ Api.prototype.init = function() {
         });
     });
 
+    this.app.post('/api/opennebula/createVM',function (req,res) {
+      opennebula.createNewVM(req.body, function (message) {
+          res.send(message);
+      })
+    })
 };
 
 module.exports = Api;

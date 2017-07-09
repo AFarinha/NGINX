@@ -22,8 +22,8 @@
       </router-link>
     </li>
 	<li class="pageLink" v-on:click="toggleMenu">
-      <router-link to="/templates"><i class="fa fa-table"></i>
-        <span class="page">Templates</span>
+      <router-link to="/opennebula"><i class="fa fa-table"></i>
+        <span class="page">Open Nebula</span>
       </router-link>
     </li>
   </ul>

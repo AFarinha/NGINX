@@ -7,7 +7,7 @@ import DashboardView from './components/views/Dashboard.vue'
 import VHostView from './components/views/VHost.vue'
 import ListVHostView from './components/views/VHostsList.vue'
 import UpstreamsListCreateView from './components/views/UpstreamsListCreate.vue'
-import TemplatesView from './components/views/Templates.vue'
+import OpenNebulaView from './components/views/OpenNebula.vue'
 
 // Routes
 const routes = [
@@ -46,10 +46,10 @@ const routes = [
         name: 'List or Create Upstreams',
         meta: {description: 'Here is possible to list or create Upstreams'}
       }, {
-        path: 'templates',
-        component: TemplatesView,
-        name: 'List Templates',
-        meta: {description: 'Here is possible to list Templates'}
+        path: 'opennebula',
+        component: OpenNebulaView,
+        name: 'OpenNebula',
+        meta: {description: 'Here is possible to list VMs in opennebula'}
       }
     ]
   }, {
