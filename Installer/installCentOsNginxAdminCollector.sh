@@ -83,8 +83,8 @@ sed -i -e 's/\[\]/["http:\/\/[IPStation]"]/' config.json
 
 cp $localFolder/Installer/service/NGINXAdminCollector /etc/systemd/system/NGINXAdminCollector.service
 
-systemctl enable NGINXAdmin.service
-systemctl start NGINXAdmin.service
+systemctl enable NGINXAdminCollector.service
+systemctl start NGINXAdminCollector.service
 
 # FIM
 
