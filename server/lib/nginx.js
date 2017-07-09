@@ -31,7 +31,7 @@ module.exports = {
       }
       console.log('passou2');
 
-      self.writeFiles(req,fileobj,function (responseFiles) {
+      self.writeFiles(idToObj,req,fileobj,function (responseFiles) {
         console.log('passou1');
         if(responseFiles.status == 'ok'){
           console.log('Escreveu o ficheiro responde');
@@ -47,7 +47,7 @@ module.exports = {
 
     });
   },
-  writeFiles: function(req,file, responseWriteFiles) {
+  writeFiles: function(idToObj,req,file, responseWriteFiles) {
     if (req.body.instance == 'localhost') {
       utils.writeFile(file.filename, file.fileContent,function (message) {
         return responseWriteFiles({'status': message.status, 'message': message.message })
@@ -55,7 +55,7 @@ module.exports = {
     } else {
       console.log('aquielse');
       var opts = {
-        'url': '/writeHost/' + req.body.instance,
+        'url': 'http://' + req.body.instance + '/writeHost',
         'json': file
       };
       request.post(opts, function(error, response, body) {
@@ -65,13 +65,17 @@ module.exports = {
           return responseWriteFiles({'status': 'failed', 'message': error })
         }else{
           console.log('postok');
+          console.log(error);
+          console.log(response);
+          console.log(body);
           return responseWriteFiles({'status': 'ok', 'message': '' })
         }
       });
     }
   },
   insertDB: function (idToObj, req, response) {
-    console.log('insere');
+    console.log('insere' + idToObj);
+    console.log(idToObj);
     var vhost = {
         'id': idToObj,
         'instance': req.body.instance || '',

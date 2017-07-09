@@ -142,10 +142,7 @@ Api.prototype.init = function() {
 
     this.app.post('/api/newHost', function(req, res) {
       nginx.configureVhost(req, function (response) {
-        res.send({
-            'status': response.status ? response.status.toString() : 'newHost - status undefined',
-            'message': response.message ? response.message.toString() : 'newHost - message undefined'
-        });
+        res.send(response)
       })
     });
 

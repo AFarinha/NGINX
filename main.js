@@ -14,6 +14,8 @@ if(mode === 'collector'){
   var colectServer = process.env.SERVER;
   var collector = new Collector(8080);
   collector.init();
+  var apiCollector = new ApiCollector(8090);
+  apiCollector.init();
 
 } else{
   //Inicia processos para para Dashboard
