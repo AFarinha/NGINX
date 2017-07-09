@@ -3,14 +3,8 @@ var express = require('express'),
     generateFiles = require('./GenerateFiles'),
     cp = require('child_process'),
     bodyParser = require('body-parser'),
-    sqlite3 = require('sqlite3').verbose(),
-    db = require('./database.js'),
-    opennebula = require('./openNebula.js'),
-    nginx = require('./nginx.js'),
-    net = require('net'),
-    request = require('request');
 
-var Api = function(port, station, databaseName) {
+var ApiCollector = function(port, station, databaseName) {
     this.station = station;
 
     this.port = port;
@@ -24,51 +18,11 @@ var Api = function(port, station, databaseName) {
 };
 
 
-Api.prototype.init = function() {
+ApiCollector.prototype.init = function() {
     var self = this;
 
     this.httpServer.listen(this.port);
-    console.log('(server) Dashboard server listening on port ' + this.port);
-    db.initBD(this.databaseName);
-
-    this.app.get('/api/stats/:hostname', function(req, res) {
-        var keys = Object.keys(self.station.collectors);
-
-        var hostname = req.params.hostname;
-        if (hostname === 'all') {
-            hostname = undefined;
-        }
-        var outputStats;
-        var outputCacheStats;
-
-        for (var i = 0; i < keys.length; i++) {
-            var collector = self.station.collectors[keys[i]];
-            if (hostname === keys[i] || hostname === undefined) {
-
-                outputStats = collector.appendStatistics(outputStats, collector.statistics);
-                outputCacheStats = collector.appendData(outputCacheStats, collector.cacheStatistics);
-            }
-        }
-
-        if (outputStats.requesttime) {
-            outputStats.requesttime /= keys.length;
-        }
-        if (outputStats.upstreamtime) {
-            outputStats.upstreamtime /= keys.length;
-        }
-
-        res.json({
-            'statistics': outputStats,
-            'hostnames': keys,
-            'top': {
-                'error': self.station.topErrors,
-                'requests': self.station.topRequests,
-                'sites': self.station.topHostnames
-            },
-            'cache': outputCacheStats,
-            'date': new Date().getTime()
-        });
-    });
+    console.log('(server) CollectorConfig listening on port ' + this.port);
 
     this.app.post('/api/nginx/reload', function(req, res) {
         var output = cp.spawnSync('/usr/sbin/nginx', ['-s', 'reload'], {
@@ -105,7 +59,9 @@ Api.prototype.init = function() {
             }else{
               seedVHosts = parseInt(req.body.id)+1000;
             }
+
             VHostFileName = seedVHosts + '-' + req.body.host + req.body.port;
+
             try {
                 console.log('Desejado para VHost:', VHostFileName);
 
@@ -140,30 +96,6 @@ Api.prototype.init = function() {
         });
     });
 
-    this.app.post('/api/newHost', function(req, res) {
-      nginx.configureVhost(req, function (response) {
-        res.send({
-            'status': response.status ? response.status.toString() : 'newHost - status undefined',
-            'message': response.message ? response.message.toString() : 'newHost - message undefined'
-        });
-      })
-    });
-
-
-    this.app.post('/api/insertVHost', function(req, res) {
-
-        var vhost = {
-            'instance': req.body.instance,
-            'name': req.body.name,
-            'port': req.body.port,
-            'config': req.body.config
-        };
-
-        db.insertVHost(vhost, function(message) {
-            res.send(message);
-        });
-
-    });
     // NOTA:
     this.app.delete('/api/deleteUpstream/:id/:name', function(req, res) {
         var idToDelete = parseInt(req.params.id) + 100;
@@ -269,40 +201,9 @@ Api.prototype.init = function() {
 
     });
 
-    this.app.post('/api/insertVHostV2', function(req, res) {
-        console.log('\n------------------------- /insertVHostV2 -------------------------\n');
-        console.log('ID do HOST',req.body.id);
-        var vhost = {
-            'id': req.body.id,
-            'instance': req.body.instance == undefined ? '' : req.body.instance,
-            'name': req.body.name,
-            'port': req.body.port,
-            'config': req.body.config
-        };
 
-        db.insertVHostV2(vhost, function(message) {
-            res.send(message);
-        });
-    });
 
-    this.app.get('/api/getVHost/:id', function(req, res) {
-        db.selectVHost(req.params.id, function(message) {
-            console.log(message);
-            res.send(message);
-        });
-    });
 
-    this.app.get('/api/getAllVHosts', function(req, res) {
-        db.selectAllVHosts(function(message) {
-            res.send(message);
-        });
-    });
-
-    this.app.get('/api/getAllUpstreams', function(req, res) {
-        db.selectAllUpstreams(function(message) {
-            res.send(message);
-        });
-    });
 
     this.app.delete('/api/deleteVHost/:id/:name/:port', function(req, res) {
         console.log('\n------------------------- /deleteVHost -------------------------\n');
@@ -320,12 +221,6 @@ Api.prototype.init = function() {
             }
         });
     });
-
-    this.app.post('/api/opennebula/createVM',function (req,res) {
-      opennebula.createNewVM(req.body, function (message) {
-          res.send(message);
-      })
-    })
 };
 
-module.exports = Api;
+module.exports = ApiCollector;

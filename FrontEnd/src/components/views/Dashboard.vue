@@ -298,7 +298,7 @@ export default {
             app.parseStatisticsBandwidthChart(response.data)
             app.parseStatisticsTimesChart(response.data)
             app.parseStatisticsGeneral(response.data)
-            console.log(response.data)
+            // console.log(response.data)
           })
           .catch(error => {
             console.log(error)

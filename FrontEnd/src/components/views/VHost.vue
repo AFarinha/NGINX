@@ -45,6 +45,7 @@ export default {
         id: '',
         host: '',
         port: '',
+        instance: 'localhost', // por isto numa ddl
         arrayGenericServer: [],
         arrayLocations: []
       },
@@ -98,7 +99,7 @@ export default {
     },
     postCreateHost: function () {
       var app = this
-      axios.post('/api/host', app.server)
+      axios.post('/api/newHost', app.server)
         .then(function (response) {
           if (response.data.status === 'failed') {
             console.log(response.data)
