@@ -172,14 +172,10 @@ module.exports = {
         });
       });
     } else {
-      console.log('aquielse');
-      var opts = {
-        'url': 'http://' + req.params.instance + '/delete',
-        'json': fileName,
-        timeout: 2000
-      };
-      console.log('req.body.instance:', req.body.instance);
-      request.post(opts, function(error, response, body) {
+      console.log('File to delete ' + fileName);
+
+      console.log('req.body.instance:', req.params.instance);
+      request.delete('http://' + req.params.instance + '/delete/' + fileName, function(error, response) {
         console.log('post');
         if (error) {
           console.log('posterro');
@@ -190,8 +186,6 @@ module.exports = {
         } else {
           console.log('postok');
           console.log(error);
-          console.log(response);
-          console.log(body);
           return responseDeleteFiles({
             'status': 'ok',
             'message': ''

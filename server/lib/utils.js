@@ -37,6 +37,7 @@ module.exports = {
     fs.unlink('/etc/nginx/conf.d/' + fileName + '.conf', function(err) {
       if (err) {
         console.log('Erro ao apagar');
+        console.log(err);
         response({
           'status': 'failed',
           'message': err

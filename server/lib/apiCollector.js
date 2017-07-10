@@ -60,15 +60,15 @@ ApiCollector.prototype.init = function() {
     }
   });
   //acho que tanto pode apagar upstreams como Vhosts
-  this.app.post('/delete', function(req, res) {
+  this.app.delete('/delete/:filename', function(req, res) {
     //Tem de receber o nome do ficheiro
-    if (req.body.filename == 'undefined') {
+    if (req.params.filename == 'undefined') {
       res.send({
         'status': 'failed',
         'message': 'parameters undefined'
       })
     } else {
-      utils.deleteFile(req.body.filename, function(message) {
+      utils.deleteFile(req.params.filename, function(message) {
         res.send({
           'status': message.status,
           'message': message.message
