@@ -92,7 +92,7 @@ export default {
       return [{
         type: 'warning',
         handler (row) {
-          axios.delete('/api/deleteVHost/' + row.id + '/' + row.name + '/' + row.port)
+          axios.delete('/api/deleteVHost2/' + row.id + '/' + row.name + '/' + row.port + '/' + row.instance)
           .then(function (response) {
             app.responseSuccess = response.data
             app.responseError = false

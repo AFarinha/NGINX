@@ -99,11 +99,11 @@ Api.prototype.init = function() {
         db.selectNextSeedVHost(function(message1) {
             //Este Id é para inserir no config o futuro id
             var idToObj = req.body.id;
-            if(req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id)){
-              seedVHosts = JSON.parse(JSON.stringify(message1)).message.seed;
-              req.body.id = (seedVHosts - 1000).toString();
-            }else{
-              seedVHosts = parseInt(req.body.id)+1000;
+            if (req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id)) {
+                seedVHosts = JSON.parse(JSON.stringify(message1)).message.seed;
+                req.body.id = (seedVHosts - 1000).toString();
+            } else {
+                seedVHosts = parseInt(req.body.id) + 1000;
             }
             VHostFileName = seedVHosts + '-' + req.body.host + req.body.port;
             try {
@@ -141,26 +141,12 @@ Api.prototype.init = function() {
     });
 
     this.app.post('/api/newHost', function(req, res) {
-      nginx.configureVhost(req, function (response) {
-        res.send(response)
-      })
+        nginx.configureVhost(req, function(response) {
+            res.send(response)
+        })
     });
 
 
-    this.app.post('/api/insertVHost', function(req, res) {
-
-        var vhost = {
-            'instance': req.body.instance,
-            'name': req.body.name,
-            'port': req.body.port,
-            'config': req.body.config
-        };
-
-        db.insertVHost(vhost, function(message) {
-            res.send(message);
-        });
-
-    });
     // NOTA:
     this.app.delete('/api/deleteUpstream/:id/:name', function(req, res) {
         var idToDelete = parseInt(req.params.id) + 100;
@@ -268,7 +254,7 @@ Api.prototype.init = function() {
 
     this.app.post('/api/insertVHostV2', function(req, res) {
         console.log('\n------------------------- /insertVHostV2 -------------------------\n');
-        console.log('ID do HOST',req.body.id);
+        console.log('ID do HOST', req.body.id);
         var vhost = {
             'id': req.body.id,
             'instance': req.body.instance == undefined ? '' : req.body.instance,
@@ -318,10 +304,24 @@ Api.prototype.init = function() {
         });
     });
 
-    this.app.post('/api/opennebula/createVM',function (req,res) {
-      opennebula.createNewVM(req.body, function (message) {
-          res.send(message);
-      })
+    this.app.post('/api/newHost', function(req, res) {
+        nginx.configureVhost(req, function(response) {
+            res.send(response)
+        })
+    });
+
+
+    this.app.delete('/api/deleteVHost2/:id/:name/:port/:instance', function(req, res) {
+        nginx.deleteVhost(req, function(response) {
+            res.send(response)
+        })
+
+    });
+
+    this.app.post('/api/opennebula/createVM', function(req, res) {
+        opennebula.createNewVM(req.body, function(message) {
+            res.send(message);
+        })
     })
 };
 
