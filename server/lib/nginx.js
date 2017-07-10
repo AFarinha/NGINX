@@ -31,11 +31,11 @@ module.exports = {
             }
             console.log('passou2');
 
-            self.writeFiles(idToObj, req, fileobj, function(responseFiles) {
+            self.writeFiles(req, fileobj, function(responseFiles) {
                 console.log('passou1');
                 if (responseFiles.status == 'ok') {
                     console.log('Escreveu o ficheiro responde');
-                    self.insertDB(idToObj, req, function(responseBD) {
+                    self.insertDBVHost(idToObj, req, function(responseBD) {
                         return responseToApi(responseBD);
                     });
                 } else {
@@ -191,8 +191,9 @@ module.exports = {
         }
     },
     configureUpstream: function(req, responseToApi) {
+        var self = this;
         if (req.body.instance == 'localhost') {
-            console.log('\n------------------------- POST UPSTREAM -------------------------\n');
+            console.log('\n------------------------- configureUpstream -------------------------\n');
             var jsonConfig = JSON.parse(JSON.stringify(req.body));
             var confUpdtreamContent = generateFiles.createUpstreamConfSingle(jsonConfig);
 
@@ -206,36 +207,49 @@ module.exports = {
                     console.log('Update stream ', seedUptreams);
                 }
                 try {
-                    // é só uma upstream por isso só faz o ciclo 1x
-                    confUpdtreamContent.forEach(function(item) {
+                    //confUpdtreamContent.forEach(function(item) {
+                    var item = confUpdtreamContent[0];
+                    UpstreamFileName = seedUptreams + '-' + item.name.replace('https://', '').replace('http://', '');
+                    UpstreamDBName = item.name.replace('https://', '').replace('http://', '');
 
-                        UpstreamFileName = seedUptreams + '-' + item.name.replace('https://', '').replace('http://', '');
-                        UpstreamDBName = item.name.replace('https://', '').replace('http://', '');
+                    console.log('Desejado para upstream:', UpstreamFileName);
 
-                        console.log('Desejado para upstream:', UpstreamFileName);
+                    /* Lógica do ficheiro */
+                    var fileobj = {
+                        'filename': UpstreamFileName,
+                        'fileContent': item.conf
+                    }
 
-                        utils.writeFileSync(UpstreamFileName, item.conf);
-                        // Deixa o ID original para fazer distincao entre insert e update
-                        var idFromReq = req.body.id;
+                    self.writeFiles(req, fileobj, function(responseFiles) {
+                        console.log('passou1');
+                        if (responseFiles.status == 'ok') {
+                            console.log('Escreveu o ficheiro responde');
 
-                        // Se não tiver ID, guardar futuro ID (para ficar no config) no JSON antes de inserir na BD
-                        if (req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id)) {
-                            req.body.id = (seedUptreams - 100).toString();
+                            // Deixa o ID original para fazer distincao entre insert e update
+                            var idFromReq = req.body.id;
+
+                            // Se não tiver ID, guardar futuro ID (para ficar no config) no JSON antes de inserir na BD
+                            if (req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id)) {
+                                req.body.id = (seedUptreams - 100).toString();
+                            }
+                            var upstream = {
+                                'id': idFromReq,
+                                'instance': req.body.instance || '',
+                                'name': req.body.upstreamName,
+                                'config': JSON.stringify(req.body)
+                            };
+
+                            db.insertUpstream(upstream, function(message) {
+                                console.log("Resultado do insertUpstream (INSERT):", message);
+                                responseToApi(message);
+                            });
+                        } else {
+                            console.log('Erro nao escreve na BD');
+                            console.log(responseFiles);
+                            return responseToApi(responseFiles);
                         }
-                        var upstream = {
-                            'id': idFromReq,
-                            'instance': req.body.instance || '',
-                            'name': req.body.upstreamName,
-                            'config': JSON.stringify(req.body)
-                        };
-
-                        db.insertUpstream(upstream, function(message) {
-                            console.log("Resultado do insertUpstream (INSERT):", message);
-                            responseToApi(message);
-                        });
-
-                        seedUptreams++;
                     });
+                    //  seedUptreams++;});
 
                 } catch (err) {
                     console.log('Erro:', err);
@@ -264,7 +278,7 @@ module.exports = {
             });
         }
     },
-    writeFiles: function(idToObj, req, file, responseWriteFiles) {
+    writeFiles: function(req, file, responseWriteFiles) {
         if (req.body.instance == 'localhost') {
             utils.writeFile(file.filename, file.fileContent, function(message) {
                 return responseWriteFiles({ 'status': message.status, 'message': message.message })
@@ -292,7 +306,7 @@ module.exports = {
             });
         }
     },
-    insertDB: function(idToObj, req, response) {
+    insertDBVHost: function(idToObj, req, response) {
         console.log('insere' + idToObj);
         console.log(idToObj);
         var vhost = {
