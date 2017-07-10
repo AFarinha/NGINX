@@ -10,7 +10,7 @@
       <div class="box-header">
         <h3 class="box-title">Submition</h3>
         <div class="box-tools pull-right">
-          <button v-on:click="validateBeforeSubmit" id="createHost" type="button" class="btn btn-info">Create Host</button>
+          <button v-on:click="validateBeforeSubmit" id="createHost" type="button" class="btn btn-info">Post Host</button>
           <button v-on:click="postTestNginx" id="testNginx" type="button" class="btn btn-info">Test NginX</button>
           <button v-on:click="postReloadNginx" id="reloadNginx" type="button" class="btn btn-info">Reload NginX</button>
         </div>
@@ -45,7 +45,7 @@ export default {
         id: '',
         host: '',
         port: '',
-        instance: 'localhost', // por isto numa ddl, para testar meter localhost
+        instance: '192.168.1.200:8090', // por isto numa ddl, para testar meter localhost
         arrayGenericServer: [],
         arrayLocations: []
       },

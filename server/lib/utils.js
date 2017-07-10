@@ -13,6 +13,8 @@ module.exports = {
     return content;
   },
   writeFile: function(fileName, confcontent, response) {
+    console.log('writeFile');
+    console.log(confcontent);
     fs.writeFile('/etc/nginx/conf.d/' + fileName + '.conf', confcontent, function(err) {
       if (err) {
         response({

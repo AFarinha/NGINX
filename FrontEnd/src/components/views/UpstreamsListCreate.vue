@@ -100,6 +100,8 @@ export default {
               self.responseSuccess = false
               self.responseError = response.data
             } else {
+              self.responseSuccess = response.data
+              self.responseError = false
               console.log('Resposta ok')
               axios.get('/api/getAllUpstreams/')
                 .then(function (response) {
