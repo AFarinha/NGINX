@@ -94,7 +94,7 @@ export default {
         handler (row) {
           console.log('Delete in row clicked', row, self.upstream)
           // self.$message('Delete in row clicked')
-          axios.delete('/api/deleteUpstream/' + row.id + '/' + row.name)
+          axios.delete('/api/deleteUpstream/' + row.id + '/' + row.name + '/' + row.instance)
           .then(function (response) {
             if (response.data.status === 'failed') {
               self.responseSuccess = false

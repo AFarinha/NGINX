@@ -94,126 +94,17 @@ Api.prototype.init = function() {
         });
     });
 
-    this.app.post('/api/host', function(req, res) {
-        console.log('\n------------------------- POST /host -------------------------\n');
-        db.selectNextSeedVHost(function(message1) {
-            //Este Id é para inserir no config o futuro id
-            var idToObj = req.body.id;
-            if (req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id)) {
-                seedVHosts = JSON.parse(JSON.stringify(message1)).message.seed;
-                req.body.id = (seedVHosts - 1000).toString();
-            } else {
-                seedVHosts = parseInt(req.body.id) + 1000;
-            }
-            VHostFileName = seedVHosts + '-' + req.body.host + req.body.port;
-            try {
-                console.log('Desejado para VHost:', VHostFileName);
-
-                var confcontent = generateFiles.createServerConf(req.body);
-                utils.writeFileSync(VHostFileName, confcontent);
-                //Este Id é para saber se é insert ou update
-
-
-                var vhost = {
-                    'id': idToObj,
-                    'instance': req.body.instance || '',
-                    'name': req.body.host,
-                    'port': req.body.port,
-                    'config': req.body
-                };
-
-                db.insertVHostV2(vhost, function(message) {
-                    console.log("Erro:", message);
-                    return res.send(
-                        message
-                    );
-                });
-
-            } catch (err) {
-                console.log('Caiu no catch ' + err);
-                res.send({
-                    'status': 'failed',
-                    'message': err
-                });
-            }
-
-        });
-    });
-
     this.app.post('/api/newHost', function(req, res) {
         nginx.configureVhost(req, function(response) {
             res.send(response)
         })
     });
 
-
-    // NOTA:
-    this.app.delete('/api/deleteUpstream/:id/:name', function(req, res) {
-        var idToDelete = parseInt(req.params.id) + 100;
-        var fileName = idToDelete + '-' + req.params.name;
-        console.log('Apagar ficheiro' + fileName + '.config');
-        utils.deleteFile(fileName, function(message) {
-            console.log('Resultado:', message);
-            if (message.status === 'failed') {
-                res.send(message);
-            } else {
-                db.deleteUpstream(req.params.id, function(message) {
-                    res.send(message);
-                });
-            }
-        });
-    });
-
-    this.app.post('/api/insertUpstream', function(req, res) {
-        console.log('\n------------------------- POST UPSTREAM -------------------------\n');
-        var jsonConfig = JSON.parse(JSON.stringify(req.body));
-        var confUpdtreamContent = generateFiles.createUpstreamConfSingle(jsonConfig);
-
-        db.selectNextSeedUpstream(function(message2) {
-            var seedUptreams = JSON.parse(JSON.stringify(message2)).message.seed;
-            if ((req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id))) {
-                console.log('Insert stream ', seedUptreams);
-                seedUptreams = JSON.parse(JSON.stringify(message2)).message.seed;
-            } else {
-                seedUptreams = parseInt(req.body.id) + 100;
-                console.log('Update stream ', seedUptreams);
-            }
-            try {
-                // é só uma upstream por isso só faz o ciclo 1x
-                confUpdtreamContent.forEach(function(item) {
-
-                    UpstreamFileName = seedUptreams + '-' + item.name.replace('https://', '').replace('http://', '');
-                    UpstreamDBName = item.name.replace('https://', '').replace('http://', '');
-
-                    console.log('Desejado para upstream:', UpstreamFileName);
-
-                    utils.writeFileSync(UpstreamFileName, item.conf);
-                    // Deixa o ID original para fazer distincao entre insert e update
-                    var idFromReq = req.body.id;
-
-                    // Se não tiver ID, guardar futuro ID (para ficar no config) no JSON antes de inserir na BD
-                    if (req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id)) {
-                        req.body.id = (seedUptreams - 100).toString();
-                    }
-                    var upstream = {
-                        'id': idFromReq,
-                        'instance': req.body.instance || '',
-                        'name': req.body.upstreamName,
-                        'config': JSON.stringify(req.body)
-                    };
-
-                    db.insertUpstream(upstream, function(message) {
-                        console.log("Resultado do insertUpstream (INSERT):", message);
-                        res.send(message);
-                    });
-
-                    seedUptreams++;
-                });
-
-            } catch (err) {
-                console.log('Erro:', err);
-            }
-        }); // fim selectNextSeedUpstream 
+    this.app.delete('/api/deleteUpstream/:id/:name/:instance', function(req, res) {
+        console.log('\n------------------------- /deleteUpstream -------------------------\n');
+        nginx.deleteUpstream(req, function(response) {
+            res.send(response)
+        })
     });
 
     this.app.post('/api/insertVHostV2', function(req, res) {
@@ -251,23 +142,6 @@ Api.prototype.init = function() {
         });
     });
 
-    this.app.delete('/api/deleteVHost/:id/:name/:port', function(req, res) {
-        console.log('\n------------------------- /deleteVHost -------------------------\n');
-        var idToDelete = parseInt(req.params.id) + 1000;
-        var fileName = idToDelete + '-' + req.params.name + req.params.port;
-        console.log('Apagar ficheiro' + fileName + '.config');
-        utils.deleteFile(fileName, function(message) {
-            console.log('Resultado:', message);
-            if (message.status === 'failed') {
-                res.send(message);
-            } else {
-                db.deleteVHost(req.params.id, function(message) {
-                    res.send(message);
-                });
-            }
-        });
-    });
-
     this.app.post('/api/newHost', function(req, res) {
         nginx.configureVhost(req, function(response) {
             res.send(response)
@@ -280,12 +154,10 @@ Api.prototype.init = function() {
         })
     });
 
-
     this.app.delete('/api/deleteVHost2/:id/:name/:port/:instance', function(req, res) {
         nginx.deleteVhost(req, function(response) {
             res.send(response)
         })
-
     });
 
     this.app.post('/api/opennebula/createVM', function(req, res) {

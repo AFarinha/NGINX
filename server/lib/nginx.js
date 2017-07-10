@@ -85,6 +85,43 @@ module.exports = {
             });
         }
     },
+    deleteUpstream: function(req, responseToApi) {
+        console.log('nginx.js / deleteUpstream / Instance :', req.params.instance);
+        if (req.params.instance == 'localhost') {
+            var idToDelete = parseInt(req.params.id) + 100;
+            var fileName = idToDelete + '-' + req.params.name;
+            console.log('Apagar ficheiro' + fileName + '.config');
+            utils.deleteFile(fileName, function(message) {
+                console.log('Resultado:', message);
+                if (message.status === 'failed') {
+                    responseToApi(message);
+                } else {
+                    db.deleteUpstream(req.params.id, function(message) {
+                        responseToApi(message);
+                    });
+                }
+            });
+        } else {
+            console.log('\n------------------------- deleteUpstream remote -------------------------\n');
+            var opts = {
+                'url': 'http://' + req.body.instance + '/deleteUpstream',
+                timeout: 2000
+            };
+            request.post(opts, function(error, response, body) {
+                console.log('post');
+                if (error) {
+                    console.log('post erro');
+                    return responseWriteFiles({ 'status': 'failed', 'message': error })
+                } else {
+                    console.log('post ok');
+                    console.log(error);
+                    console.log(response);
+                    console.log(body);
+                    return responseWriteFiles({ 'status': 'ok', 'message': '' })
+                }
+            });
+        }
+    },
     configureUpstream: function(req, responseToApi) {
         if (req.body.instance == 'localhost') {
             console.log('\n------------------------- POST UPSTREAM -------------------------\n');
