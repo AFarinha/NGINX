@@ -178,7 +178,6 @@ Api.prototype.init = function() {
                 seedUptreams = parseInt(req.body.id) + 100;
                 console.log('Update stream ', seedUptreams);
             }
-
             try {
                 // é só uma upstream por isso só faz o ciclo 1x
                 confUpdtreamContent.forEach(function(item) {
@@ -271,6 +270,12 @@ Api.prototype.init = function() {
 
     this.app.post('/api/newHost', function(req, res) {
         nginx.configureVhost(req, function(response) {
+            res.send(response)
+        })
+    });
+
+    this.app.post('/api/newUpstream', function(req, res) {
+        nginx.configureUpstream(req, function(response) {
             res.send(response)
         })
     });

@@ -58,6 +58,7 @@ export default {
       upstream: {
         id: '',
         upstreamName: '',
+        instance: 'localhost',
         arrayUpstreamItems: []
       },
       responseSuccesscreate: false,
@@ -105,6 +106,7 @@ export default {
       self.upstream = {
         id: '',
         upstreamName: '',
+        instance: '',
         arrayUpstreamItems: []
       }
     },
@@ -125,7 +127,7 @@ export default {
     },
     postSaveUpstream: function () {
       var self = this
-      axios.post('/api/insertUpstream', self.upstream)
+      axios.post('/api/newUpstream', self.upstream)
         .then(function (response) {
           if (response.data.status === 'failed') {
             console.log(response.data)

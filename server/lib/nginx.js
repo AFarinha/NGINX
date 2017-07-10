@@ -85,6 +85,80 @@ module.exports = {
             });
         }
     },
+    configureUpstream: function(req, responseToApi) {
+        if (req.body.instance == 'localhost') {
+            console.log('\n------------------------- POST UPSTREAM -------------------------\n');
+            var jsonConfig = JSON.parse(JSON.stringify(req.body));
+            var confUpdtreamContent = generateFiles.createUpstreamConfSingle(jsonConfig);
+
+            db.selectNextSeedUpstream(function(message2) {
+                var seedUptreams = JSON.parse(JSON.stringify(message2)).message.seed;
+                if ((req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id))) {
+                    console.log('Insert stream ', seedUptreams);
+                    seedUptreams = JSON.parse(JSON.stringify(message2)).message.seed;
+                } else {
+                    seedUptreams = parseInt(req.body.id) + 100;
+                    console.log('Update stream ', seedUptreams);
+                }
+                try {
+                    // é só uma upstream por isso só faz o ciclo 1x
+                    confUpdtreamContent.forEach(function(item) {
+
+                        UpstreamFileName = seedUptreams + '-' + item.name.replace('https://', '').replace('http://', '');
+                        UpstreamDBName = item.name.replace('https://', '').replace('http://', '');
+
+                        console.log('Desejado para upstream:', UpstreamFileName);
+
+                        utils.writeFileSync(UpstreamFileName, item.conf);
+                        // Deixa o ID original para fazer distincao entre insert e update
+                        var idFromReq = req.body.id;
+
+                        // Se não tiver ID, guardar futuro ID (para ficar no config) no JSON antes de inserir na BD
+                        if (req.body.id == undefined || req.body.id == null || req.body.id == '' || isNaN(req.body.id)) {
+                            req.body.id = (seedUptreams - 100).toString();
+                        }
+                        var upstream = {
+                            'id': idFromReq,
+                            'instance': req.body.instance || '',
+                            'name': req.body.upstreamName,
+                            'config': JSON.stringify(req.body)
+                        };
+
+                        db.insertUpstream(upstream, function(message) {
+                            console.log("Resultado do insertUpstream (INSERT):", message);
+                            responseToApi(message);
+                        });
+
+                        seedUptreams++;
+                    });
+
+                } catch (err) {
+                    console.log('Erro:', err);
+                    return responseToApi({ 'status': 'failed', 'message': err })
+                }
+            }); // fim selectNextSeedUpstream 
+        } else {
+            console.log('aquielse');
+            var opts = {
+                'url': 'http://' + req.body.instance + '/writeUpstream',
+                timeout: 2000
+            };
+            console.log('req.body.instance:', req.body.instance);
+            request.post(opts, function(error, response, body) {
+                console.log('post');
+                if (error) {
+                    console.log('posterro');
+                    return responseToApi({ 'status': 'failed', 'message': error })
+                } else {
+                    console.log('postok');
+                    console.log(error);
+                    console.log(response);
+                    console.log(body);
+                    return responseToApi({ 'status': 'ok', 'message': '' })
+                }
+            });
+        }
+    },
     writeFiles: function(idToObj, req, file, responseWriteFiles) {
         if (req.body.instance == 'localhost') {
             utils.writeFile(file.filename, file.fileContent, function(message) {
@@ -95,7 +169,7 @@ module.exports = {
             var opts = {
                 'url': 'http://' + req.body.instance + '/writeHost',
                 'json': file,
-                 timeout: 2000
+                timeout: 2000
             };
             console.log('req.body.instance:', req.body.instance);
             request.post(opts, function(error, response, body) {
