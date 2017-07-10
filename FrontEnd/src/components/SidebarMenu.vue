@@ -2,27 +2,27 @@
   <ul class="sidebar-menu">
     <li class="header">TOOLS</li>
     <li class="active pageLink" v-on:click="toggleMenu">
-      <router-link to="/"><i class="fa fa-desktop"></i>
+      <router-link to="/"><i class="fa fa-home"></i>
         <span class="page">Dashboard</span>
       </router-link>
     </li>
     <li class="pageLink" v-on:click="toggleMenu">
-      <router-link to="/listVHosts"><i class="fa fa-table"></i>
+      <router-link to="/listVHosts"><i class="fa fa-book"></i>
         <span class="page">List VHost</span>
       </router-link>
     </li>
     <li class="pageLink" v-on:click="toggleMenu">
-      <router-link to="/VHost"><i class="fa fa-table"></i>
+      <router-link to="/VHost"><i class="fa fa-desktop"></i>
         <span class="page">VHost</span>
       </router-link>
     </li>
     <li class="pageLink" v-on:click="toggleMenu">
-      <router-link to="/upstreams"><i class="fa fa-table"></i>
+      <router-link to="/upstreams"><i class="fa fa-usb"></i>
         <span class="page">Upstreams</span>
       </router-link>
     </li>
 	<li class="pageLink" v-on:click="toggleMenu">
-      <router-link to="/opennebula"><i class="fa fa-table"></i>
+      <router-link to="/opennebula"><i class="fa fa-arrows-alt"></i>
         <span class="page">Open Nebula</span>
       </router-link>
     </li>
