@@ -1,9 +1,8 @@
 var Station = require('./server/lib/station.js'),
     Dashboard = require('./server/lib/dashboard.js'),
-    Collector = require('./collector/collector.js');
-    Api = require('./server/lib/api.js');
-
-
+    Collector = require('./collector/collector.js'),
+    Api = require('./server/lib/api.js'),
+    ApiCollector = require('./server/lib/apiCollector.js');
 
 
 var mode = process.env.MODE;

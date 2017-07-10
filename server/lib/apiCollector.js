@@ -2,9 +2,9 @@ var express = require('express'),
     utils = require('./utils'),
     generateFiles = require('./GenerateFiles'),
     cp = require('child_process'),
-    bodyParser = require('body-parser'),
+    bodyParser = require('body-parser');
 
-var ApiCollector = function(port, station, databaseName) {
+var ApiCollector = function(port) {
     this.port = port;
     this.app = express();
     this.app.use(bodyParser.json());
