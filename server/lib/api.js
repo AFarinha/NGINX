@@ -71,15 +71,10 @@ Api.prototype.init = function() {
     });
 
     this.app.post('/api/nginx/reload', function(req, res) {
-        var output = cp.spawnSync('/usr/sbin/nginx', ['-s', 'reload'], {
-            encoding: 'utf8'
-        });
-
-        res.send({
-            'status': 'ok',
-            'stdout': output.stdout.toString(),
-            'stderr': output.stderr.toString(),
-        });
+        console.log('\n------------------------- /nginx/reload -------------------------\n');
+        nginx.reloadNginx(req, function(response) {
+            res.send(response)
+        })
     });
 
     this.app.post('/api/nginx/test', function(req, res) {

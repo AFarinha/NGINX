@@ -156,6 +156,40 @@ module.exports = {
             });
         }
     },
+    reloadNginx: function(req, responseToApi) {
+        console.log('reloadNginx', req.body.instance);
+        if (req.body.instance == 'localhost') {
+            var output = cp.spawnSync('/usr/sbin/nginx', ['-s', 'reload'], {
+                encoding: 'utf8'
+            });
+
+            responseToApi({
+                'status': 'ok',
+                'stdout': output.stdout.toString(),
+                'stderr': output.stderr.toString(),
+            });
+        } else {
+            console.log('aquielse');
+            var opts = {
+                'url': 'http://' + req.body.instance + '/testNginx',
+                timeout: 2000
+            };
+            console.log('req.body.instance:', req.body.instance);
+            request.post(opts, function(error, response, body) {
+                console.log('post');
+                if (error) {
+                    console.log('posterro');
+                    return responseToApi({ 'status': 'failed', 'message': error })
+                } else {
+                    console.log('postok');
+                    console.log(error);
+                    console.log(response);
+                    console.log(body);
+                    return responseToApi({ 'status': 'ok', 'message': '' })
+                }
+            });
+        }
+    },
     configureUpstream: function(req, responseToApi) {
         if (req.body.instance == 'localhost') {
             console.log('\n------------------------- POST UPSTREAM -------------------------\n');
