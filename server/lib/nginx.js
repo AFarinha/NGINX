@@ -175,9 +175,11 @@ module.exports = {
       console.log('File to delete ' + fileName);
 
       console.log('req.body.instance:', req.params.instance);
-      request.delete('http://' + req.params.instance + '/delete/' + fileName, function(error, response) {
+      request.delete('http://' + req.params.instance + '/delete/' + fileName, function(body,response,error ) {
         console.log('post');
-        if (error) {
+        console.log(JSON.parse(error).status);
+
+        if (JSON.parse(error).status == 'failed') {
           console.log('posterro');
           return responseDeleteFiles({
             'status': 'failed',
@@ -186,6 +188,8 @@ module.exports = {
         } else {
           console.log('postok');
           console.log(error);
+          //console.log(response);
+          console.log(body);
           return responseDeleteFiles({
             'status': 'ok',
             'message': ''

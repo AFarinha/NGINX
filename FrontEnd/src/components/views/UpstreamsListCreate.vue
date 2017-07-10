@@ -20,10 +20,16 @@
 			      <el-table-column prop='instance' label="Instance" sortable="custom"></el-table-column>
 			    </data-tables>
 
-			    <div v-if="responseError" class="alert alert-danger alert-dismissable">
+					<div v-if="responseError" class="alert alert-danger alert-dismissable">
 			       <i class="fa fa-ban"></i>
 			       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 			       <b>Alert! </b>{{this.responseError}}
+			    </div>
+
+				<div v-if="responseSuccess" class="alert alert-success alert-dismissable">
+			      <i class="fa fa-check"></i>
+			      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			      <b>Alert! </b> {{this.responseSuccess}}
 			    </div>
 		      </div>
 		    </div>

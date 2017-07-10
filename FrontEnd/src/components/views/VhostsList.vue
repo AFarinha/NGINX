@@ -67,6 +67,7 @@ export default {
           axios.delete('/api/deleteVHost2/' + row.id + '/' + row.name + '/' + row.port + '/' + row.instance)
           .then(function (response) {
             if (response.data.status === 'failed') {
+              console.log(response.data)
               app.responseError = response.data
               app.responseSuccess = false
             } else {
