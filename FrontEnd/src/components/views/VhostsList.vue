@@ -4,8 +4,7 @@
     <data-tables
       :data='this.server'
 	    :row-action-def='rowActionsDef'
-      action-col-label='Actions'
-      @row-click='rowClick'>
+      action-col-label='Actions'>
       <el-table-column prop='id' label="id" sortable="custom"></el-table-column>
       <el-table-column prop='status' label="Status" sortable="custom"></el-table-column>
       <el-table-column prop='name' label="Host Name"  sortable="custom"></el-table-column>
@@ -34,7 +33,6 @@ import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import DataTables from 'vue-data-tables'
-
 import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
 locale.use(lang)
@@ -52,17 +50,17 @@ export default {
     }
   },
   methods: {
-    rowClick (row) {
+    /* rowClick (row) {
       this.$router.push(
         {
           path: 'VHost/' + row.id
         }
       )
-    },
+    }, */
     getRowActionsDef () {
       let app = this
       return [{
-        type: 'warning',
+        type: 'danger',
         handler (row) {
           axios.delete('/api/deleteVHost2/' + row.id + '/' + row.name + '/' + row.port + '/' + row.instance)
           .then(function (response) {
@@ -87,6 +85,19 @@ export default {
           })
         },
         name: 'Delete'
+      }, {
+        type: 'primary',
+        handler (row) {
+          var root = app.$root
+          var router = root.$router
+          router.push(
+            {
+              path: 'VHost/' + row.id
+            }
+          )
+          // window.location.href = 'VHost/' + row.id
+        },
+        name: 'Edit'
       }]
     }
   },
