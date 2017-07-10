@@ -83,18 +83,14 @@ Api.prototype.init = function() {
     });
 
     this.app.post('/api/nginx/test', function(req, res) {
-        var output = cp.spawnSync('/usr/sbin/nginx', ['-t'], {
-            encoding: 'utf8'
-        });
-
-        res.send({
-            'status': 'ok',
-            'stdout': output.stdout.toString(),
-            'stderr': output.stderr.toString(),
-        });
+        console.log('\n------------------------- /nginx/test -------------------------\n');
+        nginx.testNginx(req, function(response) {
+            res.send(response)
+        })
     });
 
     this.app.post('/api/newHost', function(req, res) {
+        console.log('\n------------------------- /newHost -------------------------\n');
         nginx.configureVhost(req, function(response) {
             res.send(response)
         })
