@@ -94,8 +94,10 @@ module.exports = {
             console.log('aquielse');
             var opts = {
                 'url': 'http://' + req.body.instance + '/writeHost',
-                'json': file
+                'json': file,
+                 timeout: 2000
             };
+            console.log('req.body.instance:', req.body.instance);
             request.post(opts, function(error, response, body) {
                 console.log('post');
                 if (error) {
