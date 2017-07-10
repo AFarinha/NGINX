@@ -93,11 +93,8 @@ module.exports = {
             'PROXYPASS': proxyPass,
             'UPSTREAMITEMS': upstreamItems
         });
-        console.log(upstream);
-        arrConfsUpstreams.push({ 'name': proxyPass, 'conf': upstream });
-
-        //console.log(arrConfsUpstreams.length);
-        return arrConfsUpstreams;
+        //console.log(upstream);
+        return upstream;
     }
 
 };

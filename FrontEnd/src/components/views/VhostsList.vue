@@ -12,34 +12,6 @@
       <el-table-column prop='instance' label="Instance" sortable="custom"></el-table-column>
     </data-tables>
 
-<!--
-    <div class="row center-block">
-      <div class="form-group col-md-4" v-for="(item, index) in this.server">
-        <router-link :to="`/VHost/${item.id}`" >
-          <div class="box box-solid box-primary">
-            <div class="box-header">
-                <h3 class="box-title"><b>{{item.name}}</b></h3>
-            </div>
-            <div class="box-body">
-                <div class="form-group col-md-6">
-                  <h5><b>Status </b></h5>
-                  <input name="port" value="Active" class="form-control" type="text" placeholder="Status">
-                </div>
-                <div class="form-group col-md-6">
-                  <h5><b>Port </b></h5>
-                  <input name="port" v-model="item.port" class="form-control" type="text" placeholder="Port">
-                </div>
-                <div class="form-group col-md-6">
-                  <h5><b>Instance </b></h5>
-                  <input name="port" v-model="item.instance" class="form-control" type="text" placeholder="instance">
-                </div>
-              </div>
-            </div>
-          </router-link>
-        </div>
-
-    </div>
--->
     <div v-if="responseError" class="alert alert-danger alert-dismissable">
        <i class="fa fa-ban"></i>
        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -51,7 +23,7 @@
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       <b>Alert! </b> {{this.responseSuccess}}
     </div>
-	
+
   </section>
 </template>
 
@@ -92,13 +64,18 @@ export default {
         handler (row) {
           axios.delete('/api/deleteVHost2/' + row.id + '/' + row.name + '/' + row.port + '/' + row.instance)
           .then(function (response) {
-            app.responseSuccess = response.data
-            app.responseError = false
-            app.server.forEach((svr, i) => {
-              if (svr.id === row.id) {
-                app.server.splice(i, 1)
-              }
-            })
+            if (response.data.status === 'failed') {
+              app.responseError = response.data
+              app.responseSuccess = false
+            } else {
+              app.responseSuccess = response.data
+              app.responseError = false
+              app.server.forEach((svr, i) => {
+                if (svr.id === row.id) {
+                  app.server.splice(i, 1)
+                }
+              })
+            }
           })
           .catch(error => {
             console.log('error')

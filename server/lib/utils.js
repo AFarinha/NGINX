@@ -13,6 +13,8 @@ module.exports = {
     return content;
   },
   writeFile: function(fileName, confcontent, response) {
+    console.log('writeFile');
+    console.log(confcontent);
     fs.writeFile('/etc/nginx/conf.d/' + fileName + '.conf', confcontent, function(err) {
       if (err) {
         response({
@@ -35,6 +37,7 @@ module.exports = {
     fs.unlink('/etc/nginx/conf.d/' + fileName + '.conf', function(err) {
       if (err) {
         console.log('Erro ao apagar');
+        console.log(err);
         response({
           'status': 'failed',
           'message': err
