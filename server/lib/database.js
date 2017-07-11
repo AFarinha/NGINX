@@ -311,6 +311,30 @@ module.exports = {
         });
 
         closeBD();
+    },
+    selectAllDirectives: function(response) {
+        openBD();
+        db.all("select name, syntax, _default, context, link from directives where context like '%location%' or context like '%server%' or context like '%upstream%'", function(err, rows) {
+            if (err) {
+                return response({ 'status': 'failed', 'message': err });
+            } else {
+                response({ 'status': 'ok', 'message': JSON.parse(JSON.stringify(rows)) });
+            }
+        });
+        closeBD();
+    },
+    selectDirectivesFilter: function(context,response) {
+        openBD();
+        console.log('DB Context:', context);
+        db.all("select name as value, name as text from directives where context like ?",'%'+context+'%', function(err, rows) {
+            if (err) {
+                return response({ 'status': 'failed', 'message': err });
+            } else {
+                response({ 'status': 'ok', 'message': JSON.parse(JSON.stringify(rows)) });
+            }
+        });
+
+        closeBD();
     }
 
 };

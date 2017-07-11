@@ -40,6 +40,7 @@
       <div class="box-body">
           <GenericItem v-for="(generic, index) in this.server.arrayGenericServer"
             :generic="generic"
+            contextType = "server"
             :key= "generic"
             v-on:removeGeneric="removeGeneric(index)" >
           </GenericItem>
@@ -75,7 +76,6 @@ export default {
   },
   data () {
     return {
-
     }
   },
   mounted: function () {

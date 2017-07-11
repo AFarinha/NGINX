@@ -184,7 +184,7 @@
     				  </div>
     				</div>
     				<div class="box-body">
-    				  <GenericItem v-for="(generic, index) in this.location.arrayGeneric" :generic="generic" :key="generic" v-on:removeGeneric="removeGeneric(index)">
+    				  <GenericItem v-for="(generic, index) in this.location.arrayGeneric" :generic="generic" contextType = "location" :key="generic" v-on:removeGeneric="removeGeneric(index)">
     				  </GenericItem>
     				  <button @click="addGeneric" type="button" class="btn btn-success">Add Generic Item</button>
     				</div>

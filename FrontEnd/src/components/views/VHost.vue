@@ -45,7 +45,7 @@ export default {
         id: '',
         host: '',
         port: '',
-        instance: '192.168.1.201:8090', // por isto numa ddl, para testar meter localhost
+        instance: 'localhost', // '192.168.1.201:8090', // por isto numa ddl, para testar meter localhost
         arrayGenericServer: [],
         arrayLocations: []
       },

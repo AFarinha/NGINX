@@ -151,6 +151,24 @@ Api.prototype.init = function() {
         })
     });
 
+    this.app.get('/api/getAllDirectives', function(req, res) {
+        console.log('\n------------------------- /getAllDirectives -------------------------\n');
+        db.selectAllDirectives(function(message) {
+            //console.log('Response:', message);
+            res.send(message);
+        });
+    });
+
+    this.app.get('/api/getDirectivesFilter/:context', function(req, res) {
+        console.log('\n------------------------- /getDirectivesFilter -------------------------\n');
+        console.log('Req.params.context:', req.params.context);
+        db.selectDirectivesFilter(req.params.context,function(message) {
+            //console.log('Response:', message);
+            res.send(message);
+        });
+    });
+
+
     this.app.post('/api/opennebula/createVM', function(req, res) {
         opennebula.createNewVM(req.body, function(message) {
             res.send(message);
