@@ -59,7 +59,7 @@ export default {
         id: '',
         upstreamName: '',
         instance: 'localhost', // '192.168.1.201:8090',
-        arrayUpstreamItems: []
+        arrayUpstreamItems: [{ type: '', subType: '', config: '' }]
       },
       responseSuccesscreate: false,
       responseErrorCreate: false
@@ -107,7 +107,7 @@ export default {
         id: '',
         upstreamName: '',
         instance: '',
-        arrayUpstreamItems: []
+        arrayUpstreamItems: [{ type: '', subType: '', config: '' }]
       }
     },
     addUpstream: function () {
@@ -152,9 +152,11 @@ export default {
       var self = this
       axios.post('/api/nginx/test', self.server)
         .then(function (response) {
-          self.responseSuccesscreate = response.data.stderr
+          console.log(response)
+          self.responseSuccesscreate = response.data.status + ' : ' + response.data.stderr
         })
         .catch(error => {
+          console.log(error)
           self.responseErrorCreate = error.response.statusText + ' : ' + error.response.data
         })
     },

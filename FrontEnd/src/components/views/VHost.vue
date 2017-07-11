@@ -45,7 +45,7 @@ export default {
         id: '',
         host: '',
         port: '',
-        instance: 'localhost', // '192.168.1.201:8090', // por isto numa ddl, para testar meter localhost
+        instance: '192.168.1.200:8090', // '192.168.1.201:8090', // por isto numa ddl, para testar meter localhost
         arrayGenericServer: [],
         arrayLocations: []
       },
@@ -121,9 +121,11 @@ export default {
       var app = this
       axios.post('/api/nginx/test', app.server)
         .then(function (response) {
-          app.responseSuccess = response.data.stderr
+          console.log(response)
+          app.responseSuccess = response.data.status + ' : ' + response.data.stderr
         })
         .catch(error => {
+          console.log(error)
           app.responseError = error.response.statusText + ' : ' + error.response.data
         })
     },

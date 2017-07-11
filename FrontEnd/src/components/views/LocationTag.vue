@@ -135,7 +135,7 @@
                 </div>
 
                 <div class="form-group col-md-4">
-                  <input type="radio" id="two" value="2" name="prox" v-model="location.StateProxyPass">
+                  <input type="radio" id="two" value="2" name="prox"  v-model="location.StateProxyPass">
                   <label for="two">Proxy Pass</label>
                   <br>
                 </div>
@@ -267,9 +267,6 @@ export default {
       )
       EventBus.$emit('errors-changed', newErrors, oldErrors)
     })
-  },
-  watch: {
-
   },
   methods: {
     onValidate: function () {

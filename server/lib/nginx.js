@@ -246,23 +246,20 @@ module.exports = {
     } else {
       console.log('aquielse');
       var opts = {
-        'url': 'http://' + req.body.instance + '/testNginx',
+        'url': 'http://' + req.body.instance + '/nginx/test',
         timeout: 2000
       };
       console.log('req.body.instance:', req.body.instance);
       request.post(opts, function(error, response, body) {
         console.log('post');
-        if (error) {
+        if (JSON.parse(body).status == 'failed') {
           console.log('posterro');
           return responseToApi({
             'status': 'failed',
-            'message': error
+            'message': body
           })
         } else {
           console.log('postok');
-          console.log(error);
-          console.log(response);
-          console.log(body);
           return responseToApi({
             'status': 'ok',
             'message': ''
@@ -286,23 +283,20 @@ module.exports = {
     } else {
       console.log('aquielse');
       var opts = {
-        'url': 'http://' + req.body.instance + '/testNginx',
+        'url': 'http://' + req.body.instance + '/nginx/reload',
         timeout: 2000
       };
       console.log('req.body.instance:', req.body.instance);
       request.post(opts, function(error, response, body) {
         console.log('post');
-        if (error) {
+        if (JSON.parse(body).status == 'failed') {
           console.log('posterro');
           return responseToApi({
             'status': 'failed',
-            'message': error
+            'message': body
           })
         } else {
           console.log('postok');
-          console.log(error);
-          console.log(response);
-          console.log(body);
           return responseToApi({
             'status': 'ok',
             'message': ''
