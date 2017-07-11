@@ -2,7 +2,7 @@
   <ul class="sidebar-menu">
     <li class="header">TOOLS</li>
     <li class="active pageLink" v-on:click="toggleMenu">
-      <router-link to="/"><i class="fa fa-home"></i>
+      <router-link to="/"><i class="fa fa-tachometer"></i>
         <span class="page">Dashboard</span>
       </router-link>
     </li>
@@ -12,17 +12,17 @@
       </router-link>
     </li>
     <li class="pageLink" v-on:click="toggleMenu">
-      <router-link to="/VHost"><i class="fa fa-desktop"></i>
+      <router-link to="/VHost"><i class="fa fa-television"></i>
         <span class="page">VHost</span>
       </router-link>
     </li>
     <li class="pageLink" v-on:click="toggleMenu">
-      <router-link to="/upstreams"><i class="fa fa-usb"></i>
+      <router-link to="/upstreams"><i class="fa fa-clone"></i>
         <span class="page">Upstreams</span>
       </router-link>
     </li>
 	<li class="pageLink" v-on:click="toggleMenu">
-      <router-link to="/opennebula"><i class="fa fa-arrows-alt"></i>
+      <router-link to="/opennebula"><i class="fa fa-cloud"></i>
         <span class="page">Open Nebula</span>
       </router-link>
     </li>
