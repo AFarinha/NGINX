@@ -11,16 +11,72 @@ one.version(function(err, data) {
 });
 
 one.getVMs(function(err, data) {
-  //console.log(data);
+ //console.log(data);
 });
 
 one.getHosts(function(err, data) {
   //console.log(data);
 });
 
-var vm = one.getVM(1);
+var vm = one.getVM(143);
 
 // query API for vm info
-vm.info(function (err, data) {
-  console.log(data['VM']['TEMPLATE']['NIC']);
+// vm.info(function(err, data) {
+//   console.log(data);
+//   console.log(data['VM']['TEMPLATE']['NIC']);
+// });
+
+vm.action('poweroff', function(err, data) {
+  if(err){
+    return response({'status': 'failed', 'message': err})
+  }else{
+    return response({'status': 'ok', 'message': data})
+  }
 });
+
+// one.getTemplates(function(err, data){
+//   var arrTemplates= [] ;
+//   if(err){
+//     return response({'status': 'failed', 'message': err})
+//   }else {
+//     for (var i = 0, len = data.length; i < len; i++) {
+//       arrTemplates.push({
+//         'id' : data[i].ID,
+//         'name' : data[i].NAME,
+//         'user' : data[i].UNAME,
+//         'groupUser' : data[i].GNAME,
+//         'groupUser' : data[i].TEMPLATE.CPU,
+//       })
+//     }
+//     return response({'status': 'ok', 'message': arrTemplates})
+//   }
+// }, null, 0, 1000)
+
+
+// one.getVMs(function(err, data) {
+//   var arrVms = [];
+//   if (err) {
+//     return response({
+//       'status': 'failed',
+//       'message': err
+//     })
+//   } else {
+//     for (var i = 0, len = data.length; i < len; i++) {
+//       arrVms.push({
+//         'id': data[i].ID,
+//         'name': data[i].NAME,
+//         'user': data[i].UNAME,
+//         'state': data[i].STATE,
+//         'deplyId': data[i].DEPLOY_ID,
+//         'realTime_CPU': data[i].MONITORING.CPU,
+//         'realTime_MEMORY': data[i].MONITORING.MEMORY,
+//         'realTime_STATE': data[i].MONITORING.STATE,
+//         'templateId': data[i].TEMPLATE.TEMPLATE_ID,
+//       })
+//     }
+//     return response({
+//       'status': 'ok',
+//       'message': arrVms
+//     })
+//   }
+// }, null, 0, 1000)

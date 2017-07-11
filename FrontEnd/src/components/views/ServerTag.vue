@@ -10,14 +10,25 @@
           </div>
       </div>
       <div class="box-body">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
+          <h5><b>instance </b></h5>
+          <div :class="{ 'has-error': vErrors.has('instance') }">
+            <select v-model="server.instance" class="form-control" >
+              <option v-for="option in this.instances" v-bind:value="option.id">
+              {{ option.name }}
+              </option>
+            </select>
+            <span v-show="vErrors.has('instance')" class="help-block">{{ vErrors.first('instance') }}</span>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
           <h5><b> Host </b></h5>
           <div :class="{ 'has-error': vErrors.has('host') }" >
             <input name="host" v-model="server.host" v-validate="'required'" class="form-control" type="text" placeholder="Host" :disabled="server.id !== '' ? true : false">
             <span v-show="vErrors.has('host')" class="help-block">{{ vErrors.first('host') }}</span>
           </div>
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
           <h5><b>Port </b></h5>
           <div :class="{ 'has-error': vErrors.has('port') }">
             <input name="port" v-model="server.port" v-validate="'required|numeric'" class="form-control" type="text" placeholder="Port" :disabled="server.id !== '' ? true : false">
@@ -76,6 +87,9 @@ export default {
   },
   data () {
     return {
+      instances: [
+        {id: 'localhost', name: 'localhost'}
+      ]
     }
   },
   mounted: function () {

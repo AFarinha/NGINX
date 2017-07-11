@@ -34,14 +34,19 @@
               </div>
             </div>
             <div class="form-group col-md-6">
-
             </div>
           </div>
         </div>
       </div>
     </div>
 
-
+    <div class="box box-solid box-primary">
+      <div class="box-header">
+          <h3 class="box-title"><b> Config VM </b></h3>
+          <div class="box-tools pull-right">
+          </div>
+      </div>
+      <div class="box-body">
     <div class="row">
       <div class="form-group col-md-6">
         <input type="radio" id="dashboard" value="false" name="prox" v-model="vm.isCollector">
@@ -69,6 +74,8 @@
         </div>
       </div>
     </div>
+   </div>
+   </div>
    </div>
 
 
@@ -100,7 +107,8 @@ export default {
         vmName: 'Name',
         isCollector: 'true',
         ipStation: 'http://192.168.1.200:8080',
-        hostname: 'collector1'
+        hostname: 'collector1',
+        templateId: '8'
       },
       responseSuccess: false,
       responseError: false
