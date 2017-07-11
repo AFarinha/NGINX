@@ -28,6 +28,11 @@
         <span class="page">Open Nebula</span>
       </router-link>
     </li>
+    <li class="pageLink" v-on:click="toggleMenu">
+        <router-link to="/opennebulaCreate"><i class="fa fa-cloud"></i>
+          <span class="page">Open Nebula Create</span>
+        </router-link>
+      </li>
   </ul>
 </template>
 <script>

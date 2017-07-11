@@ -8,6 +8,7 @@ import VHostView from './components/views/VHost.vue'
 import ListVHostView from './components/views/VHostsList.vue'
 import UpstreamsListCreateView from './components/views/UpstreamsListCreate.vue'
 import OpenNebulaView from './components/views/OpenNebula.vue'
+import OpenNebulaCreateView from './components/views/OpenNebulaCreate.vue'
 
 // Routes
 const routes = [
@@ -50,6 +51,11 @@ const routes = [
         component: OpenNebulaView,
         name: 'OpenNebula',
         meta: {description: 'Here is possible to list VMs in opennebula'}
+      }, {
+        path: 'opennebulaCreate',
+        component: OpenNebulaCreateView,
+        name: 'OpenNebulaCreate',
+        meta: {description: 'Here is possible to Create VMs in opennebula'}
       }
     ]
   }, {
