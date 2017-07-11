@@ -1,11 +1,12 @@
 <template>
   <ul class="sidebar-menu">
-    <li class="header">TOOLS</li>
+    <li class="header">MAIN</li>
     <li class="active pageLink" v-on:click="toggleMenu">
       <router-link to="/"><i class="fa fa-tachometer"></i>
         <span class="page">Dashboard</span>
       </router-link>
     </li>
+	<li class="header">NGINX</li>
     <li class="pageLink" v-on:click="toggleMenu">
       <router-link to="/listVHosts"><i class="fa fa-book"></i>
         <span class="page">List VHost</span>
@@ -21,6 +22,7 @@
         <span class="page">Upstreams</span>
       </router-link>
     </li>
+	<li class="header">CLOUD</li>
 	<li class="pageLink" v-on:click="toggleMenu">
       <router-link to="/opennebula"><i class="fa fa-cloud"></i>
         <span class="page">Open Nebula</span>
