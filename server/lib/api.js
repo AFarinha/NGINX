@@ -139,6 +139,18 @@ Api.prototype.init = function() {
     })
   });
 
+  this.app.post('/api/newVM', function(req, res) {
+     var vm = {
+      'name': req.body.name,
+      'hostname': req.body.hostname,
+      'ip': req.body.ip,
+      'templateId': req.body.templateId,
+    };
+    db.insertVM(vm, function(response) {
+      res.send(response)
+    })
+  });
+
   this.app.post('/api/newUpstream', function(req, res) {
     nginx.configureUpstream(req, function(response) {
       res.send(response)

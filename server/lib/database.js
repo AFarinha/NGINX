@@ -14,6 +14,7 @@ module.exports = {
 
             db.run("CREATE TABLE IF NOT EXISTS vhosts (id INTEGER PRIMARY KEY AUTOINCREMENT, instance TEXT,name TEXT, port INT , config TEXT, UNIQUE(instance,name,port))");
             db.run("CREATE TABLE IF NOT EXISTS upstreams (id INTEGER PRIMARY KEY AUTOINCREMENT, instance TEXT, name TEXT, config TEXT, UNIQUE(instance,name))");
+            db.run("CREATE TABLE IF NOT EXISTS vms (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, hostname TEXT, ip TEXT, templateId TEXT)");
         });
 
         closeBD();
@@ -109,6 +110,24 @@ module.exports = {
                     });
                 }
             });
+        }
+        closeBD();
+    },
+    insertVM: function(vm, response) {
+        openBD();
+        console.log('\n------------------------- DB insertVM -------------------------\n');
+        console.log('\nVM', vm, '\n');
+
+        console.log('DB: INSERT');
+        db.run("INSERT INTO vms (name, hostname, ip,templateId) VALUES (?,?,?,?)", vm.name, vm.hostname, vm.ip, vm.templateId, function(err) {
+            if (err) {
+                console.log({ 'status': 'failed', 'message': err });
+                response({ 'status': 'failed', 'message': err });
+            } else {
+                console.log('\nInsert com id ' + this.lastID);
+                response({ 'status': 'ok', 'message': { 'id': this.lastID } });
+            }
+        });
         }
         closeBD();
     },
