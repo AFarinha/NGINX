@@ -1,37 +1,44 @@
 <template>
+
   <div class="row">
-    <div class="col-md-6">
-
-    </div>
-    <div class="col-md-6">
-
-      <div class="row" style="margin-top: 0.5em">
-          <div class="col-xs-5">
-            <div :class="{ 'has-error': vErrors.has('nameProp') }">
-              <basic-select :options="directives"
-                v-model="generic.nameProp"
-                name="nameProp"
-                :selected-option="itemDirective"
-                placeholder="Propertie"
-                @select="onSelectDirective">
-              </basic-select>
-              <span v-show="vErrors.has('nameProp')" class="help-block">{{ vErrors.first('nameProp') }}</span>
-            </div>
+    <div class="col-md-7 col-sm-12">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="row" style="margin-top: 0.5em">
+              <div class="col-xs-5">
+                <div :class="{ 'has-error': vErrors.has('nameProp') }">
+                  <basic-select :options="directives"
+                    v-model="generic.nameProp"
+                    name="nameProp"
+                    :selected-option="itemDirective"
+                    @select="onSelectDirective">
+                  </basic-select>
+                  <span v-show="vErrors.has('nameProp')" class="help-block">{{ vErrors.first('nameProp') }}</span>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div :class="{ 'has-error': vErrors.has('valueProp') }">
+                  <input name="valueProp" v-bind:placeholder="this.info.syntax" v-model="generic.valueProp" v-validate="'required'"  class="form-control" type="text">
+                  <span v-show="vErrors.has('valueProp')" class="help-block">{{ vErrors.first('valueProp') }}</span>
+                </div>
+              </div>
+              <div class="col-xs-1">
+                  <button @click="remove" type="button" class="btn btn-danger fa fa-times" ></button>
+              </div>
           </div>
-          <div class="col-xs-5">
-            <div :class="{ 'has-error': vErrors.has('valueProp') }">
-              <input name="valueProp" v-model="generic.valueProp" v-validate="'required'" placeholder="Value Propertie"  class="form-control" type="text">
-              <span v-show="vErrors.has('valueProp')" class="help-block">{{ vErrors.first('valueProp') }}</span>
-            </div>
-          </div>
-          <div class="col-xs-2">
-              <button @click="remove" type="button" class="btn btn-danger fa fa-times" ></button>
-          </div>
-          
+        </div>
       </div>
+    </div>
+    <div class="clearfix visible-sm-block"></div>
+    <div class="col-md-5 col-sm-12">
+    <a v-bind:href="info.link" v-if="generic.nameProp" target="_blank">
+      <i class="fa fa-info" style="font-size:24px;margin-top: 0.4em;"></i>
+    </a>
+    <label id="context">{{this.info.default}}</label>
 
     </div>
   </div>
+
 </template>
 
 <script>
@@ -57,7 +64,8 @@ export default {
       itemDirective: {
         value: '',
         text: ''
-      }
+      },
+      info: {context: '', default: '', syntax: ''}
     }
   },
   mounted: function () {
@@ -103,8 +111,18 @@ export default {
       this.$emit('removeGeneric')
     },
     onSelectDirective (item) {
-      this.itemDirective = item
-      this.generic.nameProp = item.text
+      var self = this
+      self.itemDirective = item
+      self.generic.nameProp = item.text
+      console.log('item.link')
+      for (var i = self.directives.length - 1; i >= 0; i--) {
+        if (self.directives[i].text === item.text) {
+          self.info.context = self.directives[i].context
+          self.info.syntax = self.directives[i].syntax
+          self.info.default = 'Default: ' + self.directives[i]._default
+          self.info.link = 'https://' + self.directives[i].link
+        }
+      }
     },
     resetDiretive () {
       this.itemDirective = {}
@@ -112,6 +130,7 @@ export default {
     selectOptionDiretive () {
       // select option from parent component
       this.itemDirective = this.directives[0]
+      console.log('selectOptionDiretive')
     }
   },
   components: {

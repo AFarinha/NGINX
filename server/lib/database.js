@@ -326,7 +326,7 @@ module.exports = {
     selectDirectivesFilter: function(context,response) {
         openBD();
         console.log('DB Context:', context);
-        db.all("select name as value, name as text from directives where context like ?",'%'+context+'%', function(err, rows) {
+        db.all("select name as value, name as text, syntax, _default, context, link from directives where context like ?",'%'+context+'%', function(err, rows) {
             if (err) {
                 return response({ 'status': 'failed', 'message': err });
             } else {
