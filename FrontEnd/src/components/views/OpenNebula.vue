@@ -1,6 +1,10 @@
 <template>
   <section class="content">
     <div class="row center-block">
+      <button v-on:click="redirectCreteVM" type="button" class="btn btn-info">Create New Virtual Machine</button>
+    </div>
+    <br />
+    <div class="row center-block">
       <OpenNebulaVMItem
         v-for="(vmDetail, index) in this.VMList"
         :vmDetails="vmDetail"
@@ -49,6 +53,10 @@ export default {
     }
   },
   methods: {
+    redirectCreteVM: function () {
+      var self = this
+      self.$router.push('/opennebulaCreate')
+    },
     removeVMItem: function (index) {
       console.log('passou')
       this.VMList.splice(index, 1)

@@ -31,7 +31,9 @@
               <h5><b>Template </b></h5>
                 <select v-model="vm.templateId" class="form-control" >
                   <option v-for="option in this.templateList" v-bind:value="option.id">
-                  {{ option }}
+                    <div class="row center-block">
+                      {{ option.name }}
+                    </div>
                   </option>
                 </select>
               </div>
