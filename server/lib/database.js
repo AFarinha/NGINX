@@ -8,7 +8,7 @@ module.exports = {
         openBD();
         db.serialize(function() {
             //db.run("CREATE TABLE IF NOT EXISTS modules (id INT, name TEXT, link TEXT,PRIMARY KEY (id))");
-            //db.run("CREATE TABLE IF NOT EXISTS directives (id INT, idModule INT, name TEXT, link TEXT,FOREIGN KEY(idModule) REFERENCES modules(id))");  
+            //db.run("CREATE TABLE IF NOT EXISTS directives (id INT, idModule INT, name TEXT, link TEXT,FOREIGN KEY(idModule) REFERENCES modules(id))");
             db.run("CREATE TABLE IF NOT EXISTS modules (id INT, name TEXT, link TEXT)");
             db.run("CREATE TABLE IF NOT EXISTS directives (id INT, idModule INT, name TEXT, link TEXT, syntax TEXT, _default TEXT, context TEXT)");
 
@@ -24,7 +24,7 @@ module.exports = {
         openBDSite();
         db.serialize(function() {
             //db.run("CREATE TABLE IF NOT EXISTS modules (id INT, name TEXT, link TEXT,PRIMARY KEY (id))");
-            //db.run("CREATE TABLE IF NOT EXISTS directives (id INT, idModule INT, name TEXT, link TEXT,FOREIGN KEY(idModule) REFERENCES modules(id))");  
+            //db.run("CREATE TABLE IF NOT EXISTS directives (id INT, idModule INT, name TEXT, link TEXT,FOREIGN KEY(idModule) REFERENCES modules(id))");
             db.run("CREATE TABLE IF NOT EXISTS modules (id INT, name TEXT, link TEXT)");
             db.run("CREATE TABLE IF NOT EXISTS directives (id INT, idModule INT, name TEXT, link TEXT)");
             db.run("CREATE TABLE IF NOT EXISTS vhosts (id INTEGER PRIMARY KEY AUTOINCREMENT, instance TEXT,name TEXT, port INT , config TEXT, UNIQUE(instance,name,port))");
@@ -128,7 +128,6 @@ module.exports = {
                 response({ 'status': 'ok', 'message': { 'id': this.lastID } });
             }
         });
-        }
         closeBD();
     },
     selectVHost: function(id, response) {

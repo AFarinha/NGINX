@@ -8,10 +8,10 @@
         <!-- /.box-header -->
         <div class="box-body">
           <div class="row center-block">
-            <strong><i class="fa fa-book margin-r-5"></i> User</strong>
+            <strong><i class="fa fa-book margin-r-5"></i> IP</strong>
 
             <p class="text-muted">
-              {{this.vmDetails.user}}
+              {{this.vmDetails.IP}}
             </p>
             <hr>
             <strong><i class="fa fa-map-marker margin-r-5"></i> Metrics</strong>
@@ -24,7 +24,7 @@
             </div>
             <hr>
             <strong><i class="fa fa-pencil margin-r-5"></i> Template</strong>
-            <p>{{vmDetails.templateId}}</p>
+            <p>{{vmDetails.templateName}}</p>
             <hr>
             <strong><i class="fa fa-pencil margin-r-5"></i> Actions</strong>
             <br />

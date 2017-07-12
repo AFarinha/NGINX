@@ -126,6 +126,8 @@ module.exports = {
             'realTime_MEMORY': data[i].MONITORING.MEMORY,
             'realTime_STATE': data[i].MONITORING.STATE,
             'templateId': data[i].TEMPLATE.TEMPLATE_ID,
+            'templateName': data[i].TEMPLATE.DISK.IMAGE,
+            'IP': data[i].TEMPLATE.NIC.IP,
           })
         }
         return response({
