@@ -6,7 +6,6 @@
 	    :row-action-def='rowActionsDef'
       action-col-label='Actions'>
       <el-table-column prop='id' label="id" sortable="custom"></el-table-column>
-      <el-table-column prop='status' label="Status" sortable="custom"></el-table-column>
       <el-table-column prop='name' label="Host Name"  sortable="custom"></el-table-column>
       <el-table-column prop='port' label="Port" sortable="custom"></el-table-column>
       <el-table-column prop='instance' label="Instance" sortable="custom"></el-table-column>
@@ -50,13 +49,6 @@ export default {
     }
   },
   methods: {
-    /* rowClick (row) {
-      this.$router.push(
-        {
-          path: 'VHost/' + row.id
-        }
-      )
-    }, */
     getRowActionsDef () {
       let app = this
       return [{
@@ -95,7 +87,6 @@ export default {
               path: 'VHost/' + row.id
             }
           )
-          // window.location.href = 'VHost/' + row.id
         },
         name: 'Edit'
       }]
