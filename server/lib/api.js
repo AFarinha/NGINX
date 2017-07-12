@@ -139,6 +139,12 @@ Api.prototype.init = function() {
     })
   });
 
+  this.app.post('/api/newVM', function(req, res) {
+    db.insertVM(req, function(response) {
+      res.send(response)
+    })
+  });
+
   this.app.post('/api/newUpstream', function(req, res) {
     nginx.configureUpstream(req, function(response) {
       res.send(response)
