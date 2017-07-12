@@ -1,5 +1,4 @@
 <template>
-
   <div class="row center-block" style="margin-top: 0.5em">
       <div class="col-xs-3">
         <div :class="{ 'has-error': vErrors.has('type') }">
@@ -14,21 +13,27 @@
       </div>
       <div class="col-xs-4">
         <div :class="{ 'has-error': vErrors.has('subType') }">
-          <input :disabled="readOnly" name="subType" v-model="upstream.subType" v-validate="'required'" placeholder="HostName"  class="form-control" type="text">
+          <input :disabled="readOnly" name="subType" v-model="upstream.subType" v-validate="'required'" v-bind:placeholder="this.info.syntax"  class="form-control" type="text">
           <span v-show="vErrors.has('subType')" class="help-block">{{ vErrors.first('subType') }}</span>
         </div>
       </div>
-      <div class="col-xs-4">
+      <div class="col-xs-3">
         <div :class="{ 'has-error': vErrors.has('config') }">
-          <input :disabled="readOnly" name="config" v-model="upstream.config" placeholder="weight=1|optional"  class="form-control" type="text">
+          <input :disabled="readOnly" name="config" v-model="upstream.config" placeholder="[parameter|optional]"  class="form-control" type="text">
           <span v-show="vErrors.has('config')" class="help-block">{{ vErrors.first('config') }}</span>
         </div>
       </div>
       <div class="col-xs-1" v-if="!readOnly">
           <button @click="remove" type="button" class="btn btn-danger fa fa-times"></button>
       </div>
+      <div class="col-xs-1">
+          <a v-bind:href="info.link" v-if="upstream.type" target="_blank">
+            <i class="fa fa-info" style="font-size:24px;margin-top: 0.1em;"></i>
+          </a>
+      </div>
+       
   </div>
-
+  
 </template>
 
 <script>
@@ -58,7 +63,8 @@ export default {
       itemDirective: {
         value: '',
         text: ''
-      }
+      },
+      info: {context: '', default: '', syntax: '', link: ''}
     }
   },
   created () {
@@ -107,6 +113,14 @@ export default {
       var self = this
       self.itemDirective = item
       this.upstream.type = item.text
+      for (var i = self.directives.length - 1; i >= 0; i--) {
+        if (self.directives[i].text === item.text) {
+          self.info.context = self.directives[i].context
+          self.info.syntax = self.directives[i].syntax
+          self.info.default = 'Default: ' + self.directives[i]._default
+          self.info.link = 'https://' + self.directives[i].link
+        }
+      }
     },
     resetDiretive () {
       var self = this
