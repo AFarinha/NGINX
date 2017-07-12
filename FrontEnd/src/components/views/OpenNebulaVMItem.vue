@@ -1,124 +1,42 @@
 <template>
-  <section class="content">
+  <div>
     <div class="form-group col-md-3">
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title">VM - {{this.vmDetails.name}}</h3>
+          <h3 class="box-title">VM - {{this.vmDetails.name}}</h3> <span :class="{ 'badge bg-green': vmDetails.state == 'ACTIVE', 'badge bg-red': vmDetails.state != 'ACTIVE',  }"> {{vmDetails.state}}</span>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-          <div class="form-group">
-            <span :class="{ 'badge bg-green': vmDetails.state == 'ACTIVE', 'badge bg-red': vmDetails.state != 'ACTIVE',  }"> {{vmDetails.state}}</span>
-          </div>
+          <div class="row center-block">
+            <strong><i class="fa fa-book margin-r-5"></i> User</strong>
 
-          <strong><i class="fa fa-book margin-r-5"></i> User</strong>
-
-          <p class="text-muted">
-            {{this.vmDetails.user}}
-          </p>
-
-          <hr>
-
-          <strong><i class="fa fa-map-marker margin-r-5"></i> Metrics</strong>
-
-          <p class="text-muted">Malibu, California</p>
-
-          <hr>
-
-          <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
-
-          <p>
-            <span class="label label-danger">UI Design</span>
-            <span class="label label-success">Coding</span>
+            <p class="text-muted">
+              {{this.vmDetails.user}}
             </p>
-            <p>
-            <span class="label label-info">Javascript</span>
-            <span class="label label-warning">PHP</span>
-            <span class="label label-primary">Node.js</span>
-          </p>
-
-          <hr>
-
-          <strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
-
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+            <hr>
+            <strong><i class="fa fa-map-marker margin-r-5"></i> Metrics</strong>
+              <br />
+              <br />
+            <div>
+              <span class="label label-info">CPU:</span><span> {{'  ' + vmDetails.realTime_CPU}}</span>
+              <br />
+              <span class="label label-info">Memory:</span><span>{{'   ' +vmDetails.realTime_MEMORY}}</span>
+            </div>
+            <hr>
+            <strong><i class="fa fa-pencil margin-r-5"></i> Template</strong>
+            <p>{{vmDetails.templateId}}</p>
+            <hr>
+            <strong><i class="fa fa-pencil margin-r-5"></i> Actions</strong>
+            <br />
+            <button v-on:click="resumeVM" type="button" class="btn btn-info"><i class="fa fa-play"></i></button>
+            <button v-on:click="rebootVM" type="button" class="btn btn-info"><i class="fa fa-repeat"></i></button>
+            <button v-on:click="poweroffVM" type="button" class="btn btn-info"><i class="fa fa-power-off"></i></button>
+            <button v-on:click="deleteVM" type="button" class="btn btn-info"><i class="fa fa-trash"></i></button>
+          </div>
         </div>
-        <!-- /.box-body -->
       </div>
     </div>
-
-
-
-    <div class="form-group col-md-3">
-      {{this.vmDetails}}
-      <div class="box box-primary">
-        <div class="box-header">
-            <h3 class="box-title"><b> VM - {{this.vmDetails.name}} </b></h3>
-            <div class="box-tools pull-right">
-              <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-            </div>
-        </div>
-        <div class="box-body">
-          <div class="row center-block">
-
-            <div class="form-group">
-              <span :class="{ 'badge bg-green': vmDetails.state == 'ACTIVE', 'badge bg-red': vmDetails.state != 'ACTIVE',  }"> {{vmDetails.state}}</span>
-            </div>
-
-
-            <div class="form-group col-md-6">
-              <h5><b> User  </b></h5>
-                <input name="vmame" v-model="vmDetails.user" class="form-control" type="text" placeholder="vmame" >
-              </div>
-
-
-
-            <div class="form-group col-md-6">
-              <h5><b> deplyId  </b></h5>
-                <input name="vmame" v-model="vmDetails.deplyId" class="form-control" type="text" placeholder="vmame" >
-              </div>
-
-            <div class="form-group col-md-6">
-              <h5><b> realTime_CPU  </b></h5>
-                <input name="vmame" v-model="vmDetails.realTime_CPU" class="form-control" type="text" placeholder="vmame" >
-              </div>
-
-            <div class="form-group col-md-6">
-              <h5><b> realTime_MEMORY  </b></h5>
-                <input name="vmame" v-model="vmDetails.realTime_MEMORY" class="form-control" type="text" placeholder="vmame" >
-              </div>
-
-            <div class="form-group col-md-6">
-              <h5><b> realTime_STATE  </b></h5>
-                <input name="vmame" v-model="vmDetails.realTime_STATE" class="form-control" type="text" placeholder="vmame" >
-              </div>
-              <div class="form-group col-md-6">
-                <h5><b> templateId  </b></h5>
-                  <input name="vmame" v-model="vmDetails.templateId" class="form-control" type="text" placeholder="vmame" >
-                </div>
-          </div>
-          </div>
-        </div>
-      </div>
-
-          <button v-on:click="deleteVM" type="button" class="btn btn-info">Delete</button>
-          <button v-on:click="rebootVM" type="button" class="btn btn-info">Reboot</button>
-          <button v-on:click="resumeVM" type="button" class="btn btn-info">Resume</button>
-          <button v-on:click="poweroffVM" type="button" class="btn btn-info">PowerOff</button>
-
-          <div v-if="responseError" class="alert alert-danger alert-dismissable">
-             <i class="fa fa-ban"></i>
-             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-             <b>Alert! </b>{{this.responseError}}
-          </div>
-
-          <div v-if="responseSuccess" class="alert alert-success alert-dismissable">
-            <i class="fa fa-check"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <b>Alert! </b> {{this.responseSuccess}}
-          </div>
-
-  </section>
+  </div>
 </template>
 
 <script>
@@ -133,54 +51,64 @@ export default {
   },
   data () {
     return {
-      responseError: false,
-      responseSuccess: false
     }
   },
   methods: {
     rebootVM: function () {
       var self = this
-      axios.get('/api/opennebula/rebootVM/')
+      axios.get('/api/opennebula/rebootVM/' + self.vmDetails.id)
         .then(function (response) {
-          self.responseSuccess = response.data
+          if (response.data.status === 'ok') {
+            self.$emit('successMessage', response.data)
+          } else {
+            self.$emit('errorMessage', response.data)
+          }
         })
         .catch(error => {
-          self.responseError = error.response
+          self.$emit('errorMessage', error.data)
         })
     },
     resumeVM: function () {
       var self = this
-      axios.get('/api/opennebula/resumeVM/')
+      axios.get('/api/opennebula/resumeVM/' + self.vmDetails.id)
         .then(function (response) {
-          self.responseSuccess = response.data
+          if (response.data.status === 'ok') {
+            self.$emit('successMessage', response.data)
+          } else {
+            self.$emit('errorMessage', response.data)
+          }
         })
         .catch(error => {
-          self.responseError = error.response
+          self.$emit('errorMessage', error.data)
         })
     },
     poweroffVM: function () {
       var self = this
-      axios.get('/api/opennebula/poweroffVM/')
+      axios.get('/api/opennebula/poweroffVM/' + self.vmDetails.id)
         .then(function (response) {
-          self.responseSuccess = response.data
+          if (response.data.status === 'ok') {
+            this.$emit('successMessage', response.data)
+          } else {
+            this.$emit('errorMessage', response.data)
+          }
         })
         .catch(error => {
-          self.responseError = error.response
+          this.$emit('errorMessage', error.data)
         })
     },
     deleteVM: function () {
       var self = this
-      axios.get('/api/opennebula/deleteVM/')
+      axios.get('/api/opennebula/deleteVM/' + self.vmDetails.id)
         .then(function (response) {
           if (response.data.status === 'ok') {
-            // Mandar evento para o pai
-            self.responseSuccess = response.data
+            self.$emit('removeVMItem')
+            self.$emit('successMessage', response.data)
           } else {
-            self.responseError = response.data
+            self.$emit('errorMessage', response.data)
           }
         })
         .catch(error => {
-          self.responseError = error.response
+          self.$emit('errorMessage', error.data)
         })
     }
   }

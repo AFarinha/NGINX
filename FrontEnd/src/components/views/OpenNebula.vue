@@ -1,8 +1,27 @@
 <template>
   <section class="content">
+    <div class="row center-block">
+      <OpenNebulaVMItem
+        v-for="(vmDetail, index) in this.VMList"
+        :vmDetails="vmDetail"
+        :key="vmDetail"
+        v-on:removeVMItem="removeVMItem(index)"
+        v-on:errorMessage="errorMessage"
+        v-on:successMessage="successMessage">
+      </OpenNebulaVMItem>
+  </div>
 
-    <OpenNebulaVMItem v-for="(vmDetail, index) in this.VMList" :vmDetails="vmDetail" :key="vmDetail" v-on:removeVMItem="removeVMItem(index)">
-    </OpenNebulaVMItem>
+    <div v-if="responseError" class="alert alert-danger alert-dismissable">
+       <i class="fa fa-ban"></i>
+       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+       <b>Alert! </b>{{this.responseError}}
+    </div>
+
+    <div v-if="responseSuccess" class="alert alert-success alert-dismissable">
+      <i class="fa fa-check"></i>
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <b>Alert! </b> {{this.responseSuccess}}
+    </div>
 
   </section>
 </template>
@@ -30,8 +49,19 @@ export default {
     }
   },
   methods: {
-    removeVMItem (index) {
+    removeVMItem: function (index) {
+      console.log('passou')
       this.VMList.splice(index, 1)
+    },
+    errorMessage: function (msgError) {
+      var self = this
+      self.responseSuccess = false
+      self.responseError = msgError
+    },
+    successMessage: function (msgSuccess) {
+      var self = this
+      self.responseError = false
+      self.responseSuccess = msgSuccess
     }
   },
   created () {

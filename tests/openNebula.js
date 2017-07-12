@@ -11,7 +11,7 @@ one.version(function(err, data) {
 });
 
 one.getVMs(function(err, data) {
- //console.log(data);
+  //console.log(data);
 });
 
 one.getHosts(function(err, data) {
@@ -55,13 +55,12 @@ var vm = one.getVM(143);
 
 one.getVMs(function(err, data) {
   var arrVms = [];
-  if (err) {
-    //return response({
-    //  'status': 'failed',
-    //  'message': err
-    //})
-  } else {
-    for (var i = 0, len = data.length; i < len; i++) {
+  var leg = data.length
+  var i = 0
+    console.log(i);
+    console.log(data[i].ID);
+
+    getInfo(data[i].ID, function (response) {
       arrVms.push({
         'id': data[i].ID,
         'name': data[i].NAME,
@@ -71,14 +70,17 @@ one.getVMs(function(err, data) {
         'realTime_CPU': data[i].MONITORING.CPU,
         'realTime_MEMORY': data[i].MONITORING.MEMORY,
         'realTime_STATE': data[i].MONITORING.STATE,
-        'templateId': data[i].TEMPLATE.TEMPLATE_ID,
-      })
-    }
-    //return response({
-    //  'status': 'ok',
-    //  'message': arrVms
-    //})
-    console.log(data);
-    console.log(arrVms);
-  }
+        'templateId': data[i].TEMPLATE.TEMPLATE_ID
+      });
+      i++;
+    })
 }, null, 0, 1000)
+
+function getInfo(id,response) {
+  var vm = one.getVM(parseInt(id));
+  vm.info(function(err, dataInfo) {
+    console.log(dataInfo);
+    console.log(dataInfo['VM']['TEMPLATE']['NIC']);
+    response('cenas');
+  });
+}
