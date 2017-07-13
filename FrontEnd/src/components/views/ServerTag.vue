@@ -3,7 +3,7 @@
   <div class="row center-block">
     <div class="box box-solid box-primary">
       <div class="box-header">
-          <h3 class="box-title"><b> General Configuraion </b></h3>
+          <h3 class="box-title"><b> General Configuration </b></h3>
           <div class="box-tools pull-right">
               <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <!--  <button class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button> -->
@@ -77,6 +77,7 @@ import GenericItem from './GenericItem'
 import LocationTag from './LocationTag'
 import { EventBus } from '../../main.js'
 import { find, propEq } from 'ramda'
+import axios from 'axios'
 
 export default {
   props: {
@@ -151,6 +152,18 @@ export default {
     if (app.server.id === '') {
       app.addLocation()
     }
+    axios.get('/api/getAllVMS/')
+      .then(function (response) {
+        console.log(response.data.message)
+        var vms = response.data.message
+        for (var i = vms.length - 1; i >= 0; i--) {
+          app.instances.push(vms[i])
+        }
+      })
+      .catch(error => {
+        console.log(error)
+        app.responseError = error.response
+      })
   },
   components: {
     GenericItem: GenericItem,
