@@ -90,7 +90,7 @@ module.exports = {
         });
 
         upstream = utils.prepareConf('upstreams', {
-            'PROXYPASS': proxyPass,
+            'PROXYPASS': proxyPass.replace('https://', '').replace('http://', ''),
             'UPSTREAMITEMS': upstreamItems
         });
         //console.log(upstream);

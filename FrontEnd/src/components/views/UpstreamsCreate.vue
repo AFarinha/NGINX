@@ -8,19 +8,20 @@
 	          </div>
 	      </div>
 	      <div class="box-body">
-					<div class="form-inline col-md-6">
-	          <label>instance </label>
+					<div class="col-md-6">
+	          <label>Instance </label>
 	            <select v-model="upstream.instance" class="form-control" >
 	              <option v-for="option in this.instances" v-bind:value="option.ip">
 	              {{ option.name }}
 	              </option>
 	            </select>
 	        </div>
-					<br />
+					<hr />
+					<hr />
 	      	<Upstream :readOnly="false" v-bind:upstream="upstream"></Upstream>
 				</br>
 				<button @click="addUpstream" type="button" class="btn btn-success">Add Upstream item</button>
-				<button v-on:click="clearUpstream" type="button" class="btn btn-info">Clear</button>
+				<button v-on:click="clearUpstream" type="button" class="btn btn-warning">Clear</button>
 				 </br></br>
 					<div :class="{ 'box box-solid box-primary': !responseErrorCreate && !responseSuccesscreate,'box box-solid box-danger': responseErrorCreate && !responseSuccesscreate,'box box-solid box-success': !responseErrorCreate && responseSuccesscreate,  }">
 			      <div class="box-header">
