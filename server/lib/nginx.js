@@ -97,7 +97,7 @@ module.exports = {
     } else {
       console.log('aquielse');
       var opts = {
-        'url': 'http://' + req.body.instance + '/write',
+        'url': 'http://' + req.body.instance + ':8090/write',
         'json': file,
         timeout: 2000
       };
@@ -175,7 +175,7 @@ module.exports = {
       console.log('File to delete ' + fileName);
 
       console.log('req.body.instance:', req.params.instance);
-      request.delete('http://' + req.params.instance + '/delete/' + fileName, function(body,response,error ) {
+      request.delete('http://' + req.params.instance + ':8090/delete/' + fileName, function(body,response,error ) {
         console.log('post');
         console.log(JSON.parse(error).status);
 
@@ -246,7 +246,7 @@ module.exports = {
     } else {
       console.log('aquielse');
       var opts = {
-        'url': 'http://' + req.body.instance + '/nginx/test',
+        'url': 'http://' + req.body.instance + ':8090/nginx/test',
         timeout: 2000
       };
       console.log('req.body.instance:', req.body.instance);
@@ -283,7 +283,7 @@ module.exports = {
     } else {
       console.log('aquielse');
       var opts = {
-        'url': 'http://' + req.body.instance + '/nginx/reload',
+        'url': 'http://' + req.body.instance + ':8090/nginx/reload',
         timeout: 2000
       };
       console.log('req.body.instance:', req.body.instance);

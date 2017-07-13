@@ -89,7 +89,7 @@ export default {
   data () {
     return {
       instances: [
-        {id: 'localhost', name: 'localhost'}
+        {ip: 'localhost', name: 'localhost'}
       ]
     }
   },

@@ -8,11 +8,19 @@
 	          </div>
 	      </div>
 	      <div class="box-body">
-					<button v-on:click="clearUpstream" type="button" class="btn btn-info">Clear</button>
+					<div class="form-inline col-md-6">
+	          <label>instance </label>
+	            <select v-model="upstream.instance" class="form-control" >
+	              <option v-for="option in this.instances" v-bind:value="option.ip">
+	              {{ option.name }}
+	              </option>
+	            </select>
+	        </div>
 					<br />
 	      	<Upstream :readOnly="false" v-bind:upstream="upstream"></Upstream>
 				</br>
 				<button @click="addUpstream" type="button" class="btn btn-success">Add Upstream item</button>
+				<button v-on:click="clearUpstream" type="button" class="btn btn-info">Clear</button>
 				 </br></br>
 					<div :class="{ 'box box-solid box-primary': !responseErrorCreate && !responseSuccesscreate,'box box-solid box-danger': responseErrorCreate && !responseSuccesscreate,'box box-solid box-success': !responseErrorCreate && responseSuccesscreate,  }">
 			      <div class="box-header">
@@ -57,13 +65,29 @@ export default {
     return {
       upstream: {
         id: '',
-        upstreamName: '',
+        upstreamName: 'http://',
         instance: 'localhost', // '192.168.1.201:8090',
         arrayUpstreamItems: [{ type: '', subType: '', config: '' }]
       },
+      instances: [
+        {ip: 'localhost', name: 'localhost'}
+      ],
       responseSuccesscreate: false,
       responseErrorCreate: false
     }
+  },
+  created () {
+    var app = this
+    axios.get('/api/getAllVMS/')
+    .then(function (response) {
+      var vms = response.data.message
+      for (var i = vms.length - 1; i >= 0; i--) {
+        app.instances.push(vms[i])
+      }
+    })
+    .catch(error => {
+      app.responseErrorCreate = error.response
+    })
   },
   watch: {
     upstreamProp: function (value) {
@@ -150,7 +174,7 @@ export default {
     },
     postTestNginx: function () {
       var self = this
-      axios.post('/api/nginx/test', self.server)
+      axios.post('/api/nginx/test', self.upstream)
         .then(function (response) {
           console.log(response)
           self.responseSuccesscreate = response.data.status + ' : ' + response.data.stderr
@@ -162,7 +186,7 @@ export default {
     },
     postReloadNginx: function () {
       var self = this
-      axios.post('/api/nginx/reload', self.server)
+      axios.post('/api/nginx/reload', self.upstream)
         .then(function (response) {
           console.log(response)
           self.responseSuccesscreate = response.data.status + ' : ' + response.data.stderr
