@@ -87,67 +87,88 @@ module.exports = {
 
     listVMs: function(response) {
         one.getVMs(function(err, data) {
-          
             var arrVMs = [];
+            var arrVMsDB = [];
             if (err) {
                 return response({
                     'status': 'failed',
                     'message': err
                 })
             } else {
-                for (var i = 0, len = data.length; i < len; i++) {
-                    var stateString = null;
-                    switch (data[i].STATE) {
-                        case '0':
-                            stateString = 'INIT'
-                            break;
-                        case '1':
-                            stateString = 'PENDING'
-                            break;
-                        case '2':
-                            stateString = 'HOLD'
-                            break;
-                        case '3':
-                            stateString = 'ACTIVE'
-                            break;
-                        case '4':
-                            stateString = 'STOPPED'
-                            break;
-                        case '5':
-                            stateString = 'SUSPENDED'
-                            break;
-                        case '8':
-                            stateString = 'POWEROFF'
-                            break;
-                        case '9':
-                            stateString = 'UNDEPLOYED'
-                            break;
-                        case '10':
-                            stateString = 'CLONING'
-                            break;
-                        case '11':
-                            stateString = 'CLONING_FAILURE'
-                            break;
-                        default:
-                            stateString = 'ERROR!!'
+                db.selectAllVMS(function(respSelect) {
+                    if (respSelect.status === 'failed') {
+                        return response({
+                            'status': 'failed',
+                            'message': respSelect.message
+                        })
+                    } else {
+                        arrVMsDB = respSelect.message;
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            var stateString = null;
+                            switch (data[i].STATE) {
+                                case '0':
+                                    stateString = 'INIT'
+                                    break;
+                                case '1':
+                                    stateString = 'PENDING'
+                                    break;
+                                case '2':
+                                    stateString = 'HOLD'
+                                    break;
+                                case '3':
+                                    stateString = 'ACTIVE'
+                                    break;
+                                case '4':
+                                    stateString = 'STOPPED'
+                                    break;
+                                case '5':
+                                    stateString = 'SUSPENDED'
+                                    break;
+                                case '8':
+                                    stateString = 'POWEROFF'
+                                    break;
+                                case '9':
+                                    stateString = 'UNDEPLOYED'
+                                    break;
+                                case '10':
+                                    stateString = 'CLONING'
+                                    break;
+                                case '11':
+                                    stateString = 'CLONING_FAILURE'
+                                    break;
+                                default:
+                                    stateString = 'ERROR!!'
+                            }
+                            console.log('Antes for');
+                            console.log('arrVMs', arrVMs);
+                            console.log('arrVMsDB', arrVMsDB);
+                            for (var j = arrVMsDB.length - 1; j >= 0; j--) {
+                                console.log('if', arrVMsDB[j].id == data[i].ID);
+                                console.log('arrVMsDB[i].id', arrVMsDB[j].id);
+                                console.log('data[i].ID', data[i].ID);
+                                if (arrVMsDB[j].id == data[i].ID) {
+                                    console.log('Encontrou VM');
+                                    arrVMs.push({
+                                        'id': data[i].ID,
+                                        'name': data[i].NAME,
+                                        'user': data[i].UNAME,
+                                        'state': stateString,
+                                        'deplyId': data[i].DEPLOY_ID,
+                                        'realTime_CPU': data[i].MONITORING.CPU,
+                                        'realTime_MEMORY': data[i].MONITORING.MEMORY,
+                                        'realTime_STATE': data[i].MONITORING.STATE,
+                                        'templateId': data[i].TEMPLATE.TEMPLATE_ID,
+                                        'templateName': data[i].TEMPLATE.DISK.IMAGE,
+                                        'IP': data[i].TEMPLATE.NIC.IP,
+                                    })
+                                }
+                            }
+                        }
+                        return response({
+                            'status': 'ok',
+                            'message': arrVMs
+                        })
                     }
-                    arrVMs.push({
-                        'id': data[i].ID,
-                        'name': data[i].NAME,
-                        'user': data[i].UNAME,
-                        'state': stateString,
-                        'deplyId': data[i].DEPLOY_ID,
-                        'realTime_CPU': data[i].MONITORING.CPU,
-                        'realTime_MEMORY': data[i].MONITORING.MEMORY,
-                        'realTime_STATE': data[i].MONITORING.STATE,
-                        'templateId': data[i].TEMPLATE.TEMPLATE_ID,
-                        'templateName': data[i].TEMPLATE.DISK.IMAGE,
-                        'IP': data[i].TEMPLATE.NIC.IP,
-                    })
-                }
-                return response({
-                    'status': 'ok',
-                    'message': arrVMs
                 })
             }
         }, null, 0, 1000)
