@@ -14,7 +14,7 @@ module.exports = {
 
             db.run("CREATE TABLE IF NOT EXISTS vhosts (id INTEGER PRIMARY KEY AUTOINCREMENT, instance TEXT,name TEXT, port INT , config TEXT, UNIQUE(instance,name,port))");
             db.run("CREATE TABLE IF NOT EXISTS upstreams (id INTEGER PRIMARY KEY AUTOINCREMENT, instance TEXT, name TEXT, config TEXT, UNIQUE(instance,name))");
-            db.run("CREATE TABLE IF NOT EXISTS vms (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, hostname TEXT, ip TEXT, templateId TEXT)");
+            db.run("CREATE TABLE IF NOT EXISTS vms (id INTEGER PRIMARY KEY, name TEXT, hostname TEXT, ip TEXT, templateId TEXT)");
         });
 
         closeBD();
@@ -119,7 +119,7 @@ module.exports = {
         console.log('\nVM', vm, '\n');
 
         console.log('DB: INSERT');
-        db.run("INSERT INTO vms (name, hostname, ip,templateId) VALUES (?,?,?,?)", vm.name, vm.hostname, vm.ip, vm.templateId, function(err) {
+        db.run("INSERT INTO vms (id, name, hostname, ip,templateId) VALUES (?,?,?,?,?)", vm.id, vm.name, vm.hostname, vm.ip, vm.templateId, function(err) {
             if (err) {
                 console.log({ 'status': 'failed', 'message': err });
                 response({ 'status': 'failed', 'message': err });
@@ -128,6 +128,48 @@ module.exports = {
                 response({ 'status': 'ok', 'message': { 'id': this.lastID } });
             }
         });
+        closeBD();
+    },
+    deleteVM: function(id, response) {
+
+        openBD();
+
+        db.all("DELETE FROM vms where id = ?", id, function(err, rows) {
+            if (err) {
+                return response({ 'status': 'failed', 'message': err });
+            } else {
+                response({ 'status': 'ok', 'message': id.toString() });
+            }
+        });
+
+        closeBD();
+    },
+    selectAllVMS: function(response) {
+
+        openBD();
+
+        db.all("SELECT id, name, hostname, ip, templateId FROM vms", function(err, rows) {
+            if (err) {
+                return response({ 'status': 'failed', 'message': err });
+            } else {
+                response({ 'status': 'ok', 'message': JSON.parse(JSON.stringify(rows)) });
+            }
+        });
+
+        closeBD();
+    },
+    selectVMByID: function(id, response) {
+
+        openBD();
+
+        db.all("SELECT id, name, hostname, ip, templateId FROM vms where id = ?", id, function(err, rows) {
+            if (err) {
+                return response({ 'status': 'failed', 'message': err });
+            } else {
+                response({ 'status': 'ok', 'message': JSON.parse(JSON.stringify(rows)) });
+            }
+        });
+
         closeBD();
     },
     selectVHost: function(id, response) {
@@ -341,10 +383,10 @@ module.exports = {
         });
         closeBD();
     },
-    selectDirectivesFilter: function(context,response) {
+    selectDirectivesFilter: function(context, response) {
         openBD();
         console.log('DB Context:', context);
-        db.all("select name as value, name as text, syntax, _default, context, link from directives where context like ?",'%'+context+'%', function(err, rows) {
+        db.all("select name as value, name as text, syntax, _default, context, link from directives where context like ?", '%' + context + '%', function(err, rows) {
             if (err) {
                 return response({ 'status': 'failed', 'message': err });
             } else {
