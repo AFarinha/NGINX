@@ -14,7 +14,7 @@
           <h5><b>instance </b></h5>
           <div :class="{ 'has-error': vErrors.has('instance') }">
             <select v-model="server.instance" class="form-control" >
-              <option v-for="option in this.instances" v-bind:value="option.id">
+              <option v-for="option in this.instances" v-bind:value="option.ip">
               {{ option.name }}
               </option>
             </select>
@@ -156,6 +156,8 @@ export default {
       .then(function (response) {
         console.log(response.data.message)
         var vms = response.data.message
+        console.log('vms')
+        console.log(vms)
         for (var i = vms.length - 1; i >= 0; i--) {
           app.instances.push(vms[i])
         }
