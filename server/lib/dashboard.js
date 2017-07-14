@@ -15,7 +15,7 @@ Dashboard.prototype.init = function() {
 
   this.httpServer.listen(this.port);
   console.log('(server) Dashboard server listening on port ' + this.port);
-
+  // ERRO NO DASHHODE
   this.app.get('/stats/:hostname', function(req, res) {
     var keys = Object.keys(self.station.collectors);
 
