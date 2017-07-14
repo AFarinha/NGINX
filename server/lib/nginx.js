@@ -249,6 +249,7 @@ module.exports = {
       };
       console.log('req.body.instance:', req.body.instance);
       request.post(opts, function(error, response, body) {
+        //console.log(response);
         if(error){
           return responseToApi({
             'status': 'failed',
@@ -264,7 +265,7 @@ module.exports = {
           console.log('postok');
           return responseToApi({
             'status': 'ok',
-            'message': {}
+            'message': JSON.parse(body).message
           })
         }
       });
@@ -304,7 +305,7 @@ module.exports = {
           console.log('postok');
           return responseToApi({
             'status': 'ok',
-            'message': ''
+            'message': JSON.parse(body).message
           })
         }
       });

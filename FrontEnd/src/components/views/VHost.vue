@@ -123,8 +123,10 @@ export default {
         .then(function (response) {
           console.log(response)
           if (response.data.status === 'failed') {
+            app.responseSuccess = false
             app.responseError = response.data.message
           } else {
+            app.responseError = false
             app.responseSuccess = response.data.message
           }
         })
@@ -137,10 +139,12 @@ export default {
       var app = this
       axios.post('/api/nginx/reload', app.server)
         .then(function (response) {
-          console.log(response)
+          console.log(response.data.message)
           if (response.data.status === 'failed') {
+            app.responseSuccess = false
             app.responseError = response.data.message
           } else {
+            app.responseError = false
             app.responseSuccess = response.data.message
           }
         })

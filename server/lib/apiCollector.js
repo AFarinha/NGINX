@@ -24,7 +24,7 @@ ApiCollector.prototype.init = function() {
     });
     res.send({
       'status': 'ok',
-      'message': output.stdout.toString() + ' ' + output.stderr.toString()
+      'message': 'Reloaded: ' +  output.stdout.toString() + ' ' + output.stderr.toString()
     });
   });
 
@@ -34,7 +34,7 @@ ApiCollector.prototype.init = function() {
     });
     res.send({
       'status': 'ok',
-      'message': output.stdout.toString() + ' ' + output.stderr.toString()
+      'message':'Test: ' + output.stdout.toString() + ' ' + output.stderr.toString()
     });
   });
 

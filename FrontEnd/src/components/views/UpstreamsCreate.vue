@@ -179,9 +179,11 @@ export default {
         .then(function (response) {
           console.log(response)
           if (response.data.status === 'failed') {
-            self.responseError = response.data.message
+            self.responseSuccesscreate = false
+            self.responseErrorCreate = response.data.message
           } else {
-            self.responseSuccess = response.data.message
+            self.responseErrorCreate = false
+            self.responseSuccesscreate = response.data.message
           }
         })
         .catch(error => {
@@ -195,9 +197,11 @@ export default {
         .then(function (response) {
           console.log(response)
           if (response.data.status === 'failed') {
-            self.responseError = response.data.message
+            self.responseSuccesscreate = false
+            self.responseErrorCreate = response.data.message
           } else {
-            self.responseSuccess = response.data.message
+            self.responseErrorCreate = false
+            self.responseSuccesscreate = response.data.message
           }
         })
         .catch(error => {
