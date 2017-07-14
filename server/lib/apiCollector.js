@@ -2,8 +2,7 @@ var express = require('express'),
   utils = require('./utils'),
   generateFiles = require('./GenerateFiles'),
   cp = require('child_process'),
-  bodyParser = require('body-parser'),
-  nginx = require('./nginx.js');
+  bodyParser = require('body-parser');
 
 var ApiCollector = function(port) {
   this.port = port;
@@ -20,18 +19,23 @@ ApiCollector.prototype.init = function() {
   console.log('(server) CollectorConfig listening on port ' + this.port);
 
   this.app.post('/nginx/reload', function(req, res) {
-    console.log('\n------------------------- /nginx/reload -------------------------\n');
-    nginx.reloadNginx(req, function(response) {
-        res.send(response)
-    })
+    var output = cp.spawnSync('/usr/sbin/nginx', ['-s', 'reload'], {
+      encoding: 'utf8'
+    });
+    res.send({
+      'status': 'ok',
+      'message': output.stdout.toString() + ' ' + output.stderr.toString()
+    });
   });
 
   this.app.post('/nginx/test', function(req, res) {
-    console.log('\n------------------------- /nginx/test -------------------------\n');
-    nginx.testNginx(req, function(response) {
-        console.log(response);
-        res.send(response)
-    })
+    var output = cp.spawnSync('/usr/sbin/nginx', ['-t'], {
+      encoding: 'utf8'
+    });
+    res.send({
+      'status': 'ok',
+      'message': output.stdout.toString() + ' ' + output.stderr.toString()
+    });
   });
 
   //acho que tanto pode escrever upstreams como Vhosts
