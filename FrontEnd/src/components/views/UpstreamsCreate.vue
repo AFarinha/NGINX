@@ -77,7 +77,7 @@ export default {
       responseErrorCreate: false
     }
   },
-  created () {
+  beforeCreate () {
     var app = this
     axios.get('/api/getAllVMS/')
     .then(function (response) {

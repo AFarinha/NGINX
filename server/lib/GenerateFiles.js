@@ -27,11 +27,11 @@ module.exports = {
             });
 
             loc += utils.prepareConf('location', {
-                'PATH': item.pathGeneric == 0 ? item.path : '~* ^.+\.(' + item.pathFileType.join('|') + ')$',
+                'PATH': item.pathGeneric == 'zero' ? item.path : '~* ^.+\.(' + item.pathFileType.join('|') + ')$',
                 'PROXYPASS': (function(){
-                    if ( item.StateProxyPass == 0 ) return ''
-                    else if ( item.StateProxyPass == 1 ) return 'proxy_pass ' + item.upstreamName + ';'
-                    else if ( item.StateProxyPass == 2 ) return 'proxy_pass ' + item.proxyPass + ';'
+                    if ( item.StateProxyPass == 'zero' ) return ''
+                    else if ( item.StateProxyPass == 'one' ) return 'proxy_pass ' + item.upstreamName + ';'
+                    else if ( item.StateProxyPass == 'two' ) return 'proxy_pass ' + item.proxyPass + ';'
                 }),
                 'CACHESERVER': item.cacheServer ? 'include /etc/nginx/dashboard/cache.conf;' : '',
                 'CACHECLIENT': item.cacheClient ? 'expires ' + item.cacheClientTimeNumber + '' + item.cacheClientTimeUnit.code + ';' : '',

@@ -23,20 +23,20 @@
               <div class="box-body">
                 <div class="row">
                   <div class="form-group col-md-6">
-	                  <input type="radio" id="zero" value="0" name="loc" v-model="location.pathGeneric">
+	                  <input type="radio" value="zero" v-model="location.pathGeneric" >
           					<label for="one">Generic</label>
           					<br>
         				  </div>
 
         					<div class="form-group col-md-6">
-          					<input type="radio" id="one" value="1" name="loc" v-model="location.pathGeneric">
+          					<input type="radio" value="one" v-model="location.pathGeneric" >
           					<label for="two">MIMES</label>
           					<br>
         					</div>
       				  </div>
 	             <div class="row">
                 <!-- INICIO LOCATION PATH -->
-                <div class="form-group col-md-10" v-if="location.pathGeneric == '0' " >
+                <div class="form-group col-md-10" v-if="location.pathGeneric == 'zero' " >
                   <div :class="{ 'has-error': vErrors.has('path') }">
                     <div class="input-group">
                       <div class="input-group-addon">
@@ -47,7 +47,7 @@
                     <span v-show="vErrors.has('path')" class="help-block">{{ vErrors.first('path') }}</span>
                   </div>
                 </div>
-                <div class="form-group col-md-10" v-if="location.pathGeneric == '1' " >
+                <div class="form-group col-md-10" v-if="location.pathGeneric == 'one' " >
                   <div :class="{ 'has-error': vErrors.has('path') }">
                     <multiselect
                       v-model="location.pathFileType"
@@ -123,19 +123,19 @@
 
               <div class="row">
                 <div class="form-group col-md-4">
-                  <input type="radio" id="one" value="0" name="prox" v-model="location.StateProxyPass">
+                  <input type="radio"  value="zero"  v-model="location.StateProxyPass">
                   <label for="one">None</label>
                   <br>
                 </div>
 
                 <div class="form-group col-md-4">
-                  <input type="radio" id="two" value="1" name="prox" v-model="location.StateProxyPass">
+                  <input type="radio"  value="one"  v-model="location.StateProxyPass">
                   <label for="two">Upstream</label>
                   <br>
                 </div>
 
                 <div class="form-group col-md-4">
-                  <input type="radio" id="two" value="2" name="prox"  v-model="location.StateProxyPass">
+                  <input type="radio"  value="two" v-model="location.StateProxyPass">
                   <label for="two">Proxy Pass</label>
                   <br>
                 </div>
@@ -143,10 +143,10 @@
 
              <div class="row">
               <!-- INICIO NONE -->
-              <div class="form-group col-md-10" v-if="location.StateProxyPass == '0' " >
+              <div class="form-group col-md-10" v-if="location.StateProxyPass == 'zero' " >
               </div>
               <!-- FIM NONE | INICIO UPSTREAM -->
-              <div class="form-group col-md-10" v-if="location.StateProxyPass == '1' " >
+              <div class="form-group col-md-10" v-if="location.StateProxyPass == 'one' " >
                 <select v-model="this.location.upstreamId" class="form-control" @change="showConfig(this.location.upstreamId)">
                   <option v-for="option in this.Upstreams" v-bind:value="option.id">
                   {{ option.name }}
@@ -155,7 +155,7 @@
                 <Upstream :readOnly="true" v-bind:upstream="this.UpstreamChoosed.config"></Upstream>
               </div>
               <!-- FIM UPSTREAM | INICIO PROXY PASS -->
-              <div class="form-group col-md-10" v-if="location.StateProxyPass == '2' " >
+              <div class="form-group col-md-10" v-if="location.StateProxyPass == 'two' " >
                 <div :class="{ 'has-error': vErrors.has('proxyPass') }">
                   <!-- v-validate="`${(location.IsProxyPass || location.arrayUpstreams.length != 0) ? 'required' : ''}`" -->
                   <input name="proxyPass" v-model="location.proxyPass"  class="form-control" type="text" placeholder="Proxy Pass">
@@ -225,7 +225,7 @@ export default {
         {code: 'd', description: 'days'},
         {code: 'w', description: 'weeks'}
       ],
-      options: ['css', 'xml', 'gif', 'jpeg', 'jpg', 'js', 'atom', 'rss', 'mml', 'txt', 'jad', 'wml', 'htc', ' png', 'tif', 'tiff', 'wbmp', 'ico', 'jng', 'bmp', 'svg', 'svgz', 'webp', 'woff', 'jar', 'war', 'ear', 'json', 'hqx', 'doc', 'pdf', 'ps', 'eps', 'ai', 'rtf', 'm3u8', 'xls', 'eot', 'ppt', 'wmlc', 'kml', 'kmz', '7z', 'cco', 'jardiff', 'jnlp', 'run', 'pl', 'pm', 'prc:pdb', 'rar', 'rpm', 'sea', 'swf', 'sit', 'tcl', 'tk', 'der', 'pem', 'crt', 'xpi', 'xhtml', 'xspf', 'zip', 'bin', 'exe', 'dll', 'deb', 'dmg', 'iso', 'img', 'msi', 'msp', 'msm', 'mid', 'midi', 'kar', 'mp3', 'ogg', 'm4a', 'ra', '3gpp', '3gp', 'ts', 'mp4', 'mpeg', 'mpg', 'mov', 'webm', 'flv', 'm4v', 'mng', 'asx', 'asf', 'wmv', 'avi'],
+      options: ['css', 'xml', 'gif', 'jpeg', 'jpg', 'js', 'atom', 'rss', 'mml', 'txt', 'jad', 'wml', 'htc', 'png', 'tif', 'tiff', 'wbmp', 'ico', 'jng', 'bmp', 'svg', 'svgz', 'webp', 'woff', 'jar', 'war', 'ear', 'json', 'hqx', 'doc', 'pdf', 'ps', 'eps', 'ai', 'rtf', 'm3u8', 'xls', 'eot', 'ppt', 'wmlc', 'kml', 'kmz', '7z', 'cco', 'jardiff', 'jnlp', 'run', 'pl', 'pm', 'prc:pdb', 'rar', 'rpm', 'sea', 'swf', 'sit', 'tcl', 'tk', 'der', 'pem', 'crt', 'xpi', 'xhtml', 'xspf', 'zip', 'bin', 'exe', 'dll', 'deb', 'dmg', 'iso', 'img', 'msi', 'msp', 'msm', 'mid', 'midi', 'kar', 'mp3', 'ogg', 'm4a', 'ra', '3gpp', '3gp', 'ts', 'mp4', 'mpeg', 'mpg', 'mov', 'webm', 'flv', 'm4v', 'mng', 'asx', 'asf', 'wmv', 'avi'],
       Upstreams: [],
       // selectedUpstream: '',
       UpstreamChoosed: {

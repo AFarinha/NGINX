@@ -9,7 +9,7 @@
           <span class="info-box-icon bg-aqua"><i class="fa fa-cogs"></i></span>
           <div class="info-box-content">
             <span class="info-box-text">Requests</span>
-            <span class="info-box-number">{{this.infoServers.requestspers}} /s</span>
+            <span class="info-box-number">{{this.infoServers.requestspers.toFixed(1) }} /s</span>
           </div>
           <!-- /.info-box-content -->
         </div>

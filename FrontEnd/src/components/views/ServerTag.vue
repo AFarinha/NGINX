@@ -13,7 +13,7 @@
         <div class="form-group col-md-4">
           <h5><b>instance </b></h5>
           <div :class="{ 'has-error': vErrors.has('instance') }">
-            <select v-model="server.instance" class="form-control" >
+            <select v-model="this.server.instance" class="form-control" :disabled="server.id !== '' ? true : false" >
               <option v-for="option in this.instances" v-bind:value="option.ip">
               {{ option.name }}
               </option>
@@ -124,7 +124,7 @@ export default {
     },
     addLocation: function () {
       this.server.arrayLocations.push({
-        pathGeneric: 0,
+        pathGeneric: 'zero',
         path: '/',
         pathFileType: [],
         cacheServer: false,
@@ -132,9 +132,9 @@ export default {
         cacheClientTimeNumber: '',
         cacheClientTimeUnit: { code: 'm', description: 'minutes' },
         // para setar o radio button List
-        StateProxyPass: 0,
+        StateProxyPass: 'zero',
         // para o guardar o valor caso seja 2 (ProxyPass)
-        proxyPass: '',
+        proxyPass: 'http://',
         // para setar a ddl
         upstreamId: '',
         // para conseguir escrever no ficheiro
@@ -145,13 +145,8 @@ export default {
       this.server.arrayLocations.splice(index, 1)
     }
   },
-  created () {
-    // para criar location por default
+  beforeCreate () {
     var app = this
-    console.log(app.server)
-    if (app.server.id === '') {
-      app.addLocation()
-    }
     axios.get('/api/getAllVMS/')
       .then(function (response) {
         console.log(response.data.message)
@@ -166,6 +161,14 @@ export default {
         console.log(error)
         app.responseError = error.response
       })
+  },
+  created () {
+    // para criar location por default
+    var app = this
+    console.log(app.server)
+    if (app.server.id === '') {
+      app.addLocation()
+    }
   },
   components: {
     GenericItem: GenericItem,
