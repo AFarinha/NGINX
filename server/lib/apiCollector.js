@@ -20,27 +20,18 @@ ApiCollector.prototype.init = function() {
   console.log('(server) CollectorConfig listening on port ' + this.port);
 
   this.app.post('/nginx/reload', function(req, res) {
-    var output = cp.spawnSync('/usr/sbin/nginx', ['-s', 'reload'], {
-      encoding: 'utf8'
-    });
-
-    res.send({
-      'status': 'ok',
-      'stdout': output.stdout.toString(),
-      'stderr': output.stderr.toString(),
-    });
+    console.log('\n------------------------- /nginx/reload -------------------------\n');
+    nginx.reloadNginx(req, function(response) {
+        res.send(response)
+    })
   });
 
   this.app.post('/nginx/test', function(req, res) {
-    var output = cp.spawnSync('/usr/sbin/nginx', ['-t'], {
-      encoding: 'utf8'
-    });
-
-    res.send({
-      'status': 'ok',
-      'stdout': output.stdout.toString(),
-      'stderr': output.stderr.toString(),
-    });
+    console.log('\n------------------------- /nginx/test -------------------------\n');
+    nginx.testNginx(req, function(response) {
+        console.log(response);
+        res.send(response)
+    })
   });
 
   //acho que tanto pode escrever upstreams como Vhosts
