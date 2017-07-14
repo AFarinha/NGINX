@@ -103,11 +103,11 @@ export default {
         .then(function (response) {
           if (response.data.status === 'failed') {
             console.log(response.data)
-            app.responseError = response.data
+            app.responseError = response.data.message
             app.responseSuccess = false
           } else {
             app.server.id = response.data.message.id.toString()
-            app.responseSuccess = response.data
+            app.responseSuccess = response.data.message
             app.responseError = false
           }
         })
@@ -122,11 +122,15 @@ export default {
       axios.post('/api/nginx/test', app.server)
         .then(function (response) {
           console.log(response)
-          app.responseSuccess = response.data.status + ' : ' + response.data.stderr
+          if (response.data.status === 'failed') {
+            app.responseError = response.data.message
+          } else {
+            app.responseSuccess = response.data.message
+          }
         })
         .catch(error => {
           console.log(error)
-          app.responseError = error.response.statusText + ' : ' + error.response.data
+          app.responseError = error.data
         })
     },
     postReloadNginx: function () {
@@ -134,11 +138,15 @@ export default {
       axios.post('/api/nginx/reload', app.server)
         .then(function (response) {
           console.log(response)
-          app.responseSuccess = response.data.status + ' : ' + response.data.stderr
+          if (response.data.status === 'failed') {
+            app.responseError = response.data.message
+          } else {
+            app.responseSuccess = response.data.message
+          }
         })
         .catch(error => {
           console.log(error)
-          app.responseError = error.response.statusText + ' : ' + error.response.data
+          app.responseError = error.data
         })
     }
   },

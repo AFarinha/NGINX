@@ -80,6 +80,7 @@ Api.prototype.init = function() {
     this.app.post('/api/nginx/test', function(req, res) {
         console.log('\n------------------------- /nginx/test -------------------------\n');
         nginx.testNginx(req, function(response) {
+            console.log(response);
             res.send(response)
         })
     });

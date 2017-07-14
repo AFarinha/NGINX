@@ -237,11 +237,9 @@ module.exports = {
       var output = cp.spawnSync('/usr/sbin/nginx', ['-t'], {
         encoding: 'utf8'
       });
-
       responseToApi({
         'status': 'ok',
-        'stdout': output.stdout.toString(),
-        'stderr': output.stderr.toString(),
+        'message': output.stdout.toString() + ' ' + output.stderr.toString()
       });
     } else {
       console.log('aquielse');
@@ -251,8 +249,12 @@ module.exports = {
       };
       console.log('req.body.instance:', req.body.instance);
       request.post(opts, function(error, response, body) {
-        console.log('post');
-        if (JSON.parse(body).status == 'failed') {
+        if(error){
+          return responseToApi({
+            'status': 'failed',
+            'message': error
+          })
+        } else if (JSON.parse(body).status == 'failed') {
           console.log('posterro');
           return responseToApi({
             'status': 'failed',
@@ -262,7 +264,7 @@ module.exports = {
           console.log('postok');
           return responseToApi({
             'status': 'ok',
-            'message': ''
+            'message': {}
           })
         }
       });
@@ -274,11 +276,9 @@ module.exports = {
       var output = cp.spawnSync('/usr/sbin/nginx', ['-s', 'reload'], {
         encoding: 'utf8'
       });
-
       responseToApi({
         'status': 'ok',
-        'stdout': output.stdout.toString(),
-        'stderr': output.stderr.toString(),
+        'message': output.stdout.toString() + ' ' + output.stderr.toString()
       });
     } else {
       console.log('aquielse');
@@ -289,7 +289,12 @@ module.exports = {
       console.log('req.body.instance:', req.body.instance);
       request.post(opts, function(error, response, body) {
         console.log('post');
-        if (JSON.parse(body).status == 'failed') {
+        if(error){
+          responseToApi({
+            'status': 'failed',
+            'message': error
+          })
+        } else if (JSON.parse(body).status == 'failed') {
           console.log('posterro');
           return responseToApi({
             'status': 'failed',

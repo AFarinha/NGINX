@@ -178,11 +178,15 @@ export default {
       axios.post('/api/nginx/test', self.upstream)
         .then(function (response) {
           console.log(response)
-          self.responseSuccesscreate = response.data.status + ' : ' + response.data.stderr
+          if (response.data.status === 'failed') {
+            self.responseError = response.data.message
+          } else {
+            self.responseSuccess = response.data.message
+          }
         })
         .catch(error => {
           console.log(error)
-          self.responseErrorCreate = error.response.statusText + ' : ' + error.response.data
+          self.responseErrorCreate = error.data
         })
     },
     postReloadNginx: function () {
@@ -190,11 +194,15 @@ export default {
       axios.post('/api/nginx/reload', self.upstream)
         .then(function (response) {
           console.log(response)
-          self.responseSuccesscreate = response.data.status + ' : ' + response.data.stderr
+          if (response.data.status === 'failed') {
+            self.responseError = response.data.message
+          } else {
+            self.responseSuccess = response.data.message
+          }
         })
         .catch(error => {
           console.log(error)
-          self.responseErrorCreate = error.response.statusText + ' : ' + error.response.data
+          self.responseErrorCreate = error.data
         })
     }
   },
