@@ -2,7 +2,8 @@ var express = require('express'),
   utils = require('./utils'),
   generateFiles = require('./GenerateFiles'),
   cp = require('child_process'),
-  bodyParser = require('body-parser');
+  bodyParser = require('body-parser'),
+  nginx = require('./nginx.js');
 
 var ApiCollector = function(port) {
   this.port = port;
