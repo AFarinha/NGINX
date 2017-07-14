@@ -13,7 +13,7 @@
         <div class="form-group col-md-4">
           <h5><b>instance </b></h5>
           <div :class="{ 'has-error': vErrors.has('instance') }">
-            <select v-model="this.server.instance" class="form-control" :disabled="server.id !== '' ? true : false" >
+            <select v-model="server.instance" class="form-control" :disabled="server.id !== '' ? true : false" >
               <option v-for="option in this.instances" v-bind:value="option.ip">
               {{ option.name }}
               </option>
