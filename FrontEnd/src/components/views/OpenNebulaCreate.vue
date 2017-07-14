@@ -118,7 +118,7 @@ export default {
     return {
       vm: {
         sshKey: '',
-        vmName: 'Name',
+        vmName: 'collector1',
         isCollector: 'true',
         ipStation: 'http://192.168.1.200:8080',
         hostname: 'collector1',

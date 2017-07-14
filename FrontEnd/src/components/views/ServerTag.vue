@@ -143,6 +143,9 @@ export default {
     },
     removeLocation (index) {
       this.server.arrayLocations.splice(index, 1)
+      if (this.server.arrayLocations.length < 1) {
+        this.addLocation()
+      }
     }
   },
   beforeCreate () {
