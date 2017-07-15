@@ -29,7 +29,9 @@ Api.prototype.init = function() {
 
     this.httpServer.listen(this.port);
     console.log('(server) Dashboard server listening on port ' + this.port);
-    db.initBD(this.databaseName);
+    var script = utils.readInitSQL('./database/script.txt');
+
+    db.initBD(this.databaseName, script);
 
     this.app.get('/api/stats/:hostname', function(req, res) {
         var keys = Object.keys(self.station.collectors);

@@ -50,6 +50,10 @@ module.exports = {
         });
       }
     });
+  },
+  readInitSQL: function(path){
+    var content = fs.readFileSync(path).toString('utf8');
+    return content;
   }
 
 
