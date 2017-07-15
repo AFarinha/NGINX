@@ -2,7 +2,7 @@
   <section class="">
     {{upstream}}
     <div :class="{ 'has-error': vErrors.has('proxyPass') }">
-      <input :disabled="readOnly" name="proxyPass" v-validate="'required'" v-model="upstream.upstreamName" class="form-control" type="text" placeholder="Upstream name">
+      <input :disabled="readOnly || upstream.id !== '' ? true : false" name="proxyPass" v-validate="'required'" v-model="upstream.upstreamName" class="form-control" type="text" placeholder="Upstream name">
       <span v-show="vErrors.has('proxyPass')" class="help-block">{{ vErrors.first('proxyPass') }}</span>
     </div>
     <UpstreamItem :readOnly="readOnly" v-for="(upstream, index) in this.upstream.arrayUpstreamItems" :upstream="upstream" contextType="upstream" :key="upstream" v-on:removeUpstream="removeUpstream(index)">

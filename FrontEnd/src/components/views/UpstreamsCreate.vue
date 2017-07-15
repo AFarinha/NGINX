@@ -10,7 +10,7 @@
 	      <div class="box-body">
 					<div class="col-md-6">
 	          <label>Instance </label>
-	            <select v-model="upstream.instance" class="form-control" >
+	            <select v-model="upstream.instance" class="form-control" :disabled="upstream.id !== '' ? true : false">
 	              <option v-for="option in this.instances" v-bind:value="option.ip">
 	              {{ option.name }}
 	              </option>

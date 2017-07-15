@@ -31,9 +31,9 @@
             <i class="fa fa-info" style="font-size:24px;margin-top: 0.1em;"></i>
           </a>
       </div>
-       
+
   </div>
-  
+
 </template>
 
 <script>
