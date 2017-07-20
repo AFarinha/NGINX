@@ -3,7 +3,7 @@
 
   {{this.server}}
       <!--   <div class="box-body"> -->
-    <ServerTag v-bind:server="server" ></ServerTag>
+    <ServerTag v-bind:server="server" v-bind:instances="instances" ></ServerTag>
 
     <hr />
     <div :class="{ 'box box-solid box-primary': !responseError && !responseSuccess,'box box-solid box-danger': responseError && !responseSuccess,'box box-solid box-success': !responseError && responseSuccess,  }">
@@ -49,9 +49,25 @@ export default {
         arrayGenericServer: [],
         arrayLocations: []
       },
+      instances: [
+        {ip: 'localhost', name: 'localhost'}
+      ],
       responseSuccess: false,
       responseError: false
     }
+  },
+  beforeCreate () {
+    var app = this
+    axios.get('/api/getAllVMS/')
+      .then(function (response) {
+        var vms = response.data.message
+        for (var i = vms.length - 1; i >= 0; i--) {
+          app.instances.push(vms[i])
+        }
+      })
+      .catch(error => {
+        app.responseError = error.response
+      })
   },
   created: function () {
     var app = this

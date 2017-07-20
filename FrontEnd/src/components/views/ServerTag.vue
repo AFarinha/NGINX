@@ -15,7 +15,7 @@
           <div :class="{ 'has-error': vErrors.has('instance') }">
             <select v-model="server.instance" class="form-control" :disabled="server.id !== '' ? true : false" >
               <option v-for="option in this.instances" v-bind:value="option.ip">
-              {{ option.name }}
+              {{option.name}}
               </option>
             </select>
             <span v-show="vErrors.has('instance')" class="help-block">{{ vErrors.first('instance') }}</span>
@@ -77,20 +77,20 @@ import GenericItem from './GenericItem'
 import LocationTag from './LocationTag'
 import { EventBus } from '../../main.js'
 import { find, propEq } from 'ramda'
-import axios from 'axios'
 
 export default {
   props: {
     server: {
       type: Object,
       required: true
+    },
+    instances: {
+      type: Array,
+      required: true
     }
   },
   data () {
     return {
-      instances: [
-        {ip: 'localhost', name: 'localhost'}
-      ]
     }
   },
   mounted: function () {
@@ -148,27 +148,9 @@ export default {
       }
     }
   },
-  beforeCreate () {
-    var app = this
-    axios.get('/api/getAllVMS/')
-      .then(function (response) {
-        console.log(response.data.message)
-        var vms = response.data.message
-        console.log('vms')
-        console.log(vms)
-        for (var i = vms.length - 1; i >= 0; i--) {
-          app.instances.push(vms[i])
-        }
-      })
-      .catch(error => {
-        console.log(error)
-        app.responseError = error.response
-      })
-  },
   created () {
-    // para criar location por default
     var app = this
-    console.log(app.server)
+    // para criar location por default
     if (app.server.id === '') {
       app.addLocation()
     }
